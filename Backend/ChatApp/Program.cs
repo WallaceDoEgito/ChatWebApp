@@ -1,3 +1,4 @@
+using ChatApp.Data;
 using ChatApp.Interfaces;
 using ChatApp.Services;
 
@@ -8,6 +9,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IHasher, BcryptPasswordHasher>();
+builder.Services.AddScoped<AppDbContext>();
+builder.Services.AddScoped<ITokenService, TokenGenerator>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 

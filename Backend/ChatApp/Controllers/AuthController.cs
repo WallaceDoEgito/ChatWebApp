@@ -10,10 +10,10 @@ namespace ChatApp.Controllers;
 public class AuthController(IAuthService authService) : ControllerBase
 {
     [HttpPost("register")]
-    public IActionResult RegisterUser(RegisterUserRequest req)
+    public async Task<IActionResult> RegisterUser(RegisterUserRequest req)
     {
         if (req.UserName.Length > 32) return BadRequest("Your Username is too long");
-        String? id = authService.RegisterUser(req);
+        String? id = await authService.RegisterUser(req);
         if (id == null)
             return StatusCode(StatusCodes.Status500InternalServerError,
                 new { msg = "Nao foi possivel criar o usuario tente mais tarde" });
@@ -21,10 +21,10 @@ public class AuthController(IAuthService authService) : ControllerBase
     }
 
     [HttpPost("login")]
-    public IActionResult Login(LoginUserRequest req)
+    public async Task<IActionResult> Login(LoginUserRequest req)
     {
         if (req.UserName.Length > 32) return BadRequest("Your Username is too long");
-        String? token = authService.Login(req);
+        String? token = await authService.Login(req);
         if (token == null) return BadRequest("Username or password is incorrect");
         return Ok(token);
     }

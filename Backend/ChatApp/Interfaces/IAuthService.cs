@@ -4,6 +4,6 @@ namespace ChatApp.Interfaces;
 
 public interface IAuthService
 {
-    public String? RegisterUser(RegisterUserRequest req);
-    public String? Login(LoginUserRequest req);
+    public Task<String?> RegisterUser(RegisterUserRequest req);
+    public Task<String?> Login(LoginUserRequest req);
 }
