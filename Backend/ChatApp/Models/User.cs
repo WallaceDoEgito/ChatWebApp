@@ -10,7 +10,7 @@ public class User
     public Guid Id { get; set; }
     [MaxLength(32)] public required string UserName { get; set; } = String.Empty;
     public required string PasswordHashed { get; set; } = String.Empty;
-    public DateTime CreatedAt { get; set; }= DateTime.Now;
+    public DateTime CreatedAt { get; set; }= DateTime.UtcNow;
     public ICollection<Channel> Channels { get; set; } = new List<Channel>();
     public ICollection<User> Friends { get; set; } = new List<User>();
     public ICollection<User> FriendOf { get; set; } = new List<User>();
@@ -27,6 +27,6 @@ public class User
         Id = Guid.NewGuid();
         UserName = username;
         PasswordHashed = _passwordHasher.HashPassword(password);
-        CreatedAt = DateTime.Now;
+        
     }
 }
