@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ChatApp.Models;
 
@@ -8,10 +9,10 @@ public class Message
     public required Guid UserIdSender { get; set; }
     public User Sender { get; set; } = null!;
 
-    public required DateTime SentAt { get; set; }= DateTime.UtcNow;
-    public required bool Edited { get; set; }= false;
-    public required bool Seen { get; set; }= false;
-    public required bool Deleted { get; set; }= false;
+    public required DateTime SentAt { get; set; }
+    public required bool Edited { get; set; }
+    public required bool Seen { get; set; }
+    public required bool Deleted { get; set; }
     
     
     [MaxLength(800)]public required string MessageContent { get; set; }
@@ -23,12 +24,18 @@ public class Message
     {
         
     }
-
+    
+    
+    [SetsRequiredMembers]
     public Message(Guid sender, String message, Guid recieverId)
     {
+        SentAt = DateTime.UtcNow;
         MessageId = Guid.NewGuid();
         UserIdSender = sender;
         MessageContent = message;
         ChannelId = recieverId;
+        Edited = false;
+        Seen = false;
+        Deleted = false;
     }
 }

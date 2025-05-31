@@ -34,7 +34,7 @@ namespace ChatApp.Migrations
 
                     b.HasIndex("ParticipantsId");
 
-                    b.ToTable("ChannelUser");
+                    b.ToTable("ChannelUser", (string)null);
                 });
 
             modelBuilder.Entity("ChatApp.Models.Channel", b =>
@@ -48,7 +48,7 @@ namespace ChatApp.Migrations
 
                     b.HasKey("ChannelId");
 
-                    b.ToTable("Channels");
+                    b.ToTable("Channels", (string)null);
                 });
 
             modelBuilder.Entity("ChatApp.Models.Message", b =>
@@ -86,7 +86,7 @@ namespace ChatApp.Migrations
 
                     b.HasIndex("UserIdSender");
 
-                    b.ToTable("Message");
+                    b.ToTable("Message", (string)null);
                 });
 
             modelBuilder.Entity("ChatApp.Models.User", b =>
@@ -109,7 +109,7 @@ namespace ChatApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("UserUser", b =>
@@ -124,7 +124,7 @@ namespace ChatApp.Migrations
 
                     b.HasIndex("FriendsId");
 
-                    b.ToTable("UserUser");
+                    b.ToTable("UserUser", (string)null);
                 });
 
             modelBuilder.Entity("ChannelUser", b =>
