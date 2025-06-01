@@ -4,6 +4,7 @@ using ChatApp.Hubs;
 using ChatApp.Interfaces;
 using ChatApp.Services;
 using ChatApp.Workers;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +16,18 @@ builder.Services.AddScoped<IHasher, BcryptPasswordHasher>();
 builder.Services.AddScoped<AppDbContext>();
 builder.Services.AddScoped<ITokenService, TokenGenerator>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR().AddStackExchangeRedis(builder.Configuration.GetValue<String>("RedisConnectionString")!,
+    options =>
+    {
+        options.Configuration.ChannelPrefix = $"SignalHubBackPlane_";
+    });
 builder.Services.ConfigJWTAuth(builder.Configuration);
 builder.Services.AddHostedService<MessageCreator>();
-//builder.Services.AddHostedService<MessageDistribution>();
+builder.Services.AddHostedService<MessageDistribution>();
 builder.Services.AddSingleton<RabbitMQConnection>();
+builder.Services.AddSingleton<IConnectionMultiplexer>(
+    ConnectionMultiplexer.Connect(builder.Configuration.GetValue<String>("RedisConnectionString")!));
+builder.Services.AddSingleton<RedisService>();
 
 var app = builder.Build();
 
