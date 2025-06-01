@@ -23,6 +23,7 @@ builder.Services.AddSignalR().AddStackExchangeRedis(builder.Configuration.GetVal
     });
 builder.Services.ConfigJWTAuth(builder.Configuration);
 builder.Services.AddHostedService<MessageCreator>();
+builder.Services.AddHostedService<MessageDemux>();
 builder.Services.AddHostedService<MessageDistribution>();
 builder.Services.AddSingleton<RabbitMQConnection>();
 builder.Services.AddSingleton<IConnectionMultiplexer>(

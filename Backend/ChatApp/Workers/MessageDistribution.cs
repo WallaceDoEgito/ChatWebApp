@@ -42,7 +42,7 @@ public class MessageDistribution(IHubContext<PrincipalHub> hubContext, IServiceS
                 await SendMessage(message);
                 await _channel.BasicAckAsync(ea.DeliveryTag, multiple:false);
             }
-            catch (Exception e)
+            catch
             {
                 await _channel.BasicNackAsync(ea.DeliveryTag, multiple: false, requeue: false);
             }

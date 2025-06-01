@@ -10,8 +10,8 @@ namespace ChatApp.Workers;
 
 public class MessageCreator(IServiceScopeFactory dbContextFactory, RabbitMQConnection rabbitMqConnection) : BackgroundService
 {
-    private IConnection _connection;
-    private IChannel _channel;
+    private IConnection? _connection;
+    private IChannel? _channel;
     
     public override async Task StartAsync(CancellationToken cancellationToken)
     {
@@ -34,7 +34,7 @@ public class MessageCreator(IServiceScopeFactory dbContextFactory, RabbitMQConne
                 await ProcessMessage(message!);
                 await _channel.BasicAckAsync(ea.DeliveryTag, false);
             }
-            catch (Exception e)
+            catch
             {
                 await _channel.BasicNackAsync(ea.DeliveryTag, false, false);
             }
