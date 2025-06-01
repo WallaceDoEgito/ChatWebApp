@@ -57,7 +57,7 @@ public class MessageCreator(IServiceScopeFactory dbContextFactory, RabbitMQConne
             channel.Messages.Add(message);
             await dbContext.SaveChangesAsync();
             
-            rabbitMqConnection.TransmitMessage(message);
+            rabbitMqConnection.DemuxMessage(message);
         }
     }
 

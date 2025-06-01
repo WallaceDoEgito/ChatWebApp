@@ -42,33 +42,45 @@ public class RabbitMQConnection
         await channelMessageTransmission.QueueBindAsync(queue: "MessageDistribution",
             exchange: "Message_Distribution_Exchange", String.Empty);
         
+        
+        await channelMessageTransmission.QueueDeclareAsync(queue: "Message_Demux_Queue", durable: true,
+            exclusive: false, autoDelete: false);
+        await channelMessageTransmission.ExchangeDeclareAsync(exchange: "Message_Demux_Exchange", ExchangeType.Fanout);
+        await channelMessageTransmission.QueueBindAsync(queue: "Message_Demux_Queue",
+            exchange: "Message_Demux_Exchange", String.Empty);
+        
     }
 
     public async void PublishMessage(MessageRequest req)
     {
         var factory = new ConnectionFactory();
-        IConnection connection = await factory.CreateConnectionAsync();
+        await using IConnection connection = await factory.CreateConnectionAsync();
         var jsonMessageParse = JsonSerializer.Serialize(req);
         var bodyEncoded = Encoding.UTF8.GetBytes(jsonMessageParse);
-        IChannel publish = await connection.CreateChannelAsync();
+        await using IChannel publish = await connection.CreateChannelAsync();
 
         await publish.BasicPublishAsync(exchange: "MessageRequestsExchange", body: bodyEncoded,
             routingKey: "MessageRequestQueue");
-
-        await connection.DisposeAsync();
-        await publish.DisposeAsync();
     }
 
-    public async void TransmitMessage(Message message)
+    public async void DemuxMessage(Message message)
     {
         var factory = new ConnectionFactory();
-        IConnection connection = await factory.CreateConnectionAsync();
+        await using IConnection connection = await factory.CreateConnectionAsync();
         var jsonMessageParse = JsonSerializer.Serialize(message);
         var bodyEncoded = Encoding.UTF8.GetBytes(jsonMessageParse);
-        IChannel publish = await connection.CreateChannelAsync();
+        await using IChannel publish = await connection.CreateChannelAsync();
+        await publish.BasicPublishAsync(exchange: "Message_Demux_Exchange", body: bodyEncoded,
+            routingKey: String.Empty);
+    }
+    public async void TransmitMessage(MessageDemuxDto message)
+    {
+        var factory = new ConnectionFactory();
+        await using IConnection connection = await factory.CreateConnectionAsync();
+        var jsonMessageParse = JsonSerializer.Serialize(message);
+        var bodyEncoded = Encoding.UTF8.GetBytes(jsonMessageParse);
+        await using IChannel publish = await connection.CreateChannelAsync();
         await publish.BasicPublishAsync(exchange: "Message_Distribution_Exchange", body: bodyEncoded,
             routingKey: String.Empty);
-        await connection.DisposeAsync();
-        await publish.DisposeAsync();
     }
 }

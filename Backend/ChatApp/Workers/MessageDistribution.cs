@@ -1,9 +1,79 @@
+using System.Text.Json;
+using ChatApp.Data;
+using ChatApp.Dtos;
+using ChatApp.Hubs;
+using ChatApp.Models;
+using Microsoft.AspNetCore.SignalR;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+
 namespace ChatApp.Workers;
 
-public class MessageDistribution : BackgroundService
+public class MessageDistribution(IHubContext<PrincipalHub> hubContext, IServiceScopeFactory RedisFactory) : BackgroundService
 {
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    private IConnection _connection;
+    private IChannel _channel;
+    public override async Task StartAsync(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var factory = new ConnectionFactory();
+        _connection = await factory.CreateConnectionAsync();
+        _channel = await _connection.CreateChannelAsync();
+        await base.StartAsync(cancellationToken);
+    }
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        await _channel.QueueDeclareAsync(queue: "MessageDistribution", durable: true, exclusive: false,
+            autoDelete: false, arguments: new Dictionary<string, object?>
+            {
+                { "x-dead-letter-exchange", "Message_DLQ_Exchange" },
+                {"x-dead-letter-routing-key", "Message_DLQ_Queue" }
+            });
+        var consumer = new AsyncEventingBasicConsumer(_channel);
+        consumer.ReceivedAsync += async (model, ea) =>
+        {
+            try
+            {
+                var message = JsonSerializer.Deserialize<MessageDemuxDto>(ea.Body.ToArray());
+                if (message is null) throw new ArgumentException();
+                bool userIsOnline = await CheckUserHasAActiveConnection(message.DestinyId);
+                if (!userIsOnline)
+                    await _channel.BasicNackAsync(ea.DeliveryTag, multiple: false, requeue: true);
+                await SendMessage(message);
+                await _channel.BasicAckAsync(ea.DeliveryTag, multiple:false);
+            }
+            catch (Exception e)
+            {
+                await _channel.BasicNackAsync(ea.DeliveryTag, multiple: false, requeue: false);
+            }
+        };
+        await _channel.BasicConsumeAsync("MessageDistribution", autoAck:false, consumer);
+    }
+
+    private async Task SendMessage(MessageDemuxDto message)
+    {
+        using (var factory = RedisFactory.CreateScope())
+        {
+            var redisDb = factory.ServiceProvider.GetRequiredService<RedisService>();
+            var connections = await redisDb.GetUserConnections(message.DestinyId);
+            await hubContext.Clients.Clients(connections).SendAsync("NewMessage", message);
+        }
+    }
+    private async Task<bool> CheckUserHasAActiveConnection(String userId)
+    {
+        using (var factory = RedisFactory.CreateScope())
+        {
+            var redisDb = factory.ServiceProvider.GetRequiredService<RedisService>();
+            return await redisDb.CheckUserOnline(userId);
+        }
+    }
+
+    public override async void Dispose()
+    {
+        await _connection.CloseAsync();
+        await _connection.DisposeAsync();
+        await _channel.CloseAsync();
+        await _channel.DisposeAsync();
+        base.Dispose();
     }
 }
