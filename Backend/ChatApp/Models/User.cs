@@ -15,6 +15,10 @@ public class User
     public ICollection<User> Friends { get; set; } = new List<User>();
     public ICollection<User> FriendOf { get; set; } = new List<User>();
 
+    public ICollection<FriendRequest> SendFriendRequests { get; set; } = new List<FriendRequest>();
+    public ICollection<FriendRequest> ReceviedFriendRequests { get; set;} = new List<FriendRequest>();
+    
+
     public ICollection<Message> SendMessages { get; set; } = new List<Message>();
     private readonly IHasher _passwordHasher = new BcryptPasswordHasher();
 
