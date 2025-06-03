@@ -16,7 +16,7 @@ public class RedisService(IConnectionMultiplexer redis)
         await _db.KeyExpireAsync($"{_usersConnections}{userId}", TimeSpan.FromDays(1));
     }
 
-    public async Task UserDisconnected(String userId, String connectionId)
+    public async Task UserDisconnectedAsync(String userId, String connectionId)
     {
         await _db.SetRemoveAsync($"{_usersConnections}{userId}", connectionId);
         var lengthConnectionsUser = await _db.SetLengthAsync($"{_usersConnections}{userId}");

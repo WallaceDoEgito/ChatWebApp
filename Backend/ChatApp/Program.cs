@@ -29,6 +29,7 @@ builder.Services.AddSingleton<RabbitMQConnection>();
 builder.Services.AddSingleton<IConnectionMultiplexer>(
     ConnectionMultiplexer.Connect(builder.Configuration.GetValue<String>("RedisConnectionString")!));
 builder.Services.AddSingleton<RedisService>();
+builder.Services.AddScoped<IFriendService, FriendService>();
 
 var app = builder.Build();
 
