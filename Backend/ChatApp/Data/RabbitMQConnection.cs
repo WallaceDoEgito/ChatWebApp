@@ -14,19 +14,19 @@ public class RabbitMQConnection
         Config();
     }
 
-    private async void Config()
+    private async Task Config()
     {
         var factory = new ConnectionFactory();
-        await using IConnection Connection =  await factory.CreateConnectionAsync();
+        await using IConnection connection =  await factory.CreateConnectionAsync();
         
-        await using IChannel channelMessageCreator = await Connection.CreateChannelAsync();
+        await using IChannel channelMessageCreator = await connection.CreateChannelAsync();
         await channelMessageCreator.QueueDeclareAsync(queue:"MessageRequestQueue", durable:true,exclusive:false, autoDelete:false);
         await channelMessageCreator.ExchangeDeclareAsync(exchange: "MessageRequestsExchange", type: ExchangeType.Fanout);
         await channelMessageCreator.BasicQosAsync(prefetchSize: 0, prefetchCount: 1, global: false);
         await channelMessageCreator.QueueBindAsync(queue: "MessageRequestQueue", exchange: "MessageRequestsExchange",
             routingKey: String.Empty);
 
-        await using IChannel channelMessageTransmission = await Connection.CreateChannelAsync();
+        await using IChannel channelMessageTransmission = await connection.CreateChannelAsync();
         await channelMessageTransmission.QueueDeclareAsync(queue:"Message_DLQ_Queue", durable:true, exclusive:false, autoDelete:false);
         await channelMessageTransmission.ExchangeDeclareAsync(exchange: "Message_DLQ_Exchange", ExchangeType.Direct);
 
@@ -48,10 +48,9 @@ public class RabbitMQConnection
         await channelMessageTransmission.ExchangeDeclareAsync(exchange: "Message_Demux_Exchange", ExchangeType.Fanout);
         await channelMessageTransmission.QueueBindAsync(queue: "Message_Demux_Queue",
             exchange: "Message_Demux_Exchange", String.Empty);
-        
     }
 
-    public async void PublishMessage(MessageRequest req)
+    public async Task PublishMessage(MessageRequest req)
     {
         var factory = new ConnectionFactory();
         await using IConnection connection = await factory.CreateConnectionAsync();
@@ -63,7 +62,7 @@ public class RabbitMQConnection
             routingKey: "MessageRequestQueue");
     }
 
-    public async void DemuxMessage(Message message)
+    public async Task DemuxMessage(Message message)
     {
         var factory = new ConnectionFactory();
         await using IConnection connection = await factory.CreateConnectionAsync();
@@ -73,7 +72,7 @@ public class RabbitMQConnection
         await publish.BasicPublishAsync(exchange: "Message_Demux_Exchange", body: bodyEncoded,
             routingKey: String.Empty);
     }
-    public async void TransmitMessage(MessageDemuxDto message)
+    public async Task TransmitMessage(MessageDemuxDto message)
     {
         var factory = new ConnectionFactory();
         await using IConnection connection = await factory.CreateConnectionAsync();
