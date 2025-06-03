@@ -1,3 +1,3 @@
 namespace ChatApp.Dtos;
 
-public record FriendResponseDTO(String UserRequestedId, String UserWhoTriedToGetAFriendId, bool Accepted);
+public record FriendResponseDTO(String UserRequestedId, String UserWhoTriedToGetAFriendUserName, bool Accepted);
