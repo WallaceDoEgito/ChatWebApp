@@ -14,9 +14,7 @@ public class AuthController(IAuthService authService) : ControllerBase
     {
         if (req.UserName.Length > 32) return BadRequest("Your Username is too long");
         String? id = await authService.RegisterUser(req);
-        if (id == null)
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                new { msg = "Nao foi possivel criar o usuario tente mais tarde" });
+        if (id == null) return BadRequest("This user already have a account");
         return StatusCode(StatusCodes.Status201Created, id);
     }
 
