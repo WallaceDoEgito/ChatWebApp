@@ -1,0 +1,10 @@
+
+@if(IsLogin)
+{
+    <app-login-component (RegisterClickEvent)="SwapLoginAndRegisterPage()"/>
+
+}
+@else {
+    <app-register-component (LoginClickEvent)="SwapLoginAndRegisterPage()"/>
+
+}

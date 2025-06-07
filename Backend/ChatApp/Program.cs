@@ -26,7 +26,7 @@ builder.Services.AddCors(op =>
 {
     op.AddDefaultPolicy((builder =>
     {
-        builder.AllowAnyOrigin().AllowAnyHeader();
+        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     }));
 });
 builder.Services.AddSingleton<RabbitMQConnection>();

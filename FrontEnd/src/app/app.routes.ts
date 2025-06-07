@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { AuthComponent } from './components/auth/auth.component';
-import { ChatViewComponent } from './components/chat-view/chat-view.component';
+import { AuthComponent } from './Pages/auth/auth.component';
+import { ChatViewComponent } from './Pages/chat-view/chat-view.component';
 
 export const routes: Routes = 
 [

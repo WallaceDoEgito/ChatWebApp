@@ -1,4 +1,4 @@
-import { ResponsesEnum } from "../services/Auth/ResponsesEnum";
+import { ResponsesEnum } from "../Enums/ResponsesEnum";
 
 export class AuthUserResponseDTO
 {
