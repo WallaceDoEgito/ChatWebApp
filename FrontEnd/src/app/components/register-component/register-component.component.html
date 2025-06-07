@@ -1,0 +1,48 @@
+<form class="forms">
+    <div class="conteiner">
+        <h1>Registre-se</h1>
+        <mat-form-field class="inputType">
+        <mat-label>Username</mat-label>
+        <input type="text" matInput [formControl]="UserNameFormControl" maxlength="32" >
+        @if (UserNameFormControl.hasError("required")) 
+        {
+            <mat-error>Esse campo é requerido!</mat-error>
+        }
+        @else if(UserNameFormControl.hasError("maxlength"))
+        {
+            <mat-error>Um username deve ter no maximo 32 caracteres!</mat-error>
+        }
+        
+    </mat-form-field>
+    <mat-form-field class="inputType">
+        <mat-label>Password</mat-label>
+        <input type="password" matInput [formControl]="PasswordFormControl" maxlength="128" [(ngModel)]="PasswordModel" >
+        @if (UserNameFormControl.hasError("required")) 
+        {
+            <mat-error>Esse campo é requerido!</mat-error>
+        }
+        @else if(UserNameFormControl.hasError("maxlength"))
+        {
+            <mat-error>A senha deve ter no maximo 128 caracteres!</mat-error>
+        }
+        
+    </mat-form-field>
+    <mat-form-field class="inputType">
+        <mat-label>Confirm the password</mat-label>
+        <input type="password" matInput [formControl]="PasswordFormControl" maxlength="128" [(ngModel)]="ConfirmPasswordModel" >
+        @if (UserNameFormControl.hasError("required")) 
+        {
+            <mat-error>Esse campo é requerido!</mat-error>
+        }
+        @else if(UserNameFormControl.hasError("maxlength"))
+        {
+            <mat-error>A senha deve ter no maximo 128 caracteres!</mat-error>
+        }
+        
+    </mat-form-field>
+    <span class="requestsError">{{RequestError}}</span>
+    <button mat-button [disabled]="UserNameFormControl.hasError || PasswordFormControl.hasError" (click)="SendRegister()">Registrar-se</button>
+    <a class="loginAsk" (click)="AlternateToLogin()">Já tem uma conta?</a>
+    </div>
+    
+</form>
