@@ -3,7 +3,7 @@
         <h1>Registre-se</h1>
         <mat-form-field class="inputType">
         <mat-label>Username</mat-label>
-        <input type="text" matInput [formControl]="UserNameFormControl" maxlength="32" >
+        <input type="text" matInput [formControl]="UserNameFormControl" maxlength="32" [(ngModel)]="UserNameModel" >
         @if (UserNameFormControl.hasError("required")) 
         {
             <mat-error>Esse campo é requerido!</mat-error>
@@ -41,7 +41,7 @@
         
     </mat-form-field>
     <span class="requestsError">{{RequestError}}</span>
-    <button mat-button [disabled]="UserNameFormControl.hasError || PasswordFormControl.hasError" (click)="SendRegister()">Registrar-se</button>
+    <button mat-button (click)="SendRegister()">Registrar-se</button>
     <a class="loginAsk" (click)="AlternateToLogin()">Já tem uma conta?</a>
     </div>
     

@@ -11,17 +11,31 @@ import { firstValueFrom, lastValueFrom } from 'rxjs';
 export class AuthService {
   private httpReq = inject(HttpClient);
   
-  Register(request: AuthUserRequestDTO) : AuthUserResponseDTO
+  async Register(request: AuthUserRequestDTO) : Promise<AuthUserResponseDTO>
   {
     let response!:AuthUserResponseDTO
-    this.httpReq.post<String>("http://localhost:5269/api/auth/register", request, {observe:'response'}).subscribe(ob => 
+    let resp$ : any = await (firstValueFrom(this.httpReq.post("http://localhost:5269/api/auth/register", request, {observe:'response'}))).catch(e => 
       {
-        
-        if(ob.status == 500) response = new AuthUserResponseDTO(ResponsesEnum.INTERNALSERVERERROR, ob.body?.toString() ?? null)
-        else if(ob.status == 400) response = new AuthUserResponseDTO(ResponsesEnum.BAD_REQUEST, ob.body?.toString() ?? null)
-        else response = new AuthUserResponseDTO(ResponsesEnum.CREATED, ob.body?.toString() ?? null);
-      }
-    ).unsubscribe();
+        console.log(e);
+        if(e.status == 201)
+        {
+          response = new AuthUserResponseDTO(ResponsesEnum.CREATED, e.error.text);
+        }
+        if(e.status == 400)
+        {
+          response = new AuthUserResponseDTO(ResponsesEnum.BAD_REQUEST, e.error);
+        }
+        else if(e.status == 500)
+        {
+          response = new AuthUserResponseDTO(ResponsesEnum.INTERNALSERVERERROR, e.error);
+        }
+      })
+    if(resp$)
+    {
+      let bodyD : any = resp$.body;
+      response = new AuthUserResponseDTO(ResponsesEnum.OK, bodyD.msg);
+    }
+    console.log(response);
     return response;
   }
 

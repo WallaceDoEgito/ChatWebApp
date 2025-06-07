@@ -27,14 +27,14 @@ export class RegisterComponentComponent {
   UserNameFormControl = new FormControl('',[Validators.maxLength(32), Validators.required])
   PasswordFormControl = new FormControl('',[Validators.maxLength(128), Validators.required])
 
-  SendRegister()
+  async SendRegister()
   {
     if(this.UserNameFormControl.hasError("maxlength") || this.UserNameFormControl.hasError("required")) return;
     if(this.PasswordFormControl.hasError("maxlength") || this.PasswordFormControl.hasError("required")) return;
     if(this.PasswordModel != this.ConfirmPasswordModel) this.PasswordFormControl
 
     let dtoAuthRequest = new AuthUserRequestDTO(this.UserNameModel, this.PasswordModel)
-    let response : AuthUserResponseDTO = this.authService.Register(dtoAuthRequest);
+    let response : AuthUserResponseDTO = await this.authService.Register(dtoAuthRequest);
     if(response.ResponseType === ResponsesEnum.BAD_REQUEST || response.ResponseType === ResponsesEnum.INTERNALSERVERERROR) {this.RequestError = response.MessageBody; return;}
     if(response.ResponseType === ResponsesEnum.CREATED) this.RequestSucess = "Usuario criado com sucesso!"
   }
