@@ -13,22 +13,28 @@
             <mat-error>Um username deve ter no maximo 32 caracteres!</mat-error>
         }
         
-    </mat-form-field>
-    <mat-form-field class="inputType">
-        <mat-label>Password</mat-label>
-        <input type="password" matInput [formControl]="PasswordFormControl" maxlength="128" [(ngModel)]="PasswordModel" >
-        @if (UserNameFormControl.hasError("required")) 
+        </mat-form-field>
+        <mat-form-field class="inputType">
+            <mat-label>Password</mat-label>
+            <input type="password" matInput [formControl]="PasswordFormControl" maxlength="128" [(ngModel)]="PasswordModel" >
+            @if (UserNameFormControl.hasError("required")) 
+            {
+                <mat-error>Esse campo é requerido!</mat-error>
+            }
+            @else if(UserNameFormControl.hasError("maxlength"))
+            {
+                <mat-error>A senha deve ter no maximo 128 caracteres!</mat-error>
+            }
+            
+        </mat-form-field>
+        <div class="requests">            
+        </div>
+        @if(ServerResponse != '')
         {
-            <mat-error>Esse campo é requerido!</mat-error>
+            <mat-error>{{ServerResponse}}</mat-error>
         }
-        @else if(UserNameFormControl.hasError("maxlength"))
-        {
-            <mat-error>A senha deve ter no maximo 128 caracteres!</mat-error>
-        }
-        
-    </mat-form-field>
-    <button mat-button (click)="Login()">Entrar</button>
-    <span class="loginAsk" (click)="AlternateToRegister()">Ainda não tem uma conta?</span>
+        <button mat-button (click)="Login()">Entrar</button>
+        <span class="loginAsk" (click)="AlternateToRegister()">Ainda não tem uma conta?</span>
     </div>
     
 </form>

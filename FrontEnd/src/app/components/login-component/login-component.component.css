@@ -1,0 +1,39 @@
+.forms{
+    width: 100vw;
+    height: 100vh;
+}
+
+.conteiner
+{
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    width: 30vw;
+    gap:10px;
+    margin: auto;
+    margin-top: 15vh;
+}
+
+
+input
+{
+    width: 20vw;
+}
+button
+{
+    width: 10vw;
+}
+
+.loginAsk
+{
+    color: rgb(1, 1, 117);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.requests
+{
+    margin-top: 5px;
+}

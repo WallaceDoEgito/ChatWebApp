@@ -7,6 +7,7 @@ import { AuthUserRequestDTO } from '../../DTOs/AuthUserRequest';
 import { AuthUserResponseDTO } from '../../DTOs/AuthUserResponseDTO';
 import { AuthService } from '../../services/Auth/auth.service';
 import { ResponsesEnum } from '../../Enums/ResponsesEnum';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-component',
@@ -16,6 +17,7 @@ import { ResponsesEnum } from '../../Enums/ResponsesEnum';
 })
 export class LoginComponentComponent {
   private authService = inject(AuthService);
+  private routerRedirect = inject(Router)
   public RegisterClickEvent = output();
   public UserLoginSucess = output();
   public UserNameModel! : String
@@ -30,14 +32,17 @@ export class LoginComponentComponent {
   {
     if(this.UserNameFormControl.hasError("maxlength") || this.UserNameFormControl.hasError("required")) return;
     if(this.PasswordFormControl.hasError("maxlength") || this.PasswordFormControl.hasError("required")) return;
+    this.ServerResponse = '';
 
     let dtoAuthRequest = new AuthUserRequestDTO(this.UserNameModel, this.PasswordModel)
     let response : AuthUserResponseDTO = await this.authService.Login(dtoAuthRequest);
     if(response.ResponseType === ResponsesEnum.BAD_REQUEST) {;this.ServerResponse = response.MessageBody; return}
     else if(response.ResponseType === ResponsesEnum.OK) {
+      console.log(response)
       this.authService.StoreJWTToken(response.MessageBody!);
-
+      this.routerRedirect.navigate(["/hub"])
     }
+
   }
 
   AlternateToRegister()

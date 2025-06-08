@@ -1,0 +1,26 @@
+.forms{
+    width: 100vw;
+    height: 100vh;
+}
+
+.conteiner
+{
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    gap:10px
+}
+
+.loginAsk
+{
+    color: rgb(1, 1, 117);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.RequestSucess
+{
+    color: rgb(83, 128, 15);
+}

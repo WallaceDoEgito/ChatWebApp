@@ -32,11 +32,13 @@ export class RegisterComponentComponent {
     if(this.UserNameFormControl.hasError("maxlength") || this.UserNameFormControl.hasError("required")) return;
     if(this.PasswordFormControl.hasError("maxlength") || this.PasswordFormControl.hasError("required")) return;
     if(this.PasswordModel != this.ConfirmPasswordModel) this.PasswordFormControl
-
+    this.RequestError = ''
     let dtoAuthRequest = new AuthUserRequestDTO(this.UserNameModel, this.PasswordModel)
     let response : AuthUserResponseDTO = await this.authService.Register(dtoAuthRequest);
     if(response.ResponseType === ResponsesEnum.BAD_REQUEST || response.ResponseType === ResponsesEnum.INTERNALSERVERERROR) {this.RequestError = response.MessageBody; return;}
-    if(response.ResponseType === ResponsesEnum.CREATED) this.RequestSucess = "Usuario criado com sucesso!"
+    console.log(response)
+    if(response.ResponseType == ResponsesEnum.CREATED) this.RequestSucess = "Usuario criado com sucesso!"
+    console.log(this.RequestSucess)
   }
 
   AlternateToLogin()

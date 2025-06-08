@@ -40,7 +40,8 @@
         }
         
     </mat-form-field>
-    <span class="requestsError">{{RequestError}}</span>
+    <mat-error class="requestsError">{{RequestError}}</mat-error>
+    <span class="RequestSucess">{{RequestSucess}}</span>
     <button mat-button (click)="SendRegister()">Registrar-se</button>
     <a class="loginAsk" (click)="AlternateToLogin()">Já tem uma conta?</a>
     </div>
