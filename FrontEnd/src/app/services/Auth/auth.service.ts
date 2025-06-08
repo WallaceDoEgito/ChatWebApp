@@ -16,24 +16,24 @@ export class AuthService {
     let response!:AuthUserResponseDTO
     let resp$ : any = await (firstValueFrom(this.httpReq.post("http://localhost:5269/api/auth/register", request, {observe:'response'}))).catch(e => 
       {
-        console.log(e);
         if(e.status == 201)
         {
+          console.log("cheguei aqui")
           response = new AuthUserResponseDTO(ResponsesEnum.CREATED, e.error.text);
         }
         if(e.status == 400)
         {
-          response = new AuthUserResponseDTO(ResponsesEnum.BAD_REQUEST, e.error);
+          response = new AuthUserResponseDTO(ResponsesEnum.BAD_REQUEST, e.error.msg);
         }
         else if(e.status == 500)
         {
-          response = new AuthUserResponseDTO(ResponsesEnum.INTERNALSERVERERROR, e.error);
+          response = new AuthUserResponseDTO(ResponsesEnum.INTERNALSERVERERROR, e.error.msg);
         }
       })
     if(resp$)
     {
       let bodyD : any = resp$.body;
-      response = new AuthUserResponseDTO(ResponsesEnum.OK, bodyD.msg);
+      response = new AuthUserResponseDTO(ResponsesEnum.CREATED, bodyD.msg);
     }
     console.log(response);
     return response;
@@ -44,6 +44,7 @@ export class AuthService {
     let response!:AuthUserResponseDTO
     let resp$ : any = await (firstValueFrom(this.httpReq.post("http://localhost:5269/api/auth/login", request, {observe:'response'}))).catch(e => 
       {
+        console.log(e);
         response = new AuthUserResponseDTO(ResponsesEnum.BAD_REQUEST, e.error.msg);
       })
     if(resp$)
@@ -54,7 +55,7 @@ export class AuthService {
     return response;
   }
 
-  StoreJWTToken(token : String)
+  async StoreJWTToken(token : String)
   {
     return;
   }
