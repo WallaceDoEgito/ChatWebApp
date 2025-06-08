@@ -55,9 +55,10 @@ export class AuthService {
     return response;
   }
 
-  async StoreJWTToken(token : String)
+  StoreJWTToken(token : string)
   {
-    return;
+    localStorage.removeItem('JwtSession')
+    localStorage.setItem('JWTSession', token);
   }
 
 }

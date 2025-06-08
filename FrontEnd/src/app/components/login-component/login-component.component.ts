@@ -38,8 +38,10 @@ export class LoginComponentComponent {
     let response : AuthUserResponseDTO = await this.authService.Login(dtoAuthRequest);
     if(response.ResponseType === ResponsesEnum.BAD_REQUEST) {;this.ServerResponse = response.MessageBody; return}
     else if(response.ResponseType === ResponsesEnum.OK) {
-      console.log(response)
-      this.authService.StoreJWTToken(response.MessageBody!);
+      let token : any = response.MessageBody;
+      console.log(token);
+      if(token == null) return;
+      await this.authService.StoreJWTToken(token);
       this.routerRedirect.navigate(["/hub"])
     }
 
