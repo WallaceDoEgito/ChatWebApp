@@ -13,12 +13,13 @@ export class ChatViewComponent implements OnInit{
   private Connection = new signalR.HubConnectionBuilder().configureLogging(signalR.LogLevel.Debug).withUrl("http://localhost:5269/chat", {accessTokenFactory: () => this.token}).withAutomaticReconnect().build();
   private route = inject(Router)
   async ngOnInit(): Promise<void> {
-    if(this.token == null) this.route.navigate(["/auth"]);
-    try {
-      this.Connection.start().then(()=> {console.log("Conectei!")}).catch((e) => console.log(e))
-    } catch (error) {
-      console.log(error)
+    const tokenJWT = localStorage.getItem("JWTSession");
+    if(tokenJWT == null){
+      this.route.navigate(["/auth"]);
+      return;
     }
+    this.Connection.start().then(()=> {console.log("Conectei!")}).catch((e) =>{console.log(e); this.route.navigate(["/auth"]);})
+
   }
 
 }
