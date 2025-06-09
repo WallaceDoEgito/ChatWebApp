@@ -6,7 +6,7 @@ export const routes: Routes =
 [
     {
         path:'',
-        redirectTo: 'auth',
+        redirectTo: 'hub',
         pathMatch: 'full'
     },
     {
