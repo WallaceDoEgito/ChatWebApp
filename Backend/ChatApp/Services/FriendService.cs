@@ -12,7 +12,7 @@ public class FriendService(AppDbContext dbContext, RedisService redis, IHubConte
 {
     public async Task CreateRequest(FriendRequestDTO requestDto)
     {
-       var userToReq = await dbContext.Users.FirstOrDefaultAsync(u => u.UserName == requestDto.UserNameToRequest);
+       var userToReq = await dbContext.Users.FirstOrDefaultAsync(u => u.Id.ToString() == requestDto.UserIdToRequest);
        if (userToReq is null) throw new ArgumentException("Esse usuario nao existe");
        bool reqExists =
            await dbContext.FriendRequests.AnyAsync(fr =>

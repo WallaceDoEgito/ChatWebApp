@@ -16,6 +16,7 @@ builder.Services.AddScoped<IHasher, BcryptPasswordHasher>();
 builder.Services.AddScoped<AppDbContext>();
 builder.Services.AddScoped<ITokenService, TokenGenerator>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IGetInfo, GetInfoService>();
 builder.Services.AddSignalR().AddStackExchangeRedis(builder.Configuration.GetValue<String>("RedisConnectionString")!,
     options =>
     {

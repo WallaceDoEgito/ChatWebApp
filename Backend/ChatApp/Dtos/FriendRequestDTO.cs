@@ -1,3 +1,3 @@
 namespace ChatApp.Dtos;
 
-public record FriendRequestDTO(String UserId, String UserNameToRequest);
+public record FriendRequestDTO(String UserId, String UserIdToRequest);

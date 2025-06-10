@@ -9,6 +9,7 @@ public class User
 {
     public Guid Id { get; set; }
     [MaxLength(32)] public required string UserName { get; set; } = String.Empty;
+    [MaxLength(32)] public string ExhibitedName { get; set; }
     public required string PasswordHashed { get; set; } = String.Empty;
     public DateTime CreatedAt { get; set; }= DateTime.UtcNow;
     public ICollection<Channel> Channels { get; set; } = new List<Channel>();
@@ -30,6 +31,7 @@ public class User
     {
         Id = Guid.NewGuid();
         UserName = username;
+        ExhibitedName = username;
         PasswordHashed = _passwordHasher.HashPassword(password);
         
     }
