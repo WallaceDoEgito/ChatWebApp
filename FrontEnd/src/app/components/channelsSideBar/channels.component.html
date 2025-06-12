@@ -1,0 +1,18 @@
+<div class="ChannelSideBarConteiner">
+    <div class="SearchBar">
+        <input type="text" placeholder="Pesquise algum canal...">
+        <mat-icon fontIcon="search"></mat-icon>
+    </div>
+    <button mat-button class="button">
+        <mat-icon fontIcon="person_add"></mat-icon>
+        <span>Adicione mais amigos</span>
+    </button>
+
+
+     @for(channel of ChannelList; track channel;)
+     {
+        <app-channel-clickable/>
+     } @empty {
+         <span class="NenhumAmigo">Vish... <br> parece que voce nao tem amigos!</span>
+     }
+</div>

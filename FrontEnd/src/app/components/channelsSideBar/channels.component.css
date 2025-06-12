@@ -1,0 +1,46 @@
+.ChannelSideBarConteiner
+{
+    height: 100vh;
+    width: 20vw;
+    background-color: #252525;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:10px
+}
+
+.SearchBar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 5vh;
+    margin-top: 2vh;
+    width: 15vw;
+    background-color: white;
+    border-radius: 5px;
+}
+.SearchBar > input{
+    height: 4vh;
+    width: 15vw;
+    border: none;
+}
+
+.SearchBar > input:focus{
+    outline: none;
+}
+
+button
+{
+    width: 15vw;
+}
+
+.NenhumAmigo
+{
+    margin-top: 5vh;
+    color: white;
+    opacity: 0.60;
+    text-align: center;
+    font-size: 1em;
+}
