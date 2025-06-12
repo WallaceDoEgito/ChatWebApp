@@ -18,7 +18,6 @@ export class AuthService {
       {
         if(e.status == 201)
         {
-          console.log("cheguei aqui")
           response = new AuthUserResponseDTO(ResponsesEnum.CREATED, e.error.text);
         }
         if(e.status == 400)
