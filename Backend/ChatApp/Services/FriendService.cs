@@ -12,7 +12,7 @@ public class FriendService(AppDbContext dbContext, RedisService redis, IHubConte
 {
     public async Task CreateRequest(FriendRequestDTO requestDto)
     {
-       var userToReq = await dbContext.Users.FirstOrDefaultAsync(u => u.Id.ToString() == requestDto.UserIdToRequest);
+       var userToReq = await dbContext.Users.FirstOrDefaultAsync(u => u.UserName == requestDto.UsernameToRequest);
        if (userToReq is null) throw new ArgumentException("Esse usuario nao existe");
        bool reqExists =
            await dbContext.FriendRequests.AnyAsync(fr =>
@@ -41,7 +41,7 @@ public class FriendService(AppDbContext dbContext, RedisService redis, IHubConte
 
     public async Task ResponseRequest(FriendResponseDTO response)
     {
-        var userRequested = await dbContext.Users.Include(u => u.ReceviedFriendRequests).FirstOrDefaultAsync(u => u.Id.ToString() == response.UserRequestedId);
+        var userRequested = await dbContext.Users.Include(u => u.ReceviedFriendRequests).Include(u => u.Friends).FirstOrDefaultAsync(u => u.Id.ToString() == response.UserRequestedId);
         if (userRequested is null) throw new Exception("O usuario requisitado nao existe");
 
         var request = userRequested.ReceviedFriendRequests.FirstOrDefault(u => u.UserToRequestId == userRequested.Id);
@@ -51,14 +51,24 @@ public class FriendService(AppDbContext dbContext, RedisService redis, IHubConte
             var userToBeFriend = await dbContext.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
             if (userToBeFriend is null) throw new Exception("O usuario que cria ser amigo nao existe");
             userToBeFriend.Friends.Add(userRequested);
-            userToBeFriend.FriendOf.Add(userRequested);
-            userRequested.Friends.Add(userToBeFriend);
-            userRequested.FriendOf.Add(userToBeFriend);
+            Channel ChannelTwoFriends = new Channel($"{userToBeFriend.UserName} - {userRequested.UserName}");
+            ChannelTwoFriends.Participants.Add(userToBeFriend);
+            ChannelTwoFriends.Participants.Add(userRequested);
+            await dbContext.Channels.AddAsync(ChannelTwoFriends);
             await NotifyAcceptedIfOnline(userRequested.Id.ToString(), userToBeFriend.UserName);
             await NotifyAcceptedIfOnline(userToBeFriend.Id.ToString(), userRequested.UserName);
         }
-        userRequested.ReceviedFriendRequests.Remove(request);
-        await dbContext.SaveChangesAsync();
+        dbContext.FriendRequests.Remove(request);
+
+        try
+        {
+            await dbContext.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     private async Task NotifyNewFriendRequestIfOnline(String userToNotifyId, String requestFriendName)

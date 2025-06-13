@@ -16,16 +16,17 @@ public class PrincipalHub(RabbitMQConnection connection, IFriendService friendSe
         await connection.PublishMessage(request);
     }
 
-    public async Task FriendRequest(String userIdToReq)
+    public async Task<bool> FriendRequest(String usernameToReq)
     {
-        var newRequest = new FriendRequestDTO(Context.UserIdentifier!, userIdToReq);
+        var newRequest = new FriendRequestDTO(Context.UserIdentifier!, usernameToReq);
         try
         {
             await friendService.CreateRequest(newRequest);
+            return true;
         }
         catch (Exception e)
         {
-            return;
+            return false;
         }
     }
     
