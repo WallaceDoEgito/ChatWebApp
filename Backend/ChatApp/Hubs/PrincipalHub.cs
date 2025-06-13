@@ -43,10 +43,9 @@ public class PrincipalHub(RabbitMQConnection connection, IFriendService friendSe
         }
     }
 
-    public async Task<Channel[]> GetChannelList()
+    public async Task<ChannelDTO[]> GetChannelList()
     {
-        Channel[] channelList = await getInfoService.GetUserChannels(Context.UserIdentifier!);
-        return channelList;
+        return await getInfoService.GetUserChannels(Context.UserIdentifier!);
     }
     public async Task<UserDTO[]> GetFriendRequests()
     {

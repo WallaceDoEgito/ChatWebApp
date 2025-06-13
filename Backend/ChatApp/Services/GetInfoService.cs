@@ -8,11 +8,16 @@ namespace ChatApp.Services;
 
 public class GetInfoService(AppDbContext dbContext) : IGetInfo
 {
-    public async Task<Channel[]> GetUserChannels(string userId)
+    public async Task<ChannelDTO[]> GetUserChannels(string userId)
     {
-        var user = await dbContext.Users.Include(u => u.Channels).FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+        var user = await dbContext.Users.Include(u => u.Channels).ThenInclude(c=> c.Participants)
+            .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+        
         if (user is null) return [];
-        return user.Channels.ToArray();
+        
+        return user.Channels.Select(c => new ChannelDTO(c.ChannelId.ToString(), c.ChannelName,
+            c.Participants.Select(p => new UserDTO(p.Id.ToString(), p.ExhibitedName)).ToArray())).ToArray();
+
     }
 
     public async Task<MessageDTO[]> GetMessageByChannel(string channelId, int page)

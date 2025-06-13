@@ -51,10 +51,10 @@ public class FriendService(AppDbContext dbContext, RedisService redis, IHubConte
             var userToBeFriend = await dbContext.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
             if (userToBeFriend is null) throw new Exception("O usuario que cria ser amigo nao existe");
             userToBeFriend.Friends.Add(userRequested);
-            Channel ChannelTwoFriends = new Channel($"{userToBeFriend.UserName} - {userRequested.UserName}");
-            ChannelTwoFriends.Participants.Add(userToBeFriend);
-            ChannelTwoFriends.Participants.Add(userRequested);
-            await dbContext.Channels.AddAsync(ChannelTwoFriends);
+            Channel channelTwoFriends = new Channel($"{userToBeFriend.UserName} - {userRequested.UserName}");
+            channelTwoFriends.Participants.Add(userToBeFriend);
+            channelTwoFriends.Participants.Add(userRequested);
+            await dbContext.Channels.AddAsync(channelTwoFriends);
             await NotifyAcceptedIfOnline(userRequested.Id.ToString(), userToBeFriend.UserName);
             await NotifyAcceptedIfOnline(userToBeFriend.Id.ToString(), userRequested.UserName);
         }

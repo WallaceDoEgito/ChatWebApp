@@ -57,16 +57,16 @@ public class MessageCreator(IServiceScopeFactory dbContextFactory, RabbitMQConne
             channel.Messages.Add(message);
             await dbContext.SaveChangesAsync();
             
-            rabbitMqConnection.DemuxMessage(message);
+            await rabbitMqConnection.DemuxMessage(message);
         }
     }
 
     public override void Dispose()
     {
-        _connection.CloseAsync();
-        _connection.Dispose();
-        _channel.CloseAsync();
-        _channel.Dispose();
+        _connection!.CloseAsync();
+        _connection!.Dispose();
+        _channel!.CloseAsync();
+        _channel!.Dispose();
         base.Dispose();
     }
 }
