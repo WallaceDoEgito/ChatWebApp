@@ -3,25 +3,38 @@ import { ChannelClickableComponent } from './channel-clickable/channel-clickable
 import { SignalConnectService } from '../../services/SignalConnect/signal-connect.service';
 import { Channel } from '../../DTOs/Channel';
 import {take} from "rxjs";
-import {MatFormField} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
-import {MatButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-channels',
-  imports: [ChannelClickableComponent, MatFormField, MatIconModule, MatButton],
+  imports: [ChannelClickableComponent, ReactiveFormsModule, MatIconModule, MatButton, FormsModule, MatIconButton],
   templateUrl: './channels.component.html',
   styleUrl: './channels.component.css'
 })
 export class ChannelsComponent implements OnInit {
   private SignalRS = inject(SignalConnectService)
   public ChannelList : Channel[] = []
+  public addFriends = false;
+  public addFriendModel = '';
   
   ngOnInit(): void {
     this.SignalRS.IsConnected$().pipe(take(1)).subscribe( async () => {
           this.ChannelList = await this.SignalRS.GetChannels();
+          console.log(this.ChannelList)
     });
+  }
 
+  AddFriendsToggle(){
+    this.addFriends = !this.addFriends
+    this.addFriendModel = '';
+  }
+
+  async SendFriendRequest()
+  {
+    let wasSuccesfull = await this.SignalRS.FriendRequest(this.addFriendModel);
+    this.addFriendModel = '';
   }
 
 }

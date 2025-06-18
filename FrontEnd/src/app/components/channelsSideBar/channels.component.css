@@ -21,17 +21,17 @@
     background-color: white;
     border-radius: 5px;
 }
-.SearchBar > input{
+input{
     height: 4vh;
-    width: 15vw;
+    width: 13vw;
     border: none;
 }
 
-.SearchBar > input:focus{
+input:focus{
     outline: none;
 }
 
-button
+.buttonFriend
 {
     width: 15vw;
 }
@@ -43,4 +43,38 @@ button
     opacity: 0.60;
     text-align: center;
     font-size: 1em;
+}
+.AddFriendsConteiner{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 5vh;
+    margin-top: 2vh;
+    width: 15vw;
+    background-color: #515051;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+.AddFriendsConteiner > input{
+    background-color: #515051;
+    color:white;
+}
+
+.closedInput
+{
+    width: 0vw;
+    height: 0vh;
+    transition: 0.2s;
+}
+.closedInput > *
+{
+    display: none;
+}
+
+.OpenedInput
+{
+    width: 15vw;
+    height: 5vh;
+    transition: 0.2s;
 }

@@ -1,12 +1,21 @@
 <div class="ChannelSideBarConteiner">
     <div class="SearchBar">
         <input type="text" placeholder="Pesquise algum canal...">
-        <mat-icon fontIcon="search"></mat-icon>
+        <button mat-icon-button>
+            <mat-icon fontIcon="search"></mat-icon>
+        </button>
     </div>
-    <button mat-button class="button">
+    <button mat-button class="buttonFriend" (click)="AddFriendsToggle()">
         <mat-icon fontIcon="person_add"></mat-icon>
         <span>Adicione mais amigos</span>
     </button>
+
+        <div class="AddFriendsConteiner" [class.closedInput] = "!addFriends" [class.OpenedInput] = "addFriends">
+            <input type="text" [(ngModel)]="addFriendModel" placeholder="Digite o nick de seu amigo">
+            <button mat-icon-button (click)="SendFriendRequest()">
+                <mat-icon fontIcon = "send"></mat-icon>
+            </button>
+        </div>
 
 
      @for(channel of ChannelList; track channel;)
