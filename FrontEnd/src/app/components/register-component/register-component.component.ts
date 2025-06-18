@@ -7,10 +7,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ResponsesEnum } from '../../Enums/ResponsesEnum';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-register-component',
-  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, MatButtonModule],
+    imports: [FormsModule, MatFormFieldModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, MatButtonModule, MatProgressSpinnerModule],
   templateUrl: './register-component.component.html',
   styleUrl: './register-component.component.css'
 })
@@ -22,6 +23,7 @@ export class RegisterComponentComponent {
   public RequestError:any = ''
   public RequestSucess:any = ''
   public ConfirmPasswordModel! : String
+  public loading = false;
 
   public actualPageIsRegister = false;
   UserNameFormControl = new FormControl('',[Validators.maxLength(32), Validators.required])
@@ -32,11 +34,13 @@ export class RegisterComponentComponent {
     if(this.UserNameFormControl.hasError("maxlength") || this.UserNameFormControl.hasError("required")) return;
     if(this.PasswordFormControl.hasError("maxlength") || this.PasswordFormControl.hasError("required")) return;
     if(this.PasswordModel != this.ConfirmPasswordModel) this.PasswordFormControl
+    this.loading = true;
     this.RequestError = ''
     let dtoAuthRequest = new AuthUserRequestDTO(this.UserNameModel, this.PasswordModel)
     let response : AuthUserResponseDTO = await this.authService.Register(dtoAuthRequest);
     if(response.ResponseType === ResponsesEnum.BAD_REQUEST || response.ResponseType === ResponsesEnum.INTERNALSERVERERROR) {this.RequestError = response.MessageBody; return;}
     console.log(response)
+    this.loading = false;
     if(response.ResponseType == ResponsesEnum.CREATED) this.RequestSucess = "Usuario criado com sucesso!"
     console.log(this.RequestSucess)
   }

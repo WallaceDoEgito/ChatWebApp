@@ -8,10 +8,11 @@ import { AuthUserResponseDTO } from '../../DTOs/AuthUserResponseDTO';
 import { AuthService } from '../../services/Auth/auth.service';
 import { ResponsesEnum } from '../../Enums/ResponsesEnum';
 import { Router } from '@angular/router';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-login-component',
-  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, MatButtonModule],
+  imports: [FormsModule, MatFormFieldModule, MatInputModule, MatFormFieldModule, ReactiveFormsModule, MatButtonModule, MatProgressSpinnerModule],
   templateUrl: './login-component.component.html',
   styleUrl: './login-component.component.css'
 })
@@ -27,22 +28,24 @@ export class LoginComponentComponent {
   public ServerResponse :any = ""
   UserNameFormControl = new FormControl('',[Validators.maxLength(32), Validators.required])
   PasswordFormControl = new FormControl('',[Validators.maxLength(128), Validators.required])
+  public loading = false;
 
   async Login()
   {
     if(this.UserNameFormControl.hasError("maxlength") || this.UserNameFormControl.hasError("required")) return;
     if(this.PasswordFormControl.hasError("maxlength") || this.PasswordFormControl.hasError("required")) return;
     this.ServerResponse = '';
+    this.loading = true;
 
     let dtoAuthRequest = new AuthUserRequestDTO(this.UserNameModel, this.PasswordModel)
     let response : AuthUserResponseDTO = await this.authService.Login(dtoAuthRequest);
-    if(response.ResponseType === ResponsesEnum.BAD_REQUEST) {;this.ServerResponse = response.MessageBody; return}
+    this.loading = false;
+    if(response.ResponseType === ResponsesEnum.BAD_REQUEST) {this.ServerResponse = response.MessageBody; return}
     else if(response.ResponseType === ResponsesEnum.OK) {
       let token : any = response.MessageBody;
-      console.log(token);
       if(token == null) return;
-      await this.authService.StoreJWTToken(token);
-      this.routerRedirect.navigate(["/hub"])
+      this.authService.StoreJWTToken(token);
+      await this.routerRedirect.navigate(["/hub"])
     }
 
   }

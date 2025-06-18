@@ -1,3 +1,8 @@
+@if (loading) {
+    <div class="loading">
+        <mat-spinner class="spinner"></mat-spinner>
+    </div>
+}
 <form class="forms">
     <div class="conteiner">
         <h1>Bem vindo de volta</h1>
@@ -29,7 +34,7 @@
         </mat-form-field>
         <div class="requests">            
         </div>
-        @if(ServerResponse != '')
+        @if(ServerResponse != '' && ServerResponse != undefined)
         {
             <mat-error>{{ServerResponse}}</mat-error>
         }
