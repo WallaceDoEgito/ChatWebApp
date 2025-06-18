@@ -1,3 +1,3 @@
 namespace ChatApp.Dtos;
 
-public record ChannelDTO(string ChannelId, string ChannelName, UserDTO[] Users);
+public record ChannelDTO(string ChannelId, string ChannelName, DateOnly CreationDate, UserDTO[] Users);

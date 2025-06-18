@@ -15,7 +15,7 @@ public class GetInfoService(AppDbContext dbContext) : IGetInfo
         
         if (user is null) return [];
         
-        return user.Channels.Select(c => new ChannelDTO(c.ChannelId.ToString(), c.ChannelName,
+        return user.Channels.Select(c => new ChannelDTO(c.ChannelId.ToString(), c.ChannelName, DateOnly.FromDateTime(c.CreatedAt) , 
             c.Participants.Select(p => new UserDTO(p.Id.ToString(), p.ExhibitedName)).ToArray())).ToArray();
 
     }
