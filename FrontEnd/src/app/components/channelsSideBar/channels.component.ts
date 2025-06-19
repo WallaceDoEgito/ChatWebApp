@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {Component, inject, OnInit, output} from '@angular/core';
 import { ChannelClickableComponent } from './channel-clickable/channel-clickable.component';
 import { SignalConnectService } from '../../services/SignalConnect/signal-connect.service';
 import { Channel } from '../../DTOs/Channel';
@@ -18,10 +18,16 @@ export class ChannelsComponent implements OnInit {
   public ChannelList : Channel[] = []
   public addFriends = false;
   public addFriendModel = '';
+  public emitChannelSelected = output<Channel>()
   
   ngOnInit(): void {
     this.SignalRS.IsConnected$().pipe(take(1)).subscribe( async () => {
-          this.ChannelList = await this.SignalRS.GetChannels();
+          let result = await this.SignalRS.GetChannels();
+          console.log(result);
+          for(let canal in result)
+          {
+            this.ChannelList.push(new Channel(result[canal].channelName, result[canal].channelId!, result[canal].creationDate!, result[canal].users!, []))
+          }
           console.log(this.ChannelList)
     });
   }
@@ -35,6 +41,11 @@ export class ChannelsComponent implements OnInit {
   {
     let wasSuccesfull = await this.SignalRS.FriendRequest(this.addFriendModel);
     this.addFriendModel = '';
+  }
+
+  public SelectChannel(channel:Channel)
+  {
+    this.emitChannelSelected.emit(channel);
   }
 
 }

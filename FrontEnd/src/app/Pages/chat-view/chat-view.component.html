@@ -1,14 +1,14 @@
 <nav>
-    <app-channels class="channels"/>
+    <app-channels class="channels" (emitChannelSelected)="NewChannelSelected($event)"/>
 </nav>
 
-<!--<main>-->
-<!--    @if(selectedChannelId === '')-->
+<main>
+<!--    @if(selectedChannel == undefined)-->
 <!--    {-->
-<!--        <app-default-page/>-->
+<!--        Nao esta selecionado nenhum canal-->
 <!--    }-->
-<!--    @else -->
+<!--    @else-->
 <!--    {-->
-<!--        <app-channel-page/>-->
+<!--        {{selectedChannel.ChannelName}}-->
 <!--    }-->
-<!--</main>-->
+</main>

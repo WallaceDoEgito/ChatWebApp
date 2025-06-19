@@ -1,0 +1,33 @@
+.containerChannel
+{
+    display: flex;
+    width: 20vw;
+    height: 8vh;
+    align-items: center;
+    cursor: pointer;
+}
+
+.containerChannel:hover
+{
+    transition: 200ms;
+    background-color: #515051;
+}
+
+#imageServer
+{
+    width: max-content;
+}
+
+#imageServer > img
+{
+    width: 2vw;
+    border-radius: 20px;
+    margin-left: 1vw;
+}
+
+
+.containerChannel > span
+{
+    margin-left: 2vw;
+    color:white;
+}

@@ -50,7 +50,8 @@ input:focus{
     align-items: center;
     justify-content: space-between;
     height: 5vh;
-    margin-top: 2vh;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
     width: 15vw;
     background-color: #515051;
     border-radius: 5px;
@@ -63,8 +64,8 @@ input:focus{
 
 .closedInput
 {
-    width: 0vw;
-    height: 0vh;
+    width: 0;
+    height: 0;
     transition: 0.2s;
 }
 .closedInput > *

@@ -20,7 +20,7 @@
 
      @for(channel of ChannelList; track channel;)
      {
-        <app-channel-clickable/>
+        <app-channel-clickable [channel]="channel" (clickEvent)="SelectChannel($event)"/>
      } @empty {
          <span class="NenhumAmigo">Vish... <br> parece que voce nao tem amigos!</span>
      }

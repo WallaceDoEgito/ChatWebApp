@@ -1,33 +1,32 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChannelsComponent } from "../../components/channelsSideBar/channels.component";
-import { ChannelPageComponent } from '../../components/channel-page/channel-page.component';
-import { DefaultPageComponent } from '../../components/default-page/default-page.component';
 import { SignalConnectService } from '../../services/SignalConnect/signal-connect.service';
+import {Channel} from "../../DTOs/Channel";
 
 @Component({
   selector: 'app-chat-view',
-  imports: [ChannelsComponent, ChannelPageComponent, DefaultPageComponent],
+  imports: [ChannelsComponent],
   templateUrl: './chat-view.component.html',
   styleUrl: './chat-view.component.css'
 })
 export class ChatViewComponent implements OnInit{
   private route = inject(Router)
   private signalRConnection = inject(SignalConnectService)
-  public selectedChannelId = ""
+  public selectedChannel:Channel | undefined = undefined;
 
   async ngOnInit(): Promise<void> {
     const tokenJWT = localStorage.getItem("JWTSession");
     if(tokenJWT == null){
-      this.route.navigate(["/auth"]);
+      await this.route.navigate(["/auth"]);
       return;
     }
     this.signalRConnection.TryConnect().then(e => this.signalRConnection.ComunicateConnection()).catch( e => {console.error(e);this.route.navigate(["/auth"])})
   }
 
-  async NewChannelSelected(Event:any)
+  NewChannelSelected(channelEmitted:Channel)
   {
-    // this.selectedChannelId = ;
+    this.selectedChannel = channelEmitted;
   }
 
 
