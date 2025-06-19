@@ -14,10 +14,32 @@ export class SignalConnectService {
     return this.ConnectionSubject.asObservable();
   }
 
+  public NewFriendRequest$(FriendReqUsername:String)
+  {
+    console.log(FriendReqUsername + "Quer ser seu amigo")
+  }
+  public NewFriendAccepted$(UsernameFriendAccepted:String)
+  {
+    console.log(UsernameFriendAccepted + "Aceitou seu pedido de amizade")
+  }
+
+  public NewMessage$(req:any)
+  {
+
+  }
+  public ServerResponseFriendReq$(req:any)
+  {
+    console.log(req);
+  }
+
   ComunicateConnection()
   {
     this.ConnectionSubject.next();
     console.log("Conectado via websockets")
+    this.Connection.on("SendedFriendServerResponse", (req:any) => this.ServerResponseFriendReq$(req))
+    this.Connection.on("NewFriendRequest", (req) => this.NewFriendRequest$(req))
+    this.Connection.on("NewFriendAccepted", (req) => this.NewFriendAccepted$(req))
+    this.Connection.on("NewMessage", (req) => this.NewMessage$(req))
   }
 
   TryConnect(): Promise<void> {
@@ -33,5 +55,4 @@ export class SignalConnectService {
   {
     return await this.Connection.invoke("FriendRequest", nicknameTorequest)
   }
-
 }

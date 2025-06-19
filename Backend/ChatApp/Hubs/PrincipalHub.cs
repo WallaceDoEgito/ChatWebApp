@@ -1,13 +1,16 @@
 using ChatApp.Data;
 using ChatApp.Dtos;
+using ChatApp.Exceptions;
 using ChatApp.Interfaces;
 using ChatApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.SignalR;
 
 namespace ChatApp.Hubs;
 
 [Authorize]
+[EnableCors]
 public class PrincipalHub(RabbitMQConnection connection, IFriendService friendService, RedisService redis, IGetInfo getInfoService) : Hub
 {
     public async Task SendMessage(MessageRequest request)
@@ -16,17 +19,34 @@ public class PrincipalHub(RabbitMQConnection connection, IFriendService friendSe
         await connection.PublishMessage(request);
     }
 
-    public async Task<bool> FriendRequest(String usernameToReq)
+    public async Task FriendRequest(String usernameToReq)
     {
         var newRequest = new FriendRequestDTO(Context.UserIdentifier!, usernameToReq);
         try
         {
             await friendService.CreateRequest(newRequest);
-            return true;
+            await Clients.Caller.SendAsync("SendedFriendServerResponse",
+                new { error = false, msg = "Requisicao Enviada com sucesso!" });
         }
+        catch (AlreadyIsFriendEx e)
+        {
+            await Clients.Caller.SendAsync("SendedFriendServerResponse",
+                new { error = true, msg = "Você ja é amigo deste usuario!" });
+        }
+        catch (ThisUserDontExistEx e)
+        {
+            await Clients.Caller.SendAsync("SendedFriendServerResponse",
+                new { error = true, msg = "Não encontramos nenhum usuario com esse nome" });
+        }
+        catch (DontAddYourselfEx ex)
+        {
+            await Clients.Caller.SendAsync("SendedFriendServerResponse",
+                new { error = true, msg = "Não é possivel se adicionar!" });
+        }
+        
         catch (Exception e)
         {
-            return false;
+            await Clients.Caller.SendAsync("SendedFriendServerResponse", new {error = true, msg = "Ocorreu um erro ao enviar o pedido, tente mais tarde"}); 
         }
     }
     

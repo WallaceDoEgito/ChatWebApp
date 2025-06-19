@@ -1,5 +1,6 @@
 using ChatApp.Data;
 using ChatApp.Dtos;
+using ChatApp.Exceptions;
 using ChatApp.Hubs;
 using ChatApp.Interfaces;
 using ChatApp.Models;
@@ -12,13 +13,15 @@ public class FriendService(AppDbContext dbContext, RedisService redis, IHubConte
 {
     public async Task CreateRequest(FriendRequestDTO requestDto)
     {
-       var userToReq = await dbContext.Users.FirstOrDefaultAsync(u => u.UserName == requestDto.UsernameToRequest);
-       if (userToReq is null) throw new ArgumentException("Esse usuario nao existe");
+       var userToReq = await dbContext.Users.Include(u => u.Friends).FirstOrDefaultAsync(u => u.UserName == requestDto.UsernameToRequest);
+       if (userToReq is null) throw new ThisUserDontExistEx();
+       if (userToReq.Id.ToString() == requestDto.UserId) throw new DontAddYourselfEx();
        bool reqExists =
            await dbContext.FriendRequests.AnyAsync(fr =>
                fr.UserId.ToString() == requestDto.UserId && fr.UserToRequestId == userToReq.Id);
-       
        if (reqExists) return;
+       bool alreadyIsFriend = userToReq.Friends.Any(u => u.Id.ToString() == requestDto.UserId);
+       if (alreadyIsFriend) throw new AlreadyIsFriendEx();
        bool otherUserHasAlreadyRequested = await dbContext.FriendRequests.AnyAsync(fr =>
                fr.UserId == userToReq.Id && fr.UserToRequestId.ToString() == requestDto.UserId);
 
@@ -51,6 +54,7 @@ public class FriendService(AppDbContext dbContext, RedisService redis, IHubConte
             var userToBeFriend = await dbContext.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
             if (userToBeFriend is null) throw new Exception("O usuario que cria ser amigo nao existe");
             userToBeFriend.Friends.Add(userRequested);
+            userRequested.Friends.Add(userToBeFriend);
             Channel channelTwoFriends = new Channel($"{userToBeFriend.UserName} - {userRequested.UserName}");
             channelTwoFriends.Participants.Add(userToBeFriend);
             channelTwoFriends.Participants.Add(userRequested);
