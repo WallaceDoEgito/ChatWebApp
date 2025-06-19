@@ -55,15 +55,15 @@ public class MessageDemux(RabbitMQConnection rabbitMqConnection, IServiceScopeFa
             {
                 if(users.Id.ToString() == mes.UserIdSender.ToString()) continue;
                 MessageDemuxDto dto = new MessageDemuxDto(mes.MessageId.ToString(), mes.UserIdSender.ToString(), mes.ChannelId.ToString(), users.Id.ToString(), mes.MessageContent, mes.SentAt);
-                rabbitMqConnection.TransmitMessage(dto);
+                await rabbitMqConnection.TransmitMessage(dto);
             }
         }
     }
     
     public override void Dispose()
     {
-        _channel.CloseAsync();
-        _channel.Dispose();
+        _channel!.CloseAsync();
+        _channel!.Dispose();
         base.Dispose();
     }
 }

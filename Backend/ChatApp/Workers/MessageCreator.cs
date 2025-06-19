@@ -23,7 +23,7 @@ public class MessageCreator(IServiceScopeFactory dbContextFactory, RabbitMQConne
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        await _channel.QueueDeclareAsync(queue:"MessageRequestQueue", durable:true,exclusive:false, autoDelete:false);
+        await _channel!.QueueDeclareAsync(queue:"MessageRequestQueue", durable:true,exclusive:false, autoDelete:false);
         var consumer = new AsyncEventingBasicConsumer(_channel);
         consumer.ReceivedAsync += async (model, ea) =>
         {

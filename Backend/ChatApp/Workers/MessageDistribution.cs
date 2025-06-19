@@ -9,10 +9,10 @@ using RabbitMQ.Client.Events;
 
 namespace ChatApp.Workers;
 
-public class MessageDistribution(IHubContext<PrincipalHub> hubContext, IServiceScopeFactory RedisFactory) : BackgroundService
+public class MessageDistribution(IHubContext<PrincipalHub> hubContext, IServiceScopeFactory redisFactory) : BackgroundService
 {
-    private IConnection _connection;
-    private IChannel _channel;
+    private IConnection? _connection;
+    private IChannel? _channel;
     public override async Task StartAsync(CancellationToken cancellationToken)
     {
         var factory = new ConnectionFactory();
@@ -23,7 +23,7 @@ public class MessageDistribution(IHubContext<PrincipalHub> hubContext, IServiceS
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        await _channel.QueueDeclareAsync(queue: "MessageDistribution", durable: true, exclusive: false,
+        await _channel!.QueueDeclareAsync(queue: "MessageDistribution", durable: true, exclusive: false,
             autoDelete: false, arguments: new Dictionary<string, object?>
             {
                 { "x-dead-letter-exchange", "Message_DLQ_Exchange" },
@@ -52,7 +52,7 @@ public class MessageDistribution(IHubContext<PrincipalHub> hubContext, IServiceS
 
     private async Task SendMessage(MessageDemuxDto message)
     {
-        using (var factory = RedisFactory.CreateScope())
+        using (var factory = redisFactory.CreateScope())
         {
             var redisDb = factory.ServiceProvider.GetRequiredService<RedisService>();
             var connections = await redisDb.GetUserConnections(message.DestinyId);
@@ -61,7 +61,7 @@ public class MessageDistribution(IHubContext<PrincipalHub> hubContext, IServiceS
     }
     private async Task<bool> CheckUserHasAActiveConnection(String userId)
     {
-        using (var factory = RedisFactory.CreateScope())
+        using (var factory = redisFactory.CreateScope())
         {
             var redisDb = factory.ServiceProvider.GetRequiredService<RedisService>();
             return await redisDb.CheckUserOnline(userId);
@@ -70,10 +70,10 @@ public class MessageDistribution(IHubContext<PrincipalHub> hubContext, IServiceS
 
     public override async void Dispose()
     {
-        await _connection.CloseAsync();
-        await _connection.DisposeAsync();
-        await _channel.CloseAsync();
-        await _channel.DisposeAsync();
+        await _connection!.CloseAsync();
+        await _connection!.DisposeAsync();
+        await _channel!.CloseAsync();
+        await _channel!.DisposeAsync();
         base.Dispose();
     }
 }
