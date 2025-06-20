@@ -3,10 +3,11 @@ import { Router } from '@angular/router';
 import { ChannelsComponent } from "../../components/channelsSideBar/channels.component";
 import { SignalConnectService } from '../../services/SignalConnect/signal-connect.service';
 import {Channel} from "../../DTOs/Channel";
+import {DefaultChatPageComponent} from "../../components/default-chat-page/default-chat-page.component";
 
 @Component({
   selector: 'app-chat-view',
-  imports: [ChannelsComponent],
+  imports: [ChannelsComponent, DefaultChatPageComponent],
   templateUrl: './chat-view.component.html',
   styleUrl: './chat-view.component.css'
 })

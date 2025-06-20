@@ -1,14 +1,16 @@
-<nav>
-    <app-channels class="channels" (emitChannelSelected)="NewChannelSelected($event)"/>
-</nav>
+<div class="ContainerBody">
+    <nav>
+        <app-channels class="channels" (emitChannelSelected)="NewChannelSelected($event)"/>
+    </nav>
 
-<main>
-<!--    @if(selectedChannel == undefined)-->
-<!--    {-->
-<!--        Nao esta selecionado nenhum canal-->
-<!--    }-->
-<!--    @else-->
-<!--    {-->
-<!--        {{selectedChannel.ChannelName}}-->
-<!--    }-->
-</main>
+    <main>
+        @if(selectedChannel == undefined)
+        {
+            <app-default-chat-page></app-default-chat-page>
+        }
+        @else
+        {
+            {{selectedChannel.ChannelName}}
+        }
+    </main>
+</div>
