@@ -18,7 +18,7 @@ export class ChannelsComponent implements OnInit {
   public ChannelList : Channel[] = []
   public addFriends = false;
   public addFriendModel = '';
-  public emitChannelSelected = output<Channel>()
+  public emitChannelSelected = output<Channel | undefined>()
   
   ngOnInit(): void {
     this.SignalRS.IsConnected$().pipe(take(1)).subscribe( async () => {
@@ -43,7 +43,7 @@ export class ChannelsComponent implements OnInit {
     this.addFriendModel = '';
   }
 
-  public SelectChannel(channel:Channel)
+  public SelectChannel(channel:Channel | undefined)
   {
     this.emitChannelSelected.emit(channel);
   }
