@@ -42,7 +42,7 @@ export class SignalConnectService {
   }
   public ServerResponseFriendReq$(req:any)
   {
-    console.log(req);
+
   }
 
   ComunicateConnection()
@@ -67,14 +67,12 @@ export class SignalConnectService {
   public async GetFriends(): Promise<UserInfoDTO[]>
   {
     let friends: UserInfoDTO[] = await this.Connection.invoke("GetFriends");
-    console.log(friends);
     return friends;
   }
 
   public async GetFriendRequests() : Promise<UserInfoDTO[]>
   {
     let reqs : UserInfoDTO[] = await this.Connection.invoke("GetFriendRequests");
-    console.log(reqs)
     return reqs;
   }
 
