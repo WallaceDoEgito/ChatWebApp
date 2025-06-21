@@ -3,7 +3,10 @@ nav
     width: 100vw;
     height: 10vh;
     background-color: #515051;
-    
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 main
@@ -11,4 +14,37 @@ main
     width: 100vw;
     height: 100vh;
     background-color: #414141;
+}
+
+.MenuOptionsContainer
+{
+    display: flex;
+    justify-content: center;
+    gap: 2vw;
+    margin-left: 3vw;
+}
+
+.icon
+{
+    display: flex;
+    gap: 5px;
+    font-size: large;
+    margin-left: 1vw;
+}
+
+.option
+{
+    cursor: pointer;
+    color: #e0e1ff;
+}
+
+.BadgesOption
+{
+    display: flex;
+    gap: 10px;
+}
+
+.Selected
+{
+    color: white;
 }

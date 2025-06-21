@@ -1,5 +1,17 @@
 <nav>
-
+    <div class="icon">
+        <mat-icon fontIcon="group" id="iconGroup"></mat-icon>
+        <span>Amigos</span>
+    </div>
+    <div class="MenuOptionsContainer">
+        <div class="option" [class.Selected]="AdicionadosSelecionados">
+            <span (click)="SelectAdicionados()">Adicionados</span>
+        </div>
+        <div class="option BadgesOption">
+            <span [class.Selected]="SolicitacoesSelecionados" (click)="SelectSolicitacoes()">Solicitações</span>
+            <div matBadge [matBadgeHidden]="Solicitacoes.length == 2" [matBadge]="2" matBadgePosition="after"></div>
+        </div>
+    </div>
 </nav>
 
 <main>
