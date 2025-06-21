@@ -7,10 +7,12 @@ nav
     display: flex;
     flex-direction: row;
     align-items: center;
+    overflow: hidden;
 }
 
 main
 {
+    overflow: hidden;
     width: 100vw;
     height: 100vh;
     background-color: #414141;
@@ -47,4 +49,21 @@ main
 .Selected
 {
     color: white;
+}
+
+.SolicitationsContainer
+{
+    height: 8vh;
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    margin-left: 1vw;
+    margin-top: 1vh;
+    gap: 1vw;
+}
+
+.SolicitationsContainer > img
+{
+    border-radius: 100px;
+    width: 2vw;
 }

@@ -4,16 +4,39 @@
         <span>Amigos</span>
     </div>
     <div class="MenuOptionsContainer">
-        <div class="option" [class.Selected]="AdicionadosSelecionados">
-            <span (click)="SelectAdicionados()">Adicionados</span>
+        <div class="option" [class.Selected]="AddedFriendsSelected">
+            <span (click)="SelectAdded()">Adicionados</span>
         </div>
         <div class="option BadgesOption">
-            <span [class.Selected]="SolicitacoesSelecionados" (click)="SelectSolicitacoes()">Solicitações</span>
-            <div matBadge [matBadgeHidden]="Solicitacoes.length == 2" [matBadge]="2" matBadgePosition="after"></div>
+            <span [class.Selected]="SolicitationsSelected" (click)="SelectSolicitations()">Solicitações</span>
+            <div matBadge [matBadgeHidden]="Solicitations.length == 0" [matBadge]="Solicitations.length" matBadgePosition="after"></div>
         </div>
     </div>
 </nav>
 
 <main>
+    @if(AddedFriendsSelected)
+    {
+        @for (friend of Friends; track friend.userId) {
+            <app-user-mini-profile [userInfo]="friend"/>
+        }
 
+    } @else if (SolicitationsSelected)
+    {
+        @for(sol of Solicitations; track sol.userId)
+        {
+            <div class="SolicitationsContainer">
+                <img [src]="base64WhiteImage">
+                <span style="color: white">{{sol.exibitedUsername}}</span>
+                <div class="ActionButtons">
+                    <button mat-icon-button (click)="AnswerFriendRequest(sol.userId, true)">
+                        <mat-icon fontIcon="check" style="color: #f9aadd "></mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="AnswerFriendRequest(sol.userId, false)">
+                        <mat-icon fontIcon="close" style="color: red"></mat-icon>
+                    </button>
+                </div>
+            </div>
+        }
+    }
 </main>

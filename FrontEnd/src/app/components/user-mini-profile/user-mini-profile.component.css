@@ -1,0 +1,26 @@
+.ProfileConteiner
+{
+    display: flex;
+    width: 100vw;
+    height: 5vh;
+    align-items: center;
+    margin-left: 1vw;
+    margin-top: 1vh;
+}
+
+.ProfileConteiner > img
+{
+    border-radius: 100px;
+    width: 2vw;
+}
+
+.ProfileConteiner > span
+{
+    color: white;
+    margin-left: 1vw;
+}
+
+.actionButtons
+{
+    margin-left: 5vw;
+}
