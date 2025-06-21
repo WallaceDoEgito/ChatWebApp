@@ -1,5 +1,6 @@
 using ChatApp.Data;
 using ChatApp.Dtos;
+using ChatApp.Exceptions;
 using ChatApp.Interfaces;
 using ChatApp.Models;
 using Microsoft.EntityFrameworkCore;
@@ -31,10 +32,17 @@ public class GetInfoService(AppDbContext dbContext) : IGetInfo
 
     public async Task<UserDTO[]> GetFriendRequests(string userId)
     {
-        var userReq = await dbContext.Users.Include(u => u.ReceviedFriendRequests)
+        var userReq = await dbContext.Users.Include(u => u.ReceviedFriendRequests).ThenInclude(req => req.User)
             .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
         if (userReq is null) return [];
-        return userReq.ReceviedFriendRequests
-            .Select(req => new UserDTO(req.UserId.ToString(), req.User.ExhibitedName)).ToArray();
+        return userReq.ReceviedFriendRequests.Select(req => new UserDTO(req.UserId.ToString(), req.User.ExhibitedName)).ToArray();
+    }
+
+    public async Task<UserDTO[]> GetFriends(string userId)
+    {
+        var user = await dbContext.Users.Include(u => u.Friends).FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+        if (user is null) throw new ThisUserDontExistEx();
+        UserDTO[] friends = user.Friends.Select(u => new UserDTO(u.Id.ToString(), u.ExhibitedName)).ToArray();
+        return friends;
     }
 }
