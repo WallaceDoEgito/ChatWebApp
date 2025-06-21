@@ -1,13 +1,20 @@
-import { Component, inject, output } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthUserRequestDTO } from '../../DTOs/AuthUserRequest';
-import { AuthUserResponseDTO } from '../../DTOs/AuthUserResponseDTO';
+import {Component, inject, output, signal, WritableSignal} from '@angular/core';
+import {
+  AbstractControl,
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule, ValidationErrors,
+  ValidatorFn,
+  Validators, FormGroup
+} from '@angular/forms';
 import { AuthService } from '../../services/Auth/auth.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ResponsesEnum } from '../../Enums/ResponsesEnum';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {AuthUserRequestDTO} from "../../DTOs/AuthUserRequest";
+import {AuthUserResponseDTO} from "../../DTOs/AuthUserResponseDTO";
+import {ResponsesEnum} from "../../Enums/ResponsesEnum";
 
 @Component({
   selector: 'app-register-component',
@@ -18,35 +25,66 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 export class RegisterComponentComponent {
   private authService = inject(AuthService);
   public LoginClickEvent = output();
-  public UserNameModel! : String
-  public PasswordModel! : String
-  public RequestError:any = ''
-  public RequestSucess:any = ''
-  public ConfirmPasswordModel! : String
+  public RequestError:WritableSignal<String | undefined | null> = signal('');
+  public RequestSuccess:WritableSignal<String | undefined | null> =  signal('');
   public loading = false;
 
-  public actualPageIsRegister = false;
-  UserNameFormControl = new FormControl('',[Validators.maxLength(32), Validators.required])
-  PasswordFormControl = new FormControl('',[Validators.maxLength(128), Validators.required])
+  RegistroGroup = new FormGroup
+  (
+      {
+        UserName: new FormControl('',[Validators.maxLength(32), Validators.required]),
+        Password: new FormControl('',[Validators.maxLength(128), Validators.required]),
+        ConfirmPassword: new FormControl('',[Validators.maxLength(128), Validators.required])
+      },
+      PasswordsDontMatch()
+  )
+
+  get UserNameFormControl():FormControl<any>
+  {
+    return this.RegistroGroup.get("UserName") as FormControl
+  }
+  get PasswordFormControl():FormControl<any>
+  {
+    return this.RegistroGroup.get('Password') as FormControl
+  }
+  get ConfirmPasswordFormControl()
+  {
+    return this.RegistroGroup.get('ConfirmPassword') as FormControl
+  }
 
   async SendRegister()
   {
-    if(this.UserNameFormControl.hasError("maxlength") || this.UserNameFormControl.hasError("required")) return;
-    if(this.PasswordFormControl.hasError("maxlength") || this.PasswordFormControl.hasError("required")) return;
-    if(this.PasswordModel != this.ConfirmPasswordModel) this.PasswordFormControl
+    if(this.RegistroGroup.hasError("maxlength")) return;
+    if(this.RegistroGroup.hasError("required")) return;
+    if(this.RegistroGroup.hasError("mismatch")) return;
     this.loading = true;
-    this.RequestError = ''
-    let dtoAuthRequest = new AuthUserRequestDTO(this.UserNameModel, this.PasswordModel)
+    this.RequestError.set('');
+    let dtoAuthRequest = new AuthUserRequestDTO(this.RegistroGroup.get('UserName')?.value!, this.RegistroGroup.get('Password')?.value!)
     let response : AuthUserResponseDTO = await this.authService.Register(dtoAuthRequest);
-    if(response.ResponseType === ResponsesEnum.BAD_REQUEST || response.ResponseType === ResponsesEnum.INTERNALSERVERERROR) {this.RequestError = response.MessageBody; return;}
-    console.log(response)
     this.loading = false;
-    if(response.ResponseType == ResponsesEnum.CREATED) this.RequestSucess = "Usuario criado com sucesso!"
-    console.log(this.RequestSucess)
+    if(response.ResponseType === ResponsesEnum.BAD_REQUEST || response.ResponseType === ResponsesEnum.INTERNALSERVERERROR) {this.RequestError.set(response.MessageBody); return;}
+    if(response.ResponseType == ResponsesEnum.CREATED) this.RequestSuccess.set("Usuario criado com sucesso!");
   }
 
   AlternateToLogin()
   {
     this.LoginClickEvent.emit();
   }
+
 }
+
+  export function PasswordsDontMatch():ValidatorFn
+  {
+    return (group: AbstractControl): ValidationErrors | null =>
+      {
+        const password = group.get('Password')?.value
+        const confirm = group.get('ConfirmPassword')?.value
+        if(password !== confirm)
+        {
+          group.get("Password")?.setErrors({mismatch: true})
+          group.get("ConfirmPassword")?.setErrors({mismatch: true})
+          return password === confirm ? null : {mismatch:true}
+        }
+        return null;
+      }
+  }
