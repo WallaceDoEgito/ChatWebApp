@@ -1,6 +1,6 @@
 import {Component, input, output} from '@angular/core';
 import {MatButtonModule} from "@angular/material/button";
-import {Channel} from "../../../DTOs/Channel";
+import {ChannelDTO} from "../../../DTOs/ChannelDTO";
 import {NgOptimizedImage} from "@angular/common";
 
 @Component({
@@ -13,8 +13,8 @@ import {NgOptimizedImage} from "@angular/common";
   styleUrl: './channel-clickable.component.css'
 })
 export class ChannelClickableComponent {
-  public channel = input.required<Channel>();
-  public clickEvent = output<Channel>();
+  public channel = input.required<ChannelDTO>();
+  public clickEvent = output<ChannelDTO>();
   public base64WhiteImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
 
   public clickChannel()

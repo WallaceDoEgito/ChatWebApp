@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChannelsComponent } from "../../components/channelsSideBar/channels.component";
 import { SignalConnectService } from '../../services/SignalConnect/signal-connect.service';
-import {Channel} from "../../DTOs/Channel";
+import {ChannelDTO} from "../../DTOs/ChannelDTO";
 import {DefaultChatPageComponent} from "../../components/default-chat-page/default-chat-page.component";
 
 @Component({
@@ -14,7 +14,7 @@ import {DefaultChatPageComponent} from "../../components/default-chat-page/defau
 export class ChatViewComponent implements OnInit{
   private route = inject(Router)
   private signalRConnection = inject(SignalConnectService)
-  public selectedChannel:Channel | undefined = undefined;
+  public selectedChannel:ChannelDTO | undefined = undefined;
 
   async ngOnInit(): Promise<void> {
     const tokenJWT = localStorage.getItem("JWTSession");
@@ -25,7 +25,7 @@ export class ChatViewComponent implements OnInit{
     this.signalRConnection.TryConnect().then(e => this.signalRConnection.ComunicateConnection()).catch( e => {console.error(e);this.route.navigate(["/auth"])})
   }
 
-  NewChannelSelected(channelEmitted:Channel | undefined)
+  NewChannelSelected(channelEmitted:ChannelDTO | undefined)
   {
     this.selectedChannel = channelEmitted;
   }

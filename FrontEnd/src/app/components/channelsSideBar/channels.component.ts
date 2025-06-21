@@ -1,7 +1,7 @@
 import {Component, inject, OnInit, output} from '@angular/core';
 import { ChannelClickableComponent } from './channel-clickable/channel-clickable.component';
 import { SignalConnectService } from '../../services/SignalConnect/signal-connect.service';
-import { Channel } from '../../DTOs/Channel';
+import { ChannelDTO } from '../../DTOs/ChannelDTO';
 import {take} from "rxjs";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
@@ -15,10 +15,10 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 })
 export class ChannelsComponent implements OnInit {
   private SignalRS = inject(SignalConnectService)
-  public ChannelList : Channel[] = []
+  public ChannelList : ChannelDTO[] = []
   public addFriends = false;
   public addFriendModel = '';
-  public emitChannelSelected = output<Channel | undefined>()
+  public emitChannelSelected = output<ChannelDTO | undefined>()
   
   ngOnInit(): void {
     this.SignalRS.IsConnected$().pipe(take(1)).subscribe( async () => {
@@ -26,7 +26,7 @@ export class ChannelsComponent implements OnInit {
           console.log(result);
           for(let canal in result)
           {
-            this.ChannelList.push(new Channel(result[canal].channelName, result[canal].channelId!, result[canal].creationDate!, result[canal].users!, []))
+            this.ChannelList.push(new ChannelDTO(result[canal].channelName, result[canal].channelId!, result[canal].creationDate!, result[canal].users!, []))
           }
           console.log(this.ChannelList)
     });
@@ -43,7 +43,7 @@ export class ChannelsComponent implements OnInit {
     this.addFriendModel = '';
   }
 
-  public SelectChannel(channel:Channel | undefined)
+  public SelectChannel(channel:ChannelDTO | undefined)
   {
     this.emitChannelSelected.emit(channel);
   }
