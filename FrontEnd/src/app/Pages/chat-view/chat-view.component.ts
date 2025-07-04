@@ -22,7 +22,7 @@ export class ChatViewComponent implements OnInit{
       await this.route.navigate(["/auth"]);
       return;
     }
-    this.signalRConnection.TryConnect().then(e => this.signalRConnection.ComunicateConnection()).catch( e => {console.error(e);this.route.navigate(["/auth"])})
+    this.signalRConnection.TryConnect().then(e => this.signalRConnection.ComunicateConnection()).catch( async (e)=> {await this.route.navigate(["/auth"])})
   }
 
   NewChannelSelected(channelEmitted:ChannelDTO | undefined)
