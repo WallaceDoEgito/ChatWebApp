@@ -1,11 +1,8 @@
-export class MessageDTO {
-    public UserIdThatSent : String;
-    public UserNameThatSent : String;
-    public MessageContent : String
-
-    constructor(userid : String, username: String, messageContent : String) {
-        this.UserIdThatSent = userid;
-        this.UserNameThatSent = username;
-        this.MessageContent = messageContent;
-    }
+export interface MessageDTO {
+    MessageId:string;
+    SenderId:string;
+    ChannelId:string;
+    DestinyId:string
+    Message:string;
+    SendAt:string;
 }
