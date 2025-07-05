@@ -31,7 +31,7 @@ public class MessageDemux(RabbitMQConnection rabbitMqConnection, IServiceScopeFa
         {
             try
             {
-                var message = JsonSerializer.Deserialize<Message>(ea.Body.ToArray());
+                var message = JsonSerializer.Deserialize<MessageToDemuxDTO>(ea.Body.ToArray());
                 if (message is null) throw new InvalidDataException();
                 await DemuxAndSendToQueue(message);
                 await _channel.BasicAckAsync(ea.DeliveryTag, multiple: false);
@@ -44,20 +44,19 @@ public class MessageDemux(RabbitMQConnection rabbitMqConnection, IServiceScopeFa
         await _channel.BasicConsumeAsync(queue: "Message_Demux_Queue", autoAck: false, consumer);
     }
 
-    private async Task DemuxAndSendToQueue(Message mes)
+    private async Task DemuxAndSendToQueue(MessageToDemuxDTO mes)
     {
-        using (var factory = dbFactory.CreateScope())
+        using var factory = dbFactory.CreateScope();
+        var dbContext = factory.ServiceProvider.GetRequiredService<AppDbContext>();
+        var channel = await dbContext.Channels.Include(x => x.Participants).FirstOrDefaultAsync(x => x.ChannelId.ToString() == mes.ChannelId);
+        if (channel is null) throw new KeyNotFoundException();
+        foreach (var users in channel.Participants)
         {
-            var dbContext = factory.ServiceProvider.GetRequiredService<AppDbContext>();
-            var channel = await dbContext.Channels.Include(x => x.Participants).FirstOrDefaultAsync(x => x.ChannelId == mes.ChannelId);
-            if (channel is null) throw new KeyNotFoundException();
-            foreach (var users in channel.Participants)
-            {
-                if(users.Id.ToString() == mes.UserIdSender.ToString()) continue;
-                MessageDemuxDto dto = new MessageDemuxDto(mes.MessageId.ToString(), mes.UserIdSender.ToString(), mes.ChannelId.ToString(), users.Id.ToString(), mes.MessageContent, mes.SentAt);
-                await rabbitMqConnection.TransmitMessage(dto);
-            }
+            if(users.Id.ToString() == mes.UserIdThatSended) continue;
+            MessageDemuxDto dto = new MessageDemuxDto(mes.MessageId, mes.UserIdThatSended, mes.ChannelId, users.Id.ToString(), mes.MessageContent, mes.SendAt, mes.Edited);
+            await rabbitMqConnection.TransmitMessage(dto);
         }
+        
     }
     
     public override void Dispose()

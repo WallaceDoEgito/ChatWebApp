@@ -62,7 +62,7 @@ public class RabbitMQConnection
             routingKey: "MessageRequestQueue");
     }
 
-    public async Task DemuxMessage(Message message)
+    public async Task DemuxMessage(MessageToDemuxDTO message)
     {
         var factory = new ConnectionFactory();
         await using IConnection connection = await factory.CreateConnectionAsync();

@@ -44,21 +44,21 @@ public class MessageCreator(IServiceScopeFactory dbContextFactory, RabbitMQConne
 
     private async Task ProcessMessage(MessageRequest request)
     {
-        using (var factory = dbContextFactory.CreateScope())
-        {
-            var dbContext = factory.ServiceProvider.GetRequiredService<AppDbContext>();
-            User? findUser = await dbContext.Users.Include(x => x.Channels).FirstOrDefaultAsync(x => x.Id.ToString() == request.UserId);
-            if (findUser is null) throw new ArgumentException();
-            var channel = findUser.Channels.FirstOrDefault(x => x.ChannelId.ToString() == request.ChannelId);
-            if (channel is null) throw new ArgumentException();
-    
-            var message = new Message(findUser.Id, request.Message, channel.ChannelId);
-            findUser.SendMessages.Add(message);
-            channel.Messages.Add(message);
-            await dbContext.SaveChangesAsync();
-            
-            await rabbitMqConnection.DemuxMessage(message);
-        }
+        using var factory = dbContextFactory.CreateScope();
+        var dbContext = factory.ServiceProvider.GetRequiredService<AppDbContext>();
+        User? findUser = await dbContext.Users.Include(x => x.Channels).FirstOrDefaultAsync(x => x.Id.ToString() == request.UserId);
+        if (findUser is null) throw new ArgumentException();
+        var channel = findUser.Channels.FirstOrDefault(x => x.ChannelId.ToString() == request.ChannelId);
+        if (channel is null) throw new ArgumentException();
+
+        var message = new Message(findUser.Id, request.Message, channel.ChannelId);
+        dbContext.Message.Add(message);
+        await dbContext.SaveChangesAsync();
+
+        var messageToDemux = new MessageToDemuxDTO(message.MessageId.ToString(), message.UserIdSender.ToString(), message.ChannelId.ToString(),
+            message.MessageContent, message.SentAt, message.Edited);
+        await rabbitMqConnection.DemuxMessage(messageToDemux);
+        
     }
 
     public override void Dispose()

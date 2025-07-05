@@ -13,9 +13,9 @@ namespace ChatApp.Hubs;
 [EnableCors]
 public class PrincipalHub(RabbitMQConnection connection, IFriendService friendService, RedisService redis, IGetInfo getInfoService) : Hub
 {
-    public async Task SendMessage(MessageRequest request)
+    public async Task SendMessage(String messageContent, String channelId)
     {
-        if (Context.UserIdentifier != request.UserId) return;
+        MessageRequest request = new MessageRequest(Context.UserIdentifier!, messageContent, channelId);
         await connection.PublishMessage(request);
     }
 

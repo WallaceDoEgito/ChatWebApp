@@ -38,7 +38,7 @@ public class MessageDistribution(IHubContext<PrincipalHub> hubContext, IServiceS
                 if (message is null) throw new ArgumentException();
                 bool userIsOnline = await CheckUserHasAActiveConnection(message.DestinyId);
                 if (!userIsOnline)
-                    await _channel.BasicNackAsync(ea.DeliveryTag, multiple: false, requeue: true);
+                    await _channel.BasicNackAsync(ea.DeliveryTag, multiple: false, requeue: false);
                 await SendMessage(message);
                 await _channel.BasicAckAsync(ea.DeliveryTag, multiple:false);
             }
@@ -52,12 +52,11 @@ public class MessageDistribution(IHubContext<PrincipalHub> hubContext, IServiceS
 
     private async Task SendMessage(MessageDemuxDto message)
     {
-        using (var factory = redisFactory.CreateScope())
-        {
-            var redisDb = factory.ServiceProvider.GetRequiredService<RedisService>();
-            var connections = await redisDb.GetUserConnections(message.DestinyId);
-            await hubContext.Clients.Clients(connections).SendAsync("NewMessage", message);
-        }
+        using var factory = redisFactory.CreateScope();
+        var redisDb = factory.ServiceProvider.GetRequiredService<RedisService>();
+        var connections = await redisDb.GetUserConnections(message.DestinyId);
+        await hubContext.Clients.Clients(connections).SendAsync("NewMessage", message);
+        
     }
     private async Task<bool> CheckUserHasAActiveConnection(String userId)
     {
