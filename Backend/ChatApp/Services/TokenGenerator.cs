@@ -24,7 +24,7 @@ public class TokenGenerator(IConfiguration config) : ITokenService
             issuer: config.GetSection("JWTConfig:Issuer").Value,
             audience: config.GetSection("JWTConfig:Audience").Value,
             claims: claims,
-            expires: DateTime.Now.AddMinutes(config.GetValue<double>("JWTConfig:ExpirationInMinutes")),
+            expires: DateTime.UtcNow.AddMinutes(config.GetValue<double>("JWTConfig:ExpirationInMinutes")),
             signingCredentials: signCred
         );
 
