@@ -44,7 +44,7 @@ public class AppDbContext(IConfiguration configuration) : DbContext
         {
             entity.HasIndex(m => new {
                 m.SentAt, m.ChannelId
-            });
+            }).IsDescending(true, false);
             entity.HasKey(e => e.MessageId);
             entity.HasOne(m => m.Sender).WithMany(u => u.SendMessages).OnDelete(DeleteBehavior.NoAction).HasForeignKey(m => m.UserIdSender);
             entity.HasOne(c => c.Channel).WithMany(c => c.Messages).OnDelete(DeleteBehavior.Cascade).HasForeignKey(m => m.ChannelId);
