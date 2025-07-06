@@ -4,10 +4,11 @@ import { ChannelsComponent } from "../../components/channelsSideBar/channels.com
 import { SignalConnectService } from '../../services/SignalConnect/signal-connect.service';
 import {ChannelDTO} from "../../DTOs/ChannelDTO";
 import {DefaultChatPageComponent} from "../../components/default-chat-page/default-chat-page.component";
+import {ChannelPageComponent} from "../../components/channel-page/channel-page.component";
 
 @Component({
   selector: 'app-chat-view',
-  imports: [ChannelsComponent, DefaultChatPageComponent],
+  imports: [ChannelsComponent, DefaultChatPageComponent, ChannelPageComponent],
   templateUrl: './chat-view.component.html',
   styleUrl: './chat-view.component.css'
 })

@@ -1,0 +1,80 @@
+Header
+{
+    /*overflow: hidden;*/
+    width: 80vw;
+    height: 8vh;
+    background-color: #515051;
+    display: flex;
+    align-items: center;
+    color: white;
+    justify-content: space-between;
+}
+
+span
+{
+    font-size: 1.3rem;
+    margin-left: 1vw;
+}
+
+.iconBut
+{
+    transform: scale(1.4);
+}
+
+.PhotoAndName
+{
+    display: flex;
+    align-items: center;
+    margin-left: 1vw;
+}
+
+.PhotoAndName > img
+{
+    border-radius: 100px;
+    
+    width: 3vw;
+}
+
+.CallButtons
+{
+    margin-right: 2vw;
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+}
+
+main
+{
+    height: 100vh;
+    background-color: #414141;
+}
+
+.SendMessage
+{
+    display: flex;
+    width: 60vw;
+    height: 8vh;
+    position: absolute;
+    top: 90%;
+    left: 30vw;
+    align-items: center;
+    background-color: #515051;
+    gap: 1vw;
+    box-shadow: 0px 2px 4px 1px rgba(0,0,0,0.31);
+}
+
+
+.SendMessage > input
+{
+    height: 7vh;
+    width: 55vw;
+    background-color: #515051;
+    border:none;
+    color: white;
+    font-size: 1.3rem;
+}
+
+.SendMessage > input:focus
+{
+   outline: none;
+}

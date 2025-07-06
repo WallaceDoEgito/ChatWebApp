@@ -1,1 +1,31 @@
-<p>channel-page works!</p>
+<Header>
+    <div class="PhotoAndName">
+        <img [src]="WhiteImageBase64">
+        <span id="Name">{{ChannelSelected().ChannelName}}</span>
+    </div>
+    <div class="CallButtons">
+        <button mat-icon-button>
+            <mat-icon class="iconBut" fontIcon="call"></mat-icon>
+        </button>
+        <button mat-icon-button>
+            <mat-icon class="iconBut" fontIcon="videocam"></mat-icon>
+        </button>
+    </div>
+</Header>
+
+<main>
+
+    @for (mes of ChannelSelected().Messages; track ChannelSelected().Messages)
+    {
+        tchuru tchuru, chegou mensagem pra voce
+    }
+    <div class="SendMessage">
+        <button mat-icon-button id="uploadFile">
+            <mat-icon fontIcon="add" class="iconBut"></mat-icon>
+        </button>
+        <input placeholder="Digite coisas legais!" [(ngModel)]="MessageInputModel" (keyup.enter)="SendMessage()">
+        <button mat-icon-button>
+            <mat-icon fontIcon="emoji_emotions" class="iconBut"></mat-icon>
+        </button>
+    </div>
+</main>

@@ -38,7 +38,8 @@ export class SignalConnectService {
 
   public NewMessage$(req:any)
   {
-
+    console.log("tchuru tchuru Chegou mensagem pra voce");
+    console.log(req)
   }
   public ServerResponseFriendReq$(req:any)
   {
@@ -84,5 +85,10 @@ export class SignalConnectService {
   public async FriendRequestResponse(userIdWhoRequested :String, response : boolean)
   {
       await this.Connection.send("FriendResponse", userIdWhoRequested, response);
+  }
+
+  public async SendMessage(messageContent:String, channelId:String)
+  {
+    await this.Connection.send("SendMessage", messageContent, channelId);
   }
 }
