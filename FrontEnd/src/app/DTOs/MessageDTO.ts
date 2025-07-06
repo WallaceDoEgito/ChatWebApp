@@ -1,8 +1,9 @@
 export interface MessageDTO {
-    MessageId:string;
-    SenderId:string;
-    ChannelId:string;
-    DestinyId:string
-    Message:string;
-    SendAt:string;
+    messageId:string;
+    userIdThatSended:string;
+    userNameThatSended:string;
+    channelId:string;
+    messageContent:string;
+    sendAt:string;
+    edited:boolean;
 }

@@ -14,18 +14,35 @@
 </Header>
 
 <main>
+    <div class="MessagesConteiner">
+        @for (mes of ChannelSelected().Messages; track ChannelSelected().Messages[$index].messageId)
+        {
+            <div class="MessageStructreConteiner">
+                <div id="imagePerfil">
+                    <img [src]="WhiteImageBase64">
+                </div>
+                <span id="data">
+                    <span id="info">
+                        <span id="userName">{{mes.userNameThatSended}}</span>
+                        <span id="date">{{mes.sendAt | date: "dd/MM/YYYY 'às' hh:mm"}}</span>
+                    </span>
+                    <span id="Message">
+                        {{mes.messageContent}}
+                    </span>
+                </span>
+            </div>
+        }
+    </div>
 
-    @for (mes of ChannelSelected().Messages; track ChannelSelected().Messages)
-    {
-        tchuru tchuru, chegou mensagem pra voce
-    }
-    <div class="SendMessage">
-        <button mat-icon-button id="uploadFile">
-            <mat-icon fontIcon="add" class="iconBut"></mat-icon>
-        </button>
-        <input placeholder="Digite coisas legais!" [(ngModel)]="MessageInputModel" (keyup.enter)="SendMessage()">
-        <button mat-icon-button>
-            <mat-icon fontIcon="emoji_emotions" class="iconBut"></mat-icon>
-        </button>
+    <div class="SendMessageContainer">
+        <div class="SendMessage">
+            <button mat-icon-button id="uploadFile">
+                <mat-icon fontIcon="add" class="iconBut"></mat-icon>
+            </button>
+            <input placeholder="Digite coisas legais!" [(ngModel)]="MessageInputModel" (keyup.enter)="SendMessage()">
+            <button mat-icon-button>
+                <mat-icon fontIcon="emoji_emotions" class="iconBut"></mat-icon>
+            </button>
+        </div>
     </div>
 </main>

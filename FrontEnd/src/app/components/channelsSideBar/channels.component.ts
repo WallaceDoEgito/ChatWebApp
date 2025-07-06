@@ -23,12 +23,10 @@ export class ChannelsComponent implements OnInit {
   ngOnInit(): void {
     this.SignalRS.IsConnected$().pipe(take(1)).subscribe( async () => {
           let result = await this.SignalRS.GetChannels();
-          console.log(result);
           for(let canal in result)
           {
             this.ChannelList.push(new ChannelDTO(result[canal].channelName, result[canal].channelId!, result[canal].creationDate!, result[canal].users!, []))
           }
-          console.log(this.ChannelList)
     });
   }
 

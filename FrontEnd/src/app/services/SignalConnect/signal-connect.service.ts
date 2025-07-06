@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import * as signalR from "@microsoft/signalr"
 import {ReplaySubject, Subject} from "rxjs";
 import {UserInfoDTO} from "../../DTOs/UserInfoDTO";
+import {MessageDTO} from "../../DTOs/MessageDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class SignalConnectService {
   private ConnectionSubject = new ReplaySubject<void>(1);
   private FriendRequestResponseSubject = new Subject<String>();
   private NewFriendSubject = new Subject<String>();
+  private NewMessageSubject = new Subject<MessageDTO>();
 
   IsConnected$() {
     return this.ConnectionSubject.asObservable();
@@ -27,21 +29,27 @@ export class SignalConnectService {
     return this.FriendRequestResponseSubject.asObservable();
   }
 
-  public FriendRequest$(FriendReqUsername:String)
+  GetNewMessageObservable()
+  {
+    return this.NewMessageSubject.asObservable();
+  }
+
+  private FriendRequest$(FriendReqUsername:String)
   {
     this.FriendRequestResponseSubject.next(FriendReqUsername);
   }
-  public NewFriendAccepted$(UsernameFriendAccepted:String)
+  private NewFriendAccepted$(UsernameFriendAccepted:String)
   {
     this.NewFriendSubject.next(UsernameFriendAccepted)
   }
 
-  public NewMessage$(req:any)
+  private NewMessage$(req:any)
   {
     console.log("tchuru tchuru Chegou mensagem pra voce");
     console.log(req)
+    this.NewMessageSubject.next(req)
   }
-  public ServerResponseFriendReq$(req:any)
+  private ServerResponseFriendReq$(req:any)
   {
 
   }
@@ -90,5 +98,10 @@ export class SignalConnectService {
   public async SendMessage(messageContent:String, channelId:String)
   {
     await this.Connection.send("SendMessage", messageContent, channelId);
+  }
+
+  public async GetMessagesByChannelId(channelId:String, page:number) : Promise<MessageDTO[]>
+  {
+    return this.Connection.invoke("GetMessageByChannelAndPage", channelId, page)
   }
 }
