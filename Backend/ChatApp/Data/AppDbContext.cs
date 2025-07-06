@@ -21,6 +21,7 @@ public class AppDbContext(IConfiguration configuration) : DbContext
 
         modelBuilder.Entity<User>((entity) =>
         {
+            entity.HasIndex(u => u.Id).IsUnique();
             entity.HasKey(u => u.Id);
             entity.HasMany(u => u.SendMessages).WithOne(m => m.Sender).HasForeignKey(m => m.UserIdSender)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -41,13 +42,17 @@ public class AppDbContext(IConfiguration configuration) : DbContext
 
         modelBuilder.Entity<Message>(entity =>
         {
+            entity.HasIndex(m => new {
+                m.SentAt, m.ChannelId
+            });
             entity.HasKey(e => e.MessageId);
-            entity.HasOne(m => m.Sender).WithMany(u => u.SendMessages).OnDelete(DeleteBehavior.Cascade);
-            entity.HasOne(c => c.Channel).WithMany(c => c.Messages).OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(m => m.Sender).WithMany(u => u.SendMessages).OnDelete(DeleteBehavior.NoAction).HasForeignKey(m => m.UserIdSender);
+            entity.HasOne(c => c.Channel).WithMany(c => c.Messages).OnDelete(DeleteBehavior.Cascade).HasForeignKey(m => m.ChannelId);
         });
 
         modelBuilder.Entity<Channel>(entity =>
         {
+            entity.HasIndex(c => c.ChannelId).IsUnique();
             entity.HasKey(c => c.ChannelId);
             entity.HasMany(c => c.Participants).WithMany(u => u.Channels);
             entity.HasMany(c => c.Messages).WithOne(m => m.Channel);
@@ -55,6 +60,7 @@ public class AppDbContext(IConfiguration configuration) : DbContext
 
         modelBuilder.Entity<FriendRequest>(entity =>
         {
+            entity.HasIndex(fr => fr.UserToRequestId);
             entity.HasKey(fr => new { fr.UserId, fr.UserToRequestId });
             entity.HasOne(req => req.User).WithMany(u => u.SendFriendRequests).HasForeignKey(req => req.UserId);
             entity.HasOne(req => req.UserToRequest).WithMany(u => u.ReceviedFriendRequests)
