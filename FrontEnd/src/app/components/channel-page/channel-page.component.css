@@ -91,7 +91,6 @@
         color: #e3e2e2;
         display: flex;
         flex-direction: column-reverse;
-        gap: 3vh;
         margin-top: 1vh;
         margin-left: 2vw;
         height: 79vh;
@@ -109,6 +108,7 @@
         word-break: break-all;
         text-wrap: pretty;
         gap: 1vw;
+        height: max-content;
     }
 
     #imagePerfil > img
@@ -123,6 +123,7 @@
         display: flex;
         flex-direction: column;
         gap: 0.5vh;
+        height: fit-content;
     }
 
     #info
@@ -147,3 +148,15 @@
     {
         text-wrap: wrap;
     }
+
+    .SameUser
+    {
+        margin-left: 3.3vw;
+        margin-bottom: 0.4vh;
+    }
+
+    .OtherUser
+    {
+        margin-top: 2vh;
+    }
+

@@ -15,18 +15,26 @@
 
 <main>
     <div class="MessagesConteiner">
-        @for (mes of ChannelSelected().Messages; track ChannelSelected().Messages[$index].messageId)
+        @for (mes of ChannelSelected().Messages; track ChannelSelected().Messages[$index].messageId; let indice = $index)
         {
-            <div class="MessageStructreConteiner">
-                <div id="imagePerfil">
-                    <img [src]="WhiteImageBase64">
-                </div>
+            <div class="MessageStructreConteiner" [class.OtherUser]="indice === ChannelSelected().Messages.length - 1
+                                        || ChannelSelected().Messages[indice+1].userIdThatSended != mes.userIdThatSended">
+                @if (indice === ChannelSelected().Messages.length - 1 || ChannelSelected().Messages[indice+1].userIdThatSended != mes.userIdThatSended)
+                {
+                    <div id="imagePerfil">
+                        <img [src]="WhiteImageBase64">
+                    </div>
+                }
                 <span id="data">
-                    <span id="info">
-                        <span id="userName">{{mes.userNameThatSended}}</span>
-                        <span id="date">{{mes.sendAt | date: "dd/MM/YYYY 'às' hh:mm"}}</span>
-                    </span>
-                    <span id="Message">
+                    @if (indice === ChannelSelected().Messages.length - 1 || ChannelSelected().Messages[indice+1].userIdThatSended != mes.userIdThatSended)
+                    {
+                        <span id="info">
+                            <span id="userName">{{mes.userNameThatSended}}</span>
+                            <span id="date">{{mes.sendAt | date: "dd/MM/YYYY 'às' hh:mm"}}</span>
+                        </span>
+                    }
+                    <span id="Message" [class.SameUser]="indice !== ChannelSelected().Messages.length - 1
+                                                                && ChannelSelected().Messages[indice+1].userIdThatSended == mes.userIdThatSended">
                         {{mes.messageContent}}
                     </span>
                 </span>
