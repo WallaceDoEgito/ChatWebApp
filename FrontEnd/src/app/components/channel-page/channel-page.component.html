@@ -17,28 +17,32 @@
     <div class="MessagesConteiner">
         @for (mes of ChannelSelected().Messages; track ChannelSelected().Messages[$index].messageId; let indice = $index)
         {
-            <div class="MessageStructreConteiner" [class.OtherUser]="indice === ChannelSelected().Messages.length - 1
-                                        || ChannelSelected().Messages[indice+1].userIdThatSended != mes.userIdThatSended">
-                @if (indice === ChannelSelected().Messages.length - 1 || ChannelSelected().Messages[indice+1].userIdThatSended != mes.userIdThatSended)
+            <div class="MessageStructreConteiner" [class.OtherUser]="indice === ChannelSelected().Messages.length - 1 || ChannelSelected().Messages[indice+1].userIdThatSended != mes.userIdThatSended">
+                @if (indice === ChannelSelected().Messages.length - 1 || CompareDates(mes.sendAt, ChannelSelected().Messages[indice+1].sendAt) || ChannelSelected().Messages[indice+1].userIdThatSended != mes.userIdThatSended)
                 {
                     <div id="imagePerfil">
                         <img [src]="WhiteImageBase64">
                     </div>
                 }
                 <span id="data">
-                    @if (indice === ChannelSelected().Messages.length - 1 || ChannelSelected().Messages[indice+1].userIdThatSended != mes.userIdThatSended)
+                    @if (indice === ChannelSelected().Messages.length - 1 || CompareDates(mes.sendAt, ChannelSelected().Messages[indice+1].sendAt) || ChannelSelected().Messages[indice+1].userIdThatSended != mes.userIdThatSended)
                     {
                         <span id="info">
                             <span id="userName">{{mes.userNameThatSended}}</span>
-                            <span id="date">{{mes.sendAt | date: "dd/MM/YYYY 'às' hh:mm"}}</span>
+                            <span id="date">{{mes.sendAt | date: "dd/MM/YYYY 'às' HH:mm"}}</span>
                         </span>
                     }
                     <span id="Message" [class.SameUser]="indice !== ChannelSelected().Messages.length - 1
+                                                                && !CompareDates(mes.sendAt, ChannelSelected().Messages[indice+1].sendAt)
                                                                 && ChannelSelected().Messages[indice+1].userIdThatSended == mes.userIdThatSended">
                         {{mes.messageContent}}
                     </span>
                 </span>
             </div>
+                @if(indice === ChannelSelected().Messages.length - 1 || CompareDates(mes.sendAt, ChannelSelected().Messages[indice+1].sendAt))
+                {
+                    <div class="DataMensagem">{{mes.sendAt | brazilianDatePipe}}</div>
+                }
         }
     </div>
 

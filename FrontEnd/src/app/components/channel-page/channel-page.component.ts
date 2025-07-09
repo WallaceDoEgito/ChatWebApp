@@ -5,6 +5,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {FormsModule} from "@angular/forms";
 import {SignalConnectService} from "../../services/SignalConnect/signal-connect.service";
 import {CommonModule} from "@angular/common";
+import {BrazilianDatePipePipe} from "../../pipes/brazilian-date-pipe.pipe";
 
 @Component({
   selector: 'app-channel-page',
@@ -12,7 +13,8 @@ import {CommonModule} from "@angular/common";
     MatIconButton,
     MatIconModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+      BrazilianDatePipePipe
   ],
   templateUrl: './channel-page.component.html',
   styleUrl: './channel-page.component.css'
@@ -36,15 +38,6 @@ export class ChannelPageComponent implements OnChanges, OnInit{
     if(this.MessageInputModel.trim() === "") return;
     console.log("Tentouo enviar algo ai " + this.MessageInputModel);
     await this.SignalRConnection.SendMessage(this.MessageInputModel, this.ChannelSelected().ChannelId);
-    this.ChannelSelected().Messages.unshift(
-        {
-          userNameThatSended : "Blabla",
-          messageContent : this.MessageInputModel,
-          edited :false,
-          channelId: "1",
-          messageId: "2", sendAt : "2025",
-          userIdThatSended : "tomatoma"
-        })
     this.MessageInputModel = "";
   }
 
@@ -57,4 +50,16 @@ export class ChannelPageComponent implements OnChanges, OnInit{
       this.ChannelSelected().Messages.push(message);
     }
   }
+
+  CompareDates(isoStringOne:string, isoStringTwo:string): boolean
+  {
+    let DateOne = new Date(isoStringOne);
+    let DateTwo = new Date(isoStringTwo);
+
+    console.log(`Comparando: ${isoStringOne} com ${isoStringTwo}`)
+    console.log(`Uma possui dia: ${DateOne.getDate()} e a outra ${DateTwo.getDate()}`)
+    return DateOne.getDate() != DateTwo.getDate();
+  }
+
+  protected readonly BrazilianDatePipePipe = BrazilianDatePipePipe;
 }
