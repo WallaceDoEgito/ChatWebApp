@@ -52,11 +52,9 @@ public class MessageDemux(RabbitMQConnection rabbitMqConnection, IServiceScopeFa
         if (channel is null) throw new KeyNotFoundException();
         foreach (var users in channel.Participants)
         {
-            if(users.Id.ToString() == mes.UserIdThatSended) continue;
             MessageDemuxDto dto = new MessageDemuxDto(mes.MessageId, mes.UserIdThatSended, mes.ChannelId, users.Id.ToString(), mes.MessageContent, mes.SendAt, mes.Edited);
             await rabbitMqConnection.TransmitMessage(dto);
         }
-        
     }
     
     public override void Dispose()

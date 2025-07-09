@@ -39,8 +39,11 @@ public class MessageDistribution(IHubContext<PrincipalHub> hubContext, IServiceS
                 bool userIsOnline = await CheckUserHasAActiveConnection(message.DestinyId);
                 if (!userIsOnline)
                     await _channel.BasicNackAsync(ea.DeliveryTag, multiple: false, requeue: false);
-                await SendMessage(message);
-                await _channel.BasicAckAsync(ea.DeliveryTag, multiple:false);
+                else
+                {
+                    await SendMessage(message);
+                    await _channel.BasicAckAsync(ea.DeliveryTag, multiple:false);
+                }
             }
             catch
             {

@@ -11,7 +11,7 @@ public class RabbitMQConnection
     
     public RabbitMQConnection()
     {
-        Config();
+        _ = Config();
     }
 
     private async Task Config()
