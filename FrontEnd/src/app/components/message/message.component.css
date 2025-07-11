@@ -73,15 +73,48 @@
 
 .MessageStructureHoverBackground
 {
+    position: relative;
     display: flex;
     align-content: center;
     padding-top: 0.3vh;
     width: 100vw;
     border-radius: 2px;
+    overflow: visible;
 }
 
 .MessageStructureHoverBackground:hover
 {
     background-color: #515051;
     transition: 0.2ms;
+}
+
+.ActionButtons
+{
+    position: absolute;
+    top: 0;
+    left: 70vw;
+    transform: translateY(-50%);
+    display: none;
+    z-index: 100;
+}
+
+.MessageStructureHoverBackground:hover .ActionButtons
+{
+
+    display: flex;
+}
+
+.MenuOpenned
+{
+    display: flex;
+}
+
+.MenuOpenned.MessageStructureHoverBackground
+{
+    background-color: #515051;
+}
+
+button.MenuOpenned
+{
+    background-color: rgba(255, 255, 255, 0.04);
 }
