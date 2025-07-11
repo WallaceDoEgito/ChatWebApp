@@ -19,24 +19,29 @@
                     <span id="date">{{ MessageToRender().sendAt | date: "dd/MM/YYYY 'às' HH:mm" }}</span>
                 </span>
             }
-            <span id="Message" [class.SameUser]="!FirstMessageOrDifferentUser() && !FirstMessageOrLastMessageWasTooLongAgo()"> {{ MessageToRender().messageContent }} </span>
+            <span id="Message" [class.SameUser]="!FirstMessageOrDifferentUser() && !FirstMessageOrLastMessageWasTooLongAgo()">
+                <span class="MessageTime">{{MessageToRender().sendAt | date:"HH:mm"}}</span>
+                {{ MessageToRender().messageContent }}
+            </span>
         </span>
     </div>
 
-        <div class="ActionButtons" [class.MenuOpenned]="MenuIsOpen">
-            <button mat-icon-button [matMenuTriggerFor]="MenuOpcoes" (click)="MenuOpenned()" (menuClosed)="MenuClosed()" [class.MenuOpenned]="MenuIsOpen">
-                <mat-icon fontIcon="more_horiz"></mat-icon>
-            </button>
-        </div>
-        <mat-menu #MenuOpcoes (closed)="MenuClosed()">
-            <button mat-menu-item (click)="EditMessage()">
-                <mat-icon fontIcon="edit"></mat-icon>
-                <span>Editar</span>
-            </button>
-            <button mat-menu-item (click)="DeleteMessage()">
-                <mat-icon fontIcon="delete"></mat-icon>
-                <span>Apagar</span>
-            </button>
-        </mat-menu>
+    <div class="ActionButtons" [class.MenuOpenned]="MenuIsOpen">
+        <button mat-icon-button [matMenuTriggerFor]="MenuToModifyMessages" (click)="MenuOpenned()" (menuClosed)="MenuClosed()" [class.MenuOpenned]="MenuIsOpen">
+            <mat-icon fontIcon="more_horiz"></mat-icon>
+        </button>
+    </div>
+
+    <mat-menu #MenuToModifyMessages (closed)="MenuClosed()">
+        <button mat-menu-item (click)="EditMessage()">
+            <mat-icon fontIcon="edit"></mat-icon>
+            <span>Editar</span>
+        </button>
+        <button mat-menu-item (click)="DeleteMessage()">
+            <mat-icon fontIcon="delete"></mat-icon>
+            <span>Apagar</span>
+        </button>
+    </mat-menu>
+
 </div>
 

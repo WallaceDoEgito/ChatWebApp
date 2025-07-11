@@ -118,3 +118,19 @@ button.MenuOpenned
 {
     background-color: rgba(255, 255, 255, 0.04);
 }
+
+.MessageTime
+{
+    position: absolute;
+    left: 2%;
+    z-index: 1;
+    display: none;
+
+}
+
+.MessageStructureHoverBackground:hover #Message.SameUser > .MessageTime
+{
+    display: block;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.9rem;
+}
