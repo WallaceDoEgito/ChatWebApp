@@ -3,7 +3,7 @@
     <div class="DataMensagem">{{MessageToRender().sendAt | brazilianDatePipe}}</div>
 }
 
-<div class="MessageStructureHoverBackground" [class.OtherUser]="FirstMessageOrDifferentUser()" [class.MenuOpenned]="MenuIsOpen">
+<div class="MessageStructureHoverBackground" [class.OtherUser]="FirstMessageOrDifferentUser()" [class.MenuOpenned]="MenuIsOpen" [class.Editing]="IsEditing()">
     <div class="MessageStructreConteiner">
 
         @if (FirstMessageOrLastMessageWasTooLongAgo()) {
@@ -21,7 +21,18 @@
             }
             <span id="Message" [class.SameUser]="!FirstMessageOrDifferentUser() && !FirstMessageOrLastMessageWasTooLongAgo()">
                 <span class="MessageTime">{{MessageToRender().sendAt | date:"HH:mm"}}</span>
-                {{ MessageToRender().messageContent }}
+                <span class="MessageContent">
+                    @if (!IsEditing()) {
+                        {{ MessageToRender().messageContent }}
+                    }
+                    @else if (IsEditing())
+                    {
+                        <div class="Edit" (keyup.escape)="CancelEdit()" (keyup.enter)="EditConfirmed()">
+                            <textarea class="EditMessageInput" [(ngModel)]="EditMessageModel" appAutomaticFocus></textarea>
+                            <span>esc para cancelar • enter para confirmar</span>
+                        </div>
+                    }
+                </span>
             </span>
         </span>
     </div>

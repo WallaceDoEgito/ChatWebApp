@@ -7,6 +7,7 @@ import {SignalConnectService} from "../../services/SignalConnect/signal-connect.
 import {CommonModule} from "@angular/common";
 import {BrazilianDatePipePipe} from "../../pipes/brazilian-date-pipe.pipe";
 import {MessageComponent} from "../message/message.component";
+import {MessageDTO} from "../../DTOs/MessageDTO";
 
 @Component({
   selector: 'app-channel-page',
@@ -26,6 +27,7 @@ export class ChannelPageComponent implements OnChanges, OnInit{
   private SignalRConnection = inject(SignalConnectService);
   WhiteImageBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
   MessageInputModel = "";
+  MessageIdEditing = "";
 
   async ngOnInit()
   {
@@ -51,6 +53,34 @@ export class ChannelPageComponent implements OnChanges, OnInit{
     {
       this.ChannelSelected().Messages.push(message);
     }
+  }
+
+  IsEditingAtMoment(messageId:string)
+  {
+    return this.MessageIdEditing === messageId;
+  }
+
+  EditMessageMutex(messageId:string)
+  {
+    this.MessageIdEditing = messageId;
+  }
+
+  NoMoreEditing()
+  {
+    this.MessageIdEditing = "";
+  }
+
+  EditedMessage(newMessage:MessageDTO)
+  {
+    this.MessageIdEditing = "";
+    console.log("Nova mensagem editada: ")
+    console.log(newMessage)
+  }
+
+  DeleteMessage(messageId:string)
+  {
+    console.log("Mensagem para ser apagada")
+    console.log(messageId)
   }
 
   protected readonly BrazilianDatePipePipe = BrazilianDatePipePipe;

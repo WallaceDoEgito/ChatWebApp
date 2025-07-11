@@ -1,11 +1,13 @@
-import {Component, input} from '@angular/core';
+import {Component, inject, input, output} from '@angular/core';
 import {BrazilianDatePipePipe} from "../../pipes/brazilian-date-pipe.pipe";
 import {DatePipe} from "@angular/common";
 import {ChannelDTO} from "../../DTOs/ChannelDTO";
 import {MessageDTO} from "../../DTOs/MessageDTO";
 import {MatIconButton} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
-import {MatMenu, MatMenuModule, MatMenuTrigger} from "@angular/material/menu";
+import {MatMenuModule, MatMenuTrigger} from "@angular/material/menu";
+import {FormsModule} from "@angular/forms";
+import {AutomaticFocusDirective} from "../../Directives/automatic-focus.directive";
 
 @Component({
   selector: 'app-message',
@@ -16,6 +18,8 @@ import {MatMenu, MatMenuModule, MatMenuTrigger} from "@angular/material/menu";
         MatIconModule,
         MatMenuTrigger,
         MatMenuModule,
+        FormsModule,
+        AutomaticFocusDirective
     ],
   templateUrl: './message.component.html',
   styleUrl: './message.component.css'
@@ -24,9 +28,15 @@ export class MessageComponent {
     ChannelSelected = input.required<ChannelDTO>()
     MessageToRender = input.required<MessageDTO>()
     IndexMessage = input.required<Number>()
+    IsEditing = input.required<boolean>();
     WhiteImageBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
     MenuIsOpen = false;
-    IsEditing = false;
+    EditMessageModel:string = "";
+
+    EditingMessageEvent = output<string>()
+    NoMoreEditingEvent = output<string>()
+    EditedMessageEvent = output<MessageDTO>()
+    DeleteMessageEvent = output<string>()
 
     IsOtherDay(isoStringOne:string, isoStringTwo:string): boolean
     {
@@ -46,21 +56,40 @@ export class MessageComponent {
 
     DeleteMessage()
     {
-        console.log("Delete Todo")
-        console.log("Going to delete the message: " + this.MessageToRender().messageContent)
+        this.DeleteMessageEvent.emit(this.MessageToRender().messageId);
     }
 
     EditMessage()
     {
-        console.log("Edit Todo")
+        this.EditingMessageEvent.emit(this.MessageToRender().messageId)
+        this.EditMessageModel = this.MessageToRender().messageContent
+    }
+
+    CancelEdit()
+    {
+        this.NoMoreEditingEvent.emit(this.MessageToRender().messageId)
+    }
+
+    EditConfirmed()
+    {
+        this.EditedMessageEvent.emit(
+            {
+                messageId: this.MessageToRender().messageId,
+                userIdThatSended: this.MessageToRender().messageId,
+                userNameThatSended: this.MessageToRender().userNameThatSended,
+                channelId: this.MessageToRender().channelId,
+                messageContent: this.EditMessageModel,
+                sendAt: this.MessageToRender().sendAt,
+                edited: true
+            });
     }
 
     FirstMessageOrDifferentUser()
     {
         let isFirstMessage = this.IndexMessage().valueOf() === this.ChannelSelected().Messages.length - 1
         if(isFirstMessage) return true;
-        let lastMessageWasFromADiferentUserChannelSelected = this.ChannelSelected().Messages[this.IndexMessage().valueOf() + 1].userIdThatSended != this.MessageToRender().userIdThatSended
-        return isFirstMessage || lastMessageWasFromADiferentUserChannelSelected;
+        let lastMessageWasFromADifferentUserChannelSelected = this.ChannelSelected().Messages[this.IndexMessage().valueOf() + 1].userIdThatSended != this.MessageToRender().userIdThatSended
+        return isFirstMessage || lastMessageWasFromADifferentUserChannelSelected;
     }
 
     FirstMessageOrDifferentDate()

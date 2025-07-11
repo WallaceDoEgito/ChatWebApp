@@ -134,3 +134,39 @@ button.MenuOpenned
     color: rgba(255,255,255,0.4);
     font-size: 0.9rem;
 }
+
+.Edit > textarea
+{
+    border: none;
+    overflow: auto;
+    width: 65vw;
+    resize: none;
+    background-color: rgba(25,25,25,0.7);
+    height: fit-content;
+    color: white;
+    padding: 0.8vh;
+    overflow-y: hidden;
+    font-family: inherit;
+    font-size: 0.9rem;
+    text-wrap: wrap;
+    border-radius: 5px;
+}
+
+.Edit > textarea:focus
+{
+    outline: none;
+}
+
+.Edit > span
+{
+    color: rgba(255,255,255,0.7);
+    font-size: 0.8rem;
+    padding: 1vh 0vh 1vh 0vh;
+}
+
+.Editing.MessageStructureHoverBackground
+{
+    background-color: #515051;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+}

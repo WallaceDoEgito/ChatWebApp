@@ -17,7 +17,11 @@
     <div class="MessagesConteiner">
         @for (mes of ChannelSelected().Messages; track ChannelSelected().Messages[$index].messageId; let indice = $index)
         {
-            <app-message [ChannelSelected]="ChannelSelected()" [MessageToRender]="mes" [IndexMessage]="indice"></app-message>
+            <app-message [ChannelSelected]="ChannelSelected()" [MessageToRender]="mes" [IndexMessage]="indice"
+                         [IsEditing]="IsEditingAtMoment(mes.messageId)" (EditingMessageEvent)="EditMessageMutex($event)"
+                         (NoMoreEditingEvent)="NoMoreEditing()" (DeleteMessageEvent)="DeleteMessage($event)"
+                         (EditedMessageEvent)="EditedMessage($event)"
+            />
         }
     </div>
 

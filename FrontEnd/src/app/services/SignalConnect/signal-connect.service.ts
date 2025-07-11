@@ -9,7 +9,7 @@ import {MessageDTO} from "../../DTOs/MessageDTO";
 })
 export class SignalConnectService {
   private token: any = localStorage.getItem("JWTSession");
-  private Connection = new signalR.HubConnectionBuilder().configureLogging(signalR.LogLevel.Debug).withUrl("http://localhost:5269/chat", {skipNegotiation:true,transport:signalR.HttpTransportType.WebSockets,withCredentials:true,accessTokenFactory: () => this.token}).withAutomaticReconnect().build();
+  private Connection = new signalR.HubConnectionBuilder().configureLogging(signalR.LogLevel.Debug).withUrl("http://192.168.1.20:5269/chat", {skipNegotiation:true,transport:signalR.HttpTransportType.WebSockets,withCredentials:true,accessTokenFactory: () => this.token}).withAutomaticReconnect().build();
   private ConnectionSubject = new ReplaySubject<void>(1);
   private FriendRequestResponseSubject = new Subject<String>();
   private NewFriendSubject = new Subject<String>();
@@ -103,5 +103,20 @@ export class SignalConnectService {
   public async GetMessagesByChannelId(channelId:String, page:number) : Promise<MessageDTO[]>
   {
     return this.Connection.invoke("GetMessageByChannelAndPage", channelId, page)
+  }
+
+  public async GetCurrentUserInfoAsync():Promise<UserInfoDTO>
+  {
+    return this.Connection.invoke("GetCurrentUserInfo")
+  }
+
+  public async DeleteMessageAsync(messageId:string)
+  {
+    return this.Connection.send("DeleteMessageById", messageId);
+  }
+
+  public async EditMessageAsync(messageId:string, newMessage:string)
+  {
+    return this.Connection.invoke("EditMessageById", messageId, newMessage)
   }
 }
