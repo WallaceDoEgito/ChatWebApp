@@ -1,30 +1,28 @@
-@if(IndexMessage().valueOf() === ChannelSelected().Messages.length - 1 || CompareDates(MessageToRender().sendAt, ChannelSelected().Messages[IndexMessage().valueOf()+1].sendAt))
+@if(FirstMessageOrDifferentDate())
 {
     <div class="DataMensagem">{{MessageToRender().sendAt | brazilianDatePipe}}</div>
 }
 
-<div class="MessageStructureHoverBackground" [class.OtherUser]="IndexMessage().valueOf() === ChannelSelected().Messages.length - 1 || ChannelSelected().Messages[IndexMessage().valueOf() + 1].userIdThatSended != MessageToRender().userIdThatSended" [class.MenuOpenned]="MenuIsOpen">
+<div class="MessageStructureHoverBackground" [class.OtherUser]="FirstMessageOrDifferentUser()" [class.MenuOpenned]="MenuIsOpen">
     <div class="MessageStructreConteiner">
-        @if (IndexMessage().valueOf() === ChannelSelected().Messages.length - 1 || CompareDates(MessageToRender().sendAt, ChannelSelected().Messages[IndexMessage().valueOf() + 1].sendAt) || ChannelSelected().Messages[IndexMessage().valueOf() + 1].userIdThatSended != MessageToRender().userIdThatSended) {
+
+        @if (FirstMessageOrLastMessageWasTooLongAgo()) {
             <div id="imagePerfil">
                 <img [src]="WhiteImageBase64">
             </div>
         }
-        <span id="data">
-                        @if (IndexMessage().valueOf() === ChannelSelected().Messages.length - 1 || CompareDates(MessageToRender().sendAt, ChannelSelected().Messages[IndexMessage().valueOf() + 1].sendAt) || ChannelSelected().Messages[IndexMessage().valueOf() + 1].userIdThatSended != MessageToRender().userIdThatSended) {
-                            <span id="info">
-                                <span id="userName">{{ MessageToRender().userNameThatSended }}</span>
-                                <span id="date">{{ MessageToRender().sendAt | date: "dd/MM/YYYY 'às' HH:mm" }}</span>
-                            </span>
-                        }
-            <span id="Message" [class.SameUser]="IndexMessage().valueOf()!== ChannelSelected().Messages.length - 1
-                                                                        && !CompareDates(MessageToRender().sendAt, ChannelSelected().Messages[IndexMessage().valueOf()+1].sendAt)
-                                                                    && ChannelSelected().Messages[IndexMessage().valueOf() + 1].userIdThatSended == MessageToRender().userIdThatSended">
-                            {{ MessageToRender().messageContent }}
-            </span>
-        </span>
 
+        <span id="data">
+            @if (FirstMessageOrLastMessageWasTooLongAgo()) {
+                <span id="info">
+                    <span id="userName">{{ MessageToRender().userNameThatSended }}</span>
+                    <span id="date">{{ MessageToRender().sendAt | date: "dd/MM/YYYY 'às' HH:mm" }}</span>
+                </span>
+            }
+            <span id="Message" [class.SameUser]="!FirstMessageOrDifferentUser() && !FirstMessageOrLastMessageWasTooLongAgo()"> {{ MessageToRender().messageContent }} </span>
+        </span>
     </div>
+
         <div class="ActionButtons" [class.MenuOpenned]="MenuIsOpen">
             <button mat-icon-button [matMenuTriggerFor]="MenuOpcoes" (click)="MenuOpenned()" (menuClosed)="MenuClosed()" [class.MenuOpenned]="MenuIsOpen">
                 <mat-icon fontIcon="more_horiz"></mat-icon>

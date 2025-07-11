@@ -26,9 +26,9 @@ export class MessageComponent {
     IndexMessage = input.required<Number>()
     WhiteImageBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
     MenuIsOpen = false;
-    IsEditting = false;
+    IsEditing = false;
 
-    CompareDates(isoStringOne:string, isoStringTwo:string): boolean
+    IsOtherDay(isoStringOne:string, isoStringTwo:string): boolean
     {
         let DateOne = new Date(isoStringOne);
         let DateTwo = new Date(isoStringTwo);
@@ -53,5 +53,24 @@ export class MessageComponent {
     EditMessage()
     {
         console.log("Edit Todo")
+    }
+
+    FirstMessageOrDifferentUser()
+    {
+        let isFirstMessage = this.IndexMessage().valueOf() === this.ChannelSelected().Messages.length - 1
+        let lastMessageWasFromADiferentUserChannelSelected = this.ChannelSelected().Messages[this.IndexMessage().valueOf() + 1].userIdThatSended != this.MessageToRender().userIdThatSended
+        return isFirstMessage || lastMessageWasFromADiferentUserChannelSelected;
+    }
+
+    FirstMessageOrDifferentDate()
+    {
+        let isFirstMessage = this.IndexMessage().valueOf() === this.ChannelSelected().Messages.length - 1;
+        let lastMessageWasOtherDay = this.IsOtherDay(this.MessageToRender().sendAt, this.ChannelSelected().Messages[this.IndexMessage().valueOf()+1].sendAt)
+        return isFirstMessage || lastMessageWasOtherDay
+    }
+
+    FirstMessageOrLastMessageWasTooLongAgo()
+    {
+        return this.FirstMessageOrDifferentDate() || this.FirstMessageOrDifferentUser()
     }
 }
