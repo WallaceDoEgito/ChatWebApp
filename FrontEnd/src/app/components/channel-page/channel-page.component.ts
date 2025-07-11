@@ -6,6 +6,7 @@ import {FormsModule} from "@angular/forms";
 import {SignalConnectService} from "../../services/SignalConnect/signal-connect.service";
 import {CommonModule} from "@angular/common";
 import {BrazilianDatePipePipe} from "../../pipes/brazilian-date-pipe.pipe";
+import {MessageComponent} from "../message/message.component";
 
 @Component({
   selector: 'app-channel-page',
@@ -14,7 +15,8 @@ import {BrazilianDatePipePipe} from "../../pipes/brazilian-date-pipe.pipe";
     MatIconModule,
     FormsModule,
     CommonModule,
-      BrazilianDatePipePipe
+    BrazilianDatePipePipe,
+    MessageComponent
   ],
   templateUrl: './channel-page.component.html',
   styleUrl: './channel-page.component.css'
@@ -49,16 +51,6 @@ export class ChannelPageComponent implements OnChanges, OnInit{
     {
       this.ChannelSelected().Messages.push(message);
     }
-  }
-
-  CompareDates(isoStringOne:string, isoStringTwo:string): boolean
-  {
-    let DateOne = new Date(isoStringOne);
-    let DateTwo = new Date(isoStringTwo);
-
-    console.log(`Comparando: ${isoStringOne} com ${isoStringTwo}`)
-    console.log(`Uma possui dia: ${DateOne.getDate()} e a outra ${DateTwo.getDate()}`)
-    return DateOne.getDate() != DateTwo.getDate();
   }
 
   protected readonly BrazilianDatePipePipe = BrazilianDatePipePipe;

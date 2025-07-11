@@ -1,0 +1,87 @@
+.MessageStructreConteiner
+{
+    display: flex;
+    flex-direction: row;
+    width: 51vw;
+    word-break: break-all;
+    text-wrap: pretty;
+    gap: 1vw;
+    height: max-content;
+    margin-left: 2vw;
+}
+
+
+#imagePerfil > img
+{
+    width: 2.3vw;
+    border-radius: 100px;
+    /*margin-top: 0.2vh;*/
+}
+
+#data
+{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vh;
+    height: fit-content;
+}
+
+#info
+{
+    display: flex;
+    gap: 1vw;
+    align-items: center;
+}
+
+#info
+{
+    display: flex;
+    gap: 1vw;
+}
+
+#info > #date
+{
+    color: rgba(255,255,255,0.4);
+    font-size: 0.8rem;
+}
+
+#Message
+{
+    text-wrap: wrap;
+}
+
+.SameUser
+{
+    margin-left: 3.3vw;
+    margin-bottom: 0.4vh;
+}
+
+.OtherUser
+{
+    margin-top: 2vh;
+
+}
+
+.DataMensagem
+{
+    color: rgba(255,255,255,0.4);
+    font-size: 0.9rem;
+    text-align: center;
+    margin-right: 5vw;
+    margin-top: 1.5vh;
+}
+
+.MessageStructureHoverBackground
+{
+    display: flex;
+    align-content: center;
+    padding-top: 0.3vh;
+    width: 100vw;
+    border-radius: 2px;
+}
+
+.MessageStructureHoverBackground:hover
+{
+    background-color: #515051;
+    transition: 0.2ms;
+}
