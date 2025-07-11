@@ -58,6 +58,7 @@ export class MessageComponent {
     FirstMessageOrDifferentUser()
     {
         let isFirstMessage = this.IndexMessage().valueOf() === this.ChannelSelected().Messages.length - 1
+        if(isFirstMessage) return true;
         let lastMessageWasFromADiferentUserChannelSelected = this.ChannelSelected().Messages[this.IndexMessage().valueOf() + 1].userIdThatSended != this.MessageToRender().userIdThatSended
         return isFirstMessage || lastMessageWasFromADiferentUserChannelSelected;
     }
@@ -65,6 +66,7 @@ export class MessageComponent {
     FirstMessageOrDifferentDate()
     {
         let isFirstMessage = this.IndexMessage().valueOf() === this.ChannelSelected().Messages.length - 1;
+        if(isFirstMessage) return true;
         let lastMessageWasOtherDay = this.IsOtherDay(this.MessageToRender().sendAt, this.ChannelSelected().Messages[this.IndexMessage().valueOf()+1].sendAt)
         return isFirstMessage || lastMessageWasOtherDay
     }
