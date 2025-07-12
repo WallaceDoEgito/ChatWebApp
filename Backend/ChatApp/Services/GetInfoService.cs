@@ -26,7 +26,7 @@ public class GetInfoService(AppDbContext dbContext) : IGetInfo
         int pageTam = 20;
         var message = await dbContext.Message.Where(m => m.ChannelId.ToString() == channelId)
             .OrderByDescending(m => m.SentAt).Skip((page - 1) * pageTam).Take(pageTam).Select(m =>
-                new MessageDTO(m.UserIdSender.ToString()!, m.Sender.ExhibitedName, m.MessageContent, m.MessageId.ToString(), m.SentAt, m.Edited)).ToArrayAsync();
+                new MessageDTO(m.UserIdSender.ToString()!, m.Sender.ExhibitedName, m.MessageContent, m.MessageId.ToString(), channelId, m.SentAt, m.Edited)).ToArrayAsync();
         return message;
     }
 

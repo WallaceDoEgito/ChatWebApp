@@ -1,3 +1,3 @@
 namespace ChatApp.Dtos;
 
-public record MessageDemuxDto( String MessageId, String SenderId, String ChannelId, String DestinyId, String Message, DateTime SendAt, bool Edited);
+public record MessageDemuxDto( String MessageId, String SenderId, string SenderUsername, String ChannelId, String DestinyId, String Message, DateTime SendAt, bool Edited);

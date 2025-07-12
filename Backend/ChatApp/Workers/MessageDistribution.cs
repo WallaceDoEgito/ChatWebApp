@@ -53,11 +53,13 @@ public class MessageDistribution(IHubContext<PrincipalHub> hubContext, IServiceS
         await _channel.BasicConsumeAsync("MessageDistribution", autoAck:false, consumer);
     }
 
-    private async Task SendMessage(MessageDemuxDto message)
+    private async Task SendMessage(MessageDemuxDto messageDemux)
     {
         using var factory = redisFactory.CreateScope();
         var redisDb = factory.ServiceProvider.GetRequiredService<RedisService>();
-        var connections = await redisDb.GetUserConnections(message.DestinyId);
+        var connections = await redisDb.GetUserConnections(messageDemux.DestinyId);
+        var message = new MessageDTO(messageDemux.SenderId, messageDemux.SenderUsername, messageDemux.Message,
+            messageDemux.MessageId, messageDemux.ChannelId ,messageDemux.SendAt, messageDemux.Edited);
         await hubContext.Clients.Clients(connections).SendAsync("NewMessage", message);
         
     }

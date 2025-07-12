@@ -55,7 +55,7 @@ public class MessageCreator(IServiceScopeFactory dbContextFactory, RabbitMQConne
         dbContext.Message.Add(message);
         await dbContext.SaveChangesAsync();
 
-        var messageToDemux = new MessageToDemuxDTO(message.MessageId.ToString(), message.UserIdSender.ToString()!, message.ChannelId.ToString(),
+        var messageToDemux = new MessageToDemuxDTO(message.MessageId.ToString(), message.UserIdSender.ToString()!, findUser.UserName , message.ChannelId.ToString(),
             message.MessageContent, message.SentAt, message.Edited);
         await rabbitMqConnection.DemuxMessage(messageToDemux);
         

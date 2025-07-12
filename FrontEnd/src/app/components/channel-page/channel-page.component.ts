@@ -19,7 +19,6 @@ import {UserInfoService} from "../../services/UserInfo/user-info.service";
     MatIconModule,
     FormsModule,
     CommonModule,
-    BrazilianDatePipePipe,
     MessageComponent
   ],
   templateUrl: './channel-page.component.html',
@@ -36,7 +35,7 @@ export class ChannelPageComponent implements OnChanges, OnInit{
 
   async ngOnInit()
   {
-    this.SignalRConnection.GetNewMessageObservable().subscribe( req => this.RefreshMessages())
+    this.SignalRConnection.GetNewMessageObservable().subscribe( req => this.NewMessageArrived(req))
     this.SignalRConnection.GetMessageEditedObservable().subscribe( req => this.MessageEditedOnChannel(req))
     this.SignalRConnection.GetMessageDeletedObservable().subscribe( req => this.MessageDeletedOnChannel(req))
     await this.userInfo.LoadUser();
@@ -61,6 +60,15 @@ export class ChannelPageComponent implements OnChanges, OnInit{
     {
       this.ChannelSelected().Messages.push(message);
     }
+  }
+
+  NewMessageArrived(req : MessageDTO)
+  {
+    console.log("Tentarei verificar a mesngem")
+    if(req.channelId != this.ChannelSelected().ChannelId) return;
+    console.log("Botando mensagme nos components")
+    console.log(req)
+    this.ChannelSelected().Messages.unshift(req);
   }
 
   MessageEditedOnChannel(req:MessageEditedEvent)
