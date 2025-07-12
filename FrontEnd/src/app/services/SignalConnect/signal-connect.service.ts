@@ -117,6 +117,6 @@ export class SignalConnectService {
 
   public async EditMessageAsync(messageId:string, newMessage:string)
   {
-    return this.Connection.invoke("EditMessageById", messageId, newMessage)
+    return this.Connection.send("EditMessageById", messageId, newMessage)
   }
 }
