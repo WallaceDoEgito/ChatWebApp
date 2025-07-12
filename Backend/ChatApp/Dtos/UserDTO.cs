@@ -1,3 +1,3 @@
 namespace ChatApp.Dtos;
 
-public record UserDTO(String UserId, string ExibitedUsername);
+public record UserDTO(String UserId, string ExibitedUsername, string UserProfilePicUrl);

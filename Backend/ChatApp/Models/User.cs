@@ -9,7 +9,7 @@ public class User
 {
     public Guid Id { get; set; }
     [MaxLength(32)] public required string UserName { get; set; } = String.Empty;
-    [MaxLength(32)] public string ExhibitedName { get; set; }
+    [MaxLength(32)] public string ExhibitedName { get; set; } = String.Empty;
     public required string PasswordHashed { get; set; } = String.Empty;
     public DateTime CreatedAt { get; set; }= DateTime.UtcNow;
     public ICollection<Channel> Channels { get; set; } = new List<Channel>();
@@ -22,6 +22,8 @@ public class User
 
     public ICollection<Message> SendMessages { get; set; } = new List<Message>();
     private readonly IHasher _passwordHasher = new BcryptPasswordHasher();
+    
+    public string ProfilePicUrl { get; set; } = String.Empty;
 
     public User(){}
     
