@@ -10,6 +10,7 @@ import {MessageComponent} from "../message/message.component";
 import {MessageDTO} from "../../DTOs/MessageDTO";
 import {MessageEditedEvent} from "../../DTOs/MessageEditedEvent";
 import {MessageDeletedEvent} from "../../DTOs/MessageDeletedEvent";
+import {UserInfoService} from "../../services/UserInfo/user-info.service";
 
 @Component({
   selector: 'app-channel-page',
@@ -31,11 +32,14 @@ export class ChannelPageComponent implements OnChanges, OnInit{
   MessageInputModel = "";
   MessageIdEditing = "";
 
+  userInfo = inject(UserInfoService);
+
   async ngOnInit()
   {
     this.SignalRConnection.GetNewMessageObservable().subscribe( req => this.RefreshMessages())
     this.SignalRConnection.GetMessageEditedObservable().subscribe( req => this.MessageEditedOnChannel(req))
     this.SignalRConnection.GetMessageDeletedObservable().subscribe( req => this.MessageDeletedOnChannel(req))
+    await this.userInfo.LoadUser();
   }
   async ngOnChanges() {
     await this.RefreshMessages();

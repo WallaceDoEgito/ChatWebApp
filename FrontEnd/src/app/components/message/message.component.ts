@@ -1,6 +1,6 @@
 import {Component, inject, input, output} from '@angular/core';
 import {BrazilianDatePipePipe} from "../../pipes/brazilian-date-pipe.pipe";
-import {DatePipe} from "@angular/common";
+import {AsyncPipe, DatePipe} from "@angular/common";
 import {ChannelDTO} from "../../DTOs/ChannelDTO";
 import {MessageDTO} from "../../DTOs/MessageDTO";
 import {MatIconButton} from "@angular/material/button";
@@ -8,6 +8,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatMenuModule, MatMenuTrigger} from "@angular/material/menu";
 import {FormsModule} from "@angular/forms";
 import {AutomaticFocusDirective} from "../../Directives/automatic-focus.directive";
+import {UserInfoService} from "../../services/UserInfo/user-info.service";
 
 @Component({
   selector: 'app-message',
@@ -19,7 +20,8 @@ import {AutomaticFocusDirective} from "../../Directives/automatic-focus.directiv
         MatMenuTrigger,
         MatMenuModule,
         FormsModule,
-        AutomaticFocusDirective
+        AutomaticFocusDirective,
+        AsyncPipe
     ],
   templateUrl: './message.component.html',
   styleUrl: './message.component.css'
@@ -29,6 +31,7 @@ export class MessageComponent {
     MessageToRender = input.required<MessageDTO>()
     IndexMessage = input.required<Number>()
     IsEditing = input.required<boolean>();
+
     WhiteImageBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
     MenuIsOpen = false;
     EditMessageModel:string = "";
@@ -37,6 +40,8 @@ export class MessageComponent {
     NoMoreEditingEvent = output<string>()
     EditedMessageEvent = output<MessageDTO>()
     DeleteMessageEvent = output<string>()
+
+    userInfo = inject(UserInfoService);
 
     IsOtherDay(isoStringOne:string, isoStringTwo:string): boolean
     {
@@ -103,5 +108,12 @@ export class MessageComponent {
     FirstMessageOrLastMessageWasTooLongAgo()
     {
         return this.FirstMessageOrDifferentDate() || this.FirstMessageOrDifferentUser()
+    }
+
+    CanThisUserEraseMessages() : boolean
+    {
+        let user = this.userInfo.GetUserInfo()
+        if(user.userId == this.MessageToRender().userIdThatSended) return true;
+        return false;
     }
 }

@@ -37,22 +37,25 @@
         </span>
     </div>
 
-    <div class="ActionButtons" [class.MenuOpenned]="MenuIsOpen">
-        <button mat-icon-button [matMenuTriggerFor]="MenuToModifyMessages" (click)="MenuOpenned()" (menuClosed)="MenuClosed()" [class.MenuOpenned]="MenuIsOpen">
-            <mat-icon fontIcon="more_horiz"></mat-icon>
-        </button>
-    </div>
+    @if(CanThisUserEraseMessages())
+    {
+        <div class="ActionButtons" [class.MenuOpenned]="MenuIsOpen">
+            <button mat-icon-button [matMenuTriggerFor]="MenuToModifyMessages" (click)="MenuOpenned()" (menuClosed)="MenuClosed()" [class.MenuOpenned]="MenuIsOpen">
+                <mat-icon fontIcon="more_horiz"></mat-icon>
+            </button>
+        </div>
 
-    <mat-menu #MenuToModifyMessages (closed)="MenuClosed()">
-        <button mat-menu-item (click)="EditMessage()">
-            <mat-icon fontIcon="edit"></mat-icon>
-            <span>Editar</span>
-        </button>
-        <button mat-menu-item (click)="DeleteMessage()">
-            <mat-icon fontIcon="delete"></mat-icon>
-            <span>Apagar</span>
-        </button>
-    </mat-menu>
+        <mat-menu #MenuToModifyMessages (closed)="MenuClosed()">
+            <button mat-menu-item (click)="EditMessage()">
+                <mat-icon fontIcon="edit"></mat-icon>
+                <span>Editar</span>
+            </button>
+            <button mat-menu-item (click)="DeleteMessage()">
+                <mat-icon fontIcon="delete"></mat-icon>
+                <span>Apagar</span>
+            </button>
+        </mat-menu>
+    }
 
 </div>
 
