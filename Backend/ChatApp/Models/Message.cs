@@ -6,7 +6,7 @@ namespace ChatApp.Models;
 public class Message
 {
     public Guid MessageId { get; set; }
-    public required Guid UserIdSender { get; set; }
+    public required Guid? UserIdSender { get; set; }
     public User Sender { get; set; } = null!;
 
     public required DateTime SentAt { get; set; }

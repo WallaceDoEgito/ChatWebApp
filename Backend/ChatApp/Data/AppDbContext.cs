@@ -43,10 +43,10 @@ public class AppDbContext(IConfiguration configuration) : DbContext
         modelBuilder.Entity<Message>(entity =>
         {
             entity.HasIndex(m => new {
-                m.SentAt, m.ChannelId
-            }).IsDescending(true, false);
+                m.SentAt, m.ChannelId, m.MessageId
+            }).IsDescending(true, false, false);
             entity.HasKey(e => e.MessageId);
-            entity.HasOne(m => m.Sender).WithMany(u => u.SendMessages).OnDelete(DeleteBehavior.NoAction).HasForeignKey(m => m.UserIdSender);
+            entity.HasOne(m => m.Sender).WithMany(u => u.SendMessages).OnDelete(DeleteBehavior.SetNull).HasForeignKey(m => m.UserIdSender);
             entity.HasOne(c => c.Channel).WithMany(c => c.Messages).OnDelete(DeleteBehavior.Cascade).HasForeignKey(m => m.ChannelId);
         });
 
