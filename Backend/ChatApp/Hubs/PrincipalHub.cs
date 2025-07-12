@@ -11,7 +11,7 @@ namespace ChatApp.Hubs;
 
 [Authorize]
 [EnableCors]
-public class PrincipalHub(RabbitMQConnection connection, IFriendService friendService, RedisService redis, IGetInfo getInfoService) : Hub
+public class PrincipalHub(RabbitMQConnection connection, IFriendService friendService, RedisService redis, IGetInfo getInfoService, IMessageService messageService) : Hub
 {
     public async Task SendMessage(String messageContent, String channelId)
     {
@@ -82,6 +82,21 @@ public class PrincipalHub(RabbitMQConnection connection, IFriendService friendSe
     {
         MessageDTO[] messageList = await getInfoService.GetMessageByChannel(channelId, page);
         return messageList;
+    }
+
+    public async Task DeleteMessageById(string messageId)
+    {
+        await messageService.DeleteMessage(Context.UserIdentifier!, messageId);
+    }
+
+    public async Task EditMessageById(string messageId, string newMessageContent)
+    {
+        await messageService.EditMessage(Context.UserIdentifier!, messageId, newMessageContent);
+    }
+
+    public async Task<UserDTO> GetCurrentUserInfo()
+    {
+        return await getInfoService.GetUserInfo(Context.UserIdentifier!);
     }
     
     
