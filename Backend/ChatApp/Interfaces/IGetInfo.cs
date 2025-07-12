@@ -10,4 +10,5 @@ public interface IGetInfo
     public Task<UserDTO[]> GetFriendRequests(String userId);
 
     public Task<UserDTO[]> GetFriends(string userId);
+    public Task<UserDTO> GetUserInfo(string userId);
 }

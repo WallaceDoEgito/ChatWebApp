@@ -17,7 +17,7 @@ public class GetInfoService(AppDbContext dbContext) : IGetInfo
         if (user is null) return [];
         
         return user.Channels.Select(c => new ChannelDTO(c.ChannelId.ToString(), c.ChannelName, DateOnly.FromDateTime(c.CreatedAt) , 
-            c.Participants.Select(p => new UserDTO(p.Id.ToString(), p.ExhibitedName)).ToArray())).ToArray();
+            c.Participants.Select(p => new UserDTO(p.Id.ToString(), p.ExhibitedName, p.ProfilePicUrl)).ToArray())).ToArray();
 
     }
 
@@ -35,14 +35,21 @@ public class GetInfoService(AppDbContext dbContext) : IGetInfo
         var userReq = await dbContext.Users.Include(u => u.ReceviedFriendRequests).ThenInclude(req => req.User)
             .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
         if (userReq is null) return [];
-        return userReq.ReceviedFriendRequests.Select(req => new UserDTO(req.UserId.ToString(), req.User.ExhibitedName)).ToArray();
+        return userReq.ReceviedFriendRequests.Select(req => new UserDTO(req.UserId.ToString(), req.User.ExhibitedName, req.User.ProfilePicUrl)).ToArray();
     }
 
     public async Task<UserDTO[]> GetFriends(string userId)
     {
         var user = await dbContext.Users.Include(u => u.Friends).FirstOrDefaultAsync(u => u.Id.ToString() == userId);
         if (user is null) throw new ThisUserDontExistEx();
-        UserDTO[] friends = user.Friends.Select(u => new UserDTO(u.Id.ToString(), u.ExhibitedName)).ToArray();
+        UserDTO[] friends = user.Friends.Select(u => new UserDTO(u.Id.ToString(), u.ExhibitedName, u.ProfilePicUrl)).ToArray();
         return friends;
+    }
+
+    public async Task<UserDTO> GetUserInfo(string userId)
+    {
+        var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+        if (user is null) throw new ThisUserDontExistEx();
+        return new UserDTO(userId, user.ExhibitedName, user.ProfilePicUrl);
     }
 }
