@@ -8,6 +8,8 @@ import {CommonModule} from "@angular/common";
 import {BrazilianDatePipePipe} from "../../pipes/brazilian-date-pipe.pipe";
 import {MessageComponent} from "../message/message.component";
 import {MessageDTO} from "../../DTOs/MessageDTO";
+import {MessageEditedEvent} from "../../DTOs/MessageEditedEvent";
+import {MessageDeletedEvent} from "../../DTOs/MessageDeletedEvent";
 
 @Component({
   selector: 'app-channel-page',
@@ -32,6 +34,8 @@ export class ChannelPageComponent implements OnChanges, OnInit{
   async ngOnInit()
   {
     this.SignalRConnection.GetNewMessageObservable().subscribe( req => this.RefreshMessages())
+    this.SignalRConnection.GetMessageEditedObservable().subscribe( req => this.MessageEditedOnChannel(req))
+    this.SignalRConnection.GetMessageDeletedObservable().subscribe( req => this.MessageDeletedOnChannel(req))
   }
   async ngOnChanges() {
     await this.RefreshMessages();
@@ -55,6 +59,29 @@ export class ChannelPageComponent implements OnChanges, OnInit{
     }
   }
 
+  MessageEditedOnChannel(req:MessageEditedEvent)
+  {
+    if(this.ChannelSelected().ChannelId != req.channelId) return;
+    for(let i = 0; i < this.ChannelSelected().Messages.length; i++) {
+      if (this.ChannelSelected().Messages[i].messageId == req.messageId) {
+        this.ChannelSelected().Messages[i].edited = true;
+        this.ChannelSelected().Messages[i].messageContent = req.newMessage;
+        break;
+      }
+    }
+  }
+
+  MessageDeletedOnChannel(req:MessageDeletedEvent)
+  {
+    if(this.ChannelSelected().ChannelId != req.channelId) return;
+    for(let i = 0; i < this.ChannelSelected().Messages.length; i++) {
+      if (this.ChannelSelected().Messages[i].messageId == req.messageId) {
+        this.ChannelSelected().Messages.splice(i,1);
+        break;
+      }
+    }
+  }
+
   IsEditingAtMoment(messageId:string)
   {
     return this.MessageIdEditing === messageId;
@@ -70,17 +97,21 @@ export class ChannelPageComponent implements OnChanges, OnInit{
     this.MessageIdEditing = "";
   }
 
-  EditedMessage(newMessage:MessageDTO)
+  async EditedMessage(newMessage:MessageDTO)
   {
     this.MessageIdEditing = "";
     console.log("Nova mensagem editada: ")
     console.log(newMessage)
+
+    await this.SignalRConnection.EditMessageAsync(newMessage.messageId, newMessage.messageContent)
   }
 
-  DeleteMessage(messageId:string)
+  async DeleteMessage(messageId:string)
   {
     console.log("Mensagem para ser apagada")
     console.log(messageId)
+
+    console.log(await this.SignalRConnection.DeleteMessageAsync(messageId))
   }
 
   protected readonly BrazilianDatePipePipe = BrazilianDatePipePipe;

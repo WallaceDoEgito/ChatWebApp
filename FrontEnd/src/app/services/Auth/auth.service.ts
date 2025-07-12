@@ -41,7 +41,7 @@ export class AuthService {
   async Login(request: AuthUserRequestDTO) : Promise<AuthUserResponseDTO>
   {
     let response!:AuthUserResponseDTO
-    let resp$ : any = await (firstValueFrom(this.httpReq.post("http://192.168.1.20:5269/api/auth/login", request, {observe:'response'}))).catch(e =>
+    let resp$ : any = await (firstValueFrom(this.httpReq.post("http://localhost:5269/api/auth/login", request, {observe:'response'}))).catch(e =>
       {
         console.log(e);
         response = new AuthUserResponseDTO(ResponsesEnum.BAD_REQUEST, e.error.msg);

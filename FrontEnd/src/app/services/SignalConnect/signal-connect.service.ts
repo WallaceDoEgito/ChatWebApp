@@ -3,17 +3,21 @@ import * as signalR from "@microsoft/signalr"
 import {ReplaySubject, Subject} from "rxjs";
 import {UserInfoDTO} from "../../DTOs/UserInfoDTO";
 import {MessageDTO} from "../../DTOs/MessageDTO";
+import {MessageDeletedEvent} from "../../DTOs/MessageDeletedEvent";
+import {MessageEditedEvent} from "../../DTOs/MessageEditedEvent";
 
 @Injectable({
   providedIn: 'root'
 })
 export class SignalConnectService {
   private token: any = localStorage.getItem("JWTSession");
-  private Connection = new signalR.HubConnectionBuilder().configureLogging(signalR.LogLevel.Debug).withUrl("http://192.168.1.20:5269/chat", {skipNegotiation:true,transport:signalR.HttpTransportType.WebSockets,withCredentials:true,accessTokenFactory: () => this.token}).withAutomaticReconnect().build();
+  private Connection = new signalR.HubConnectionBuilder().configureLogging(signalR.LogLevel.Debug).withUrl("http://localhost:5269/chat", {skipNegotiation:true,transport:signalR.HttpTransportType.WebSockets,withCredentials:true,accessTokenFactory: () => this.token}).withAutomaticReconnect().build();
   private ConnectionSubject = new ReplaySubject<void>(1);
   private FriendRequestResponseSubject = new Subject<String>();
   private NewFriendSubject = new Subject<String>();
   private NewMessageSubject = new Subject<MessageDTO>();
+  private MessageDeletedSubject = new Subject<MessageDeletedEvent>();
+  private MessageEditedSubject = new Subject<MessageEditedEvent>();
 
   IsConnected$() {
     return this.ConnectionSubject.asObservable();
@@ -34,6 +38,16 @@ export class SignalConnectService {
     return this.NewMessageSubject.asObservable();
   }
 
+  GetMessageDeletedObservable()
+  {
+    return this.MessageDeletedSubject.asObservable();
+  }
+
+  GetMessageEditedObservable()
+  {
+    return this.MessageEditedSubject.asObservable();
+  }
+
   private FriendRequest$(FriendReqUsername:String)
   {
     this.FriendRequestResponseSubject.next(FriendReqUsername);
@@ -49,9 +63,24 @@ export class SignalConnectService {
     console.log(req)
     this.NewMessageSubject.next(req)
   }
+
   private ServerResponseFriendReq$(req:any)
   {
 
+  }
+
+  private MessageDeletedInChannel$(req:MessageDeletedEvent)
+  {
+    console.log("Mensagem foi apagada!!")
+    console.log(req);
+    this.MessageDeletedSubject.next(req);
+  }
+
+  private MessageEditedInChannel$(req:MessageEditedEvent)
+  {
+    console.log("Mensagem foi editada!!")
+    console.log(req);
+    this.MessageEditedSubject.next(req);
   }
 
   ComunicateConnection()
@@ -62,6 +91,8 @@ export class SignalConnectService {
     this.Connection.on("NewFriendRequest", (req) => this.FriendRequest$(req))
     this.Connection.on("NewFriendAccepted", (req) => this.NewFriendAccepted$(req))
     this.Connection.on("NewMessage", (req) => this.NewMessage$(req))
+    this.Connection.on("MessageDeletedInChannel", (req) => this.MessageDeletedInChannel$(req))
+    this.Connection.on("MessageEditedInChannel", (req) => this.MessageEditedInChannel$(req))
   }
 
   TryConnect(): Promise<void> {
