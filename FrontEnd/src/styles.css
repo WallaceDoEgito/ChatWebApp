@@ -6,3 +6,6 @@ body {
     padding: 0;
     overflow: hidden;
 }
+ .mdc-text-field {
+    overflow: visible !important;
+}
