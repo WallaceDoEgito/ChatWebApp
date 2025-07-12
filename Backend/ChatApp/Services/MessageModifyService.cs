@@ -12,28 +12,40 @@ public class MessageModifyService(AppDbContext dbContext, IHubContext<PrincipalH
 {
     public async Task DeleteMessage(string userIdRequest, string messageId)
     {
-        var message = await dbContext.Message.Include(m => m.Sender).Include(m => m.Channel).ThenInclude(c => c.Participants).FirstOrDefaultAsync(m => m.MessageId.ToString() == messageId);
+        var message = await dbContext.Message.Include(m => m.Channel).ThenInclude(c => c.Participants).FirstOrDefaultAsync(m => m.MessageId.ToString() == messageId);
         if (message is null) return;
-        if (!UserCanModify(message.Sender, message)) return;
+        
+        var userWhoRequest = await dbContext.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userIdRequest);
+        if (userWhoRequest is null) return;
+        
+        if (!UserCanModify(userWhoRequest, message)) return;
 
         dbContext.Message.Remove(message);
         await dbContext.SaveChangesAsync();
+
+        await WarnClientsForDeletedMessage(message.Channel,messageId);
     }
 
     public async Task EditMessage(string userIdRequest, string messageId, string newMessageContent)
     {
-        var message = await dbContext.Message.Include(m => m.Sender).FirstOrDefaultAsync(m => m.MessageId.ToString() == messageId);
+        var message = await dbContext.Message.Include(m => m.Channel).ThenInclude(c => c.Participants).FirstOrDefaultAsync(m => m.MessageId.ToString() == messageId);
         if (message is null) return;
-        if (!UserCanModify(message.Sender, message)) return;
+        
+        var userWhoRequest = await dbContext.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userIdRequest);
+        if (userWhoRequest is null) return;
+        
+        if (!UserCanModify(userWhoRequest, message)) return;
 
         message.MessageContent = newMessageContent;
         message.Edited = true;
         await dbContext.SaveChangesAsync();
+        
+        await WarnClientsForEditMessage(message.Channel, message);
     }
 
     private bool UserCanModify(User user, Message message)
     {
-        if (user.Id == message.MessageId) return true;
+        if (user.Id == message.UserIdSender) return true;
         return false;
     }
 
