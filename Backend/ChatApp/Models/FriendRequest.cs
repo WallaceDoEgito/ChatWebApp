@@ -4,11 +4,11 @@ namespace ChatApp.Models;
 
 public class FriendRequest
 { 
-    public required Guid UserId { get; set; }
-    public User User { get; set; }
+    public required Guid UserId { get; set; } = Guid.Empty;
+    public User User { get; set; } = null!;
     
-    public required Guid UserToRequestId { get; set; }
-    public User UserToRequest { get; set; }
+    public required Guid UserToRequestId { get; set; } = Guid.Empty;
+    public User UserToRequest { get; set; } = null!;
 
     public bool Accepted { get; set; }
     public required DateTime RequestTimeUtc { get; set; }

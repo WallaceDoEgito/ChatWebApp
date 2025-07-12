@@ -25,9 +25,9 @@ builder.Services.AddSignalR().AddStackExchangeRedis(builder.Configuration.GetVal
 builder.Services.ConfigJWTAuth(builder.Configuration);
 builder.Services.AddCors(op =>
 {
-    op.AddDefaultPolicy((builder =>
+    op.AddDefaultPolicy((builderCors =>
     {
-        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        builderCors.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     }));
 });
 builder.Services.AddSingleton<RabbitMQConnection>();

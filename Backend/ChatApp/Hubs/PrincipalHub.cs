@@ -28,23 +28,23 @@ public class PrincipalHub(RabbitMQConnection connection, IFriendService friendSe
             await Clients.Caller.SendAsync("SendedFriendServerResponse",
                 new { error = false, msg = "Requisicao Enviada com sucesso!" });
         }
-        catch (AlreadyIsFriendEx e)
+        catch (AlreadyIsFriendEx)
         {
             await Clients.Caller.SendAsync("SendedFriendServerResponse",
                 new { error = true, msg = "Você ja é amigo deste usuario!" });
         }
-        catch (ThisUserDontExistEx e)
+        catch (ThisUserDontExistEx)
         {
             await Clients.Caller.SendAsync("SendedFriendServerResponse",
                 new { error = true, msg = "Não encontramos nenhum usuario com esse nome" });
         }
-        catch (DontAddYourselfEx ex)
+        catch (DontAddYourselfEx)
         {
             await Clients.Caller.SendAsync("SendedFriendServerResponse",
                 new { error = true, msg = "Não é possivel se adicionar!" });
         }
         
-        catch (Exception e)
+        catch (Exception)
         {
             await Clients.Caller.SendAsync("SendedFriendServerResponse", new {error = true, msg = "Ocorreu um erro ao enviar o pedido, tente mais tarde"}); 
         }
@@ -57,7 +57,7 @@ public class PrincipalHub(RabbitMQConnection connection, IFriendService friendSe
         {
             await friendService.ResponseRequest(newRequest);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return;
         }
