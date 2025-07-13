@@ -56,7 +56,7 @@ export class AuthService {
 
   StoreJWTToken(token : string)
   {
-    localStorage.removeItem('JwtSession')
+    localStorage.removeItem('JWTSession')
     localStorage.setItem('JWTSession', token);
   }
 
