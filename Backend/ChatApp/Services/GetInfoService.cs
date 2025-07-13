@@ -16,17 +16,20 @@ public class GetInfoService(AppDbContext dbContext) : IGetInfo
         
         if (user is null) return [];
         
-        return user.Channels.Select(c => new ChannelDTO(c.ChannelId.ToString(), c.ChannelName, DateOnly.FromDateTime(c.CreatedAt) , 
-            c.Participants.Select(p => new UserDTO(p.Id.ToString(), p.ExhibitedName, p.ProfilePicUrl)).ToArray())).ToArray();
+        return user.Channels.Select(c => new ChannelDTO(c.ChannelId.ToString(),
+            c.PrivateChannel ? c.Participants.First( p => p.Id.ToString() != userId).ExhibitedName : c.ChannelName , DateOnly.FromDateTime(c.CreatedAt),
+            c.Participants.Select(p => new UserDTO(p.Id.ToString(), p.ExhibitedName, p.ProfilePicUrl)).ToArray(), 
+            c.PrivateChannel, c.PrivateChannel ? c.Participants.First( p => p.Id.ToString() != userId).ProfilePicUrl : c.ChannelProfilePicUrl)).ToArray();
 
     }
 
     public async Task<MessageDTO[]> GetMessageByChannel(string channelId, int page)
     {
         int pageTam = 20;
-        var message = await dbContext.Message.Where(m => m.ChannelId.ToString() == channelId)
+        var message = await dbContext.Message.Include(m => m.Sender).Where(m => m.ChannelId.ToString() == channelId)
             .OrderByDescending(m => m.SentAt).Skip((page - 1) * pageTam).Take(pageTam).Select(m =>
-                new MessageDTO(m.UserIdSender.ToString()!, m.Sender.ExhibitedName, m.MessageContent, m.MessageId.ToString(), channelId, m.SentAt, m.Edited)).ToArrayAsync();
+                new MessageDTO(new UserDTO(m.Sender.Id.ToString(), m.Sender.ExhibitedName, m.Sender.ProfilePicUrl)
+                    ,m.MessageContent, m.MessageId.ToString(), channelId, m.SentAt, m.Edited)).ToArrayAsync();
         return message;
     }
 
