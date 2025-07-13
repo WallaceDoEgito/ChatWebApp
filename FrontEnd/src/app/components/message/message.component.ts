@@ -1,4 +1,4 @@
-import {Component, inject, input, output} from '@angular/core';
+import {Component, inject, input, OnInit, output} from '@angular/core';
 import {BrazilianDatePipePipe} from "../../pipes/brazilian-date-pipe.pipe";
 import {AsyncPipe, DatePipe} from "@angular/common";
 import {ChannelDTO} from "../../DTOs/ChannelDTO";
@@ -21,12 +21,11 @@ import {UserInfoService} from "../../services/UserInfo/user-info.service";
         MatMenuModule,
         FormsModule,
         AutomaticFocusDirective,
-        AsyncPipe
     ],
   templateUrl: './message.component.html',
   styleUrl: './message.component.css'
 })
-export class MessageComponent {
+export class MessageComponent implements OnInit{
     ChannelSelected = input.required<ChannelDTO>()
     MessageToRender = input.required<MessageDTO>()
     IndexMessage = input.required<Number>()
@@ -42,6 +41,13 @@ export class MessageComponent {
     DeleteMessageEvent = output<string>()
 
     userInfo = inject(UserInfoService);
+
+    MessageUserPhoto!:string
+
+    ngOnInit()
+    {
+        this.MessageUserPhoto = this.MessageToRender().userThatSended.userProfilePicUrl == "" ? this.WhiteImageBase64 :  this.MessageToRender().userThatSended.userProfilePicUrl as string
+    }
 
     IsOtherDay(isoStringOne:string, isoStringTwo:string): boolean
     {
@@ -80,8 +86,7 @@ export class MessageComponent {
         this.EditedMessageEvent.emit(
             {
                 messageId: this.MessageToRender().messageId,
-                userIdThatSended: this.MessageToRender().messageId,
-                userNameThatSended: this.MessageToRender().userNameThatSended,
+                userThatSended: this.MessageToRender().userThatSended,
                 channelId: this.MessageToRender().channelId,
                 messageContent: this.EditMessageModel,
                 sendAt: this.MessageToRender().sendAt,
@@ -93,7 +98,7 @@ export class MessageComponent {
     {
         let isFirstMessage = this.IndexMessage().valueOf() === this.ChannelSelected().Messages.length - 1
         if(isFirstMessage) return true;
-        let lastMessageWasFromADifferentUserChannelSelected = this.ChannelSelected().Messages[this.IndexMessage().valueOf() + 1].userIdThatSended != this.MessageToRender().userIdThatSended
+        let lastMessageWasFromADifferentUserChannelSelected = this.ChannelSelected().Messages[this.IndexMessage().valueOf() + 1].userThatSended.userId != this.MessageToRender().userThatSended.userId
         return isFirstMessage || lastMessageWasFromADifferentUserChannelSelected;
     }
 
@@ -113,7 +118,7 @@ export class MessageComponent {
     CanThisUserEraseMessages() : boolean
     {
         let user = this.userInfo.GetUserInfo()
-        if(user.userId == this.MessageToRender().userIdThatSended) return true;
+        if(user.userId == this.MessageToRender().userThatSended.userId) return true;
         return false;
     }
 }

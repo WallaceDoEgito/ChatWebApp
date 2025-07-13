@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, input, OnInit} from '@angular/core';
 import {UserInfoDTO} from "../../DTOs/UserInfoDTO";
 import {MatIconModule} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
@@ -9,7 +9,13 @@ import {MatIconButton} from "@angular/material/button";
   templateUrl: './user-mini-profile.component.html',
   styleUrl: './user-mini-profile.component.css'
 })
-export class UserMiniProfileComponent {
+export class UserMiniProfileComponent implements OnInit{
   public userInfo = input.required<UserInfoDTO>();
   public base64WhiteImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
+  public userProfilePic!:string
+
+  ngOnInit() {
+    console.log(this.userInfo().userProfilePicUrl)
+    this.userProfilePic = this.userInfo().userProfilePicUrl == "" ? this.base64WhiteImage : this.userInfo().userProfilePicUrl as string
+  }
 }

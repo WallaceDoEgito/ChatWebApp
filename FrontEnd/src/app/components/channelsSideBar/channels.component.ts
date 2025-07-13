@@ -25,7 +25,7 @@ export class ChannelsComponent implements OnInit {
           let result = await this.SignalRS.GetChannels();
           for(let canal in result)
           {
-            this.ChannelList.push(new ChannelDTO(result[canal].channelName, result[canal].channelId!, result[canal].creationDate!, result[canal].users!, []))
+            this.ChannelList.push(new ChannelDTO(result[canal].channelName, result[canal].channelId!, result[canal].creationDate!, result[canal].users!, [], result[canal].privateChannel!, result[canal].channelProfilePic!))
           }
     });
   }

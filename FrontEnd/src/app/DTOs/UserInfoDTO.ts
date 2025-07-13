@@ -1,5 +1,5 @@
 export interface UserInfoDTO {
     exibitedUsername : String
-     userId:String
-     UserProfilePicUrl:String
+    userId:String
+    userProfilePicUrl:String
 }

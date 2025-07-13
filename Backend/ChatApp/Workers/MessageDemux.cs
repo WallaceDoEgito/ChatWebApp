@@ -52,7 +52,7 @@ public class MessageDemux(RabbitMQConnection rabbitMqConnection, IServiceScopeFa
         if (channel is null) throw new KeyNotFoundException();
         foreach (var users in channel.Participants)
         {
-            MessageDemuxDto dto = new MessageDemuxDto(mes.MessageId, mes.UserIdThatSended, mes.UserName ,mes.ChannelId, users.Id.ToString(), mes.MessageContent, mes.SendAt, mes.Edited);
+            MessageDemuxDto dto = new MessageDemuxDto(mes.MessageId, mes.SenderInfo ,mes.ChannelId, users.Id.ToString(), mes.MessageContent, mes.SendAt, mes.Edited);
             await rabbitMqConnection.TransmitMessage(dto);
         }
     }

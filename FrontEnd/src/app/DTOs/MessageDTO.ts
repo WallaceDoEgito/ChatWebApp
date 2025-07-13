@@ -1,8 +1,9 @@
+import {UserInfoDTO} from "./UserInfoDTO";
+
 export interface MessageDTO {
     messageId:string;
-    userIdThatSended:string;
-    userNameThatSended:string;
     channelId:string;
+    userThatSended:UserInfoDTO
     messageContent:string;
     sendAt:string;
     edited:boolean;

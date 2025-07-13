@@ -8,14 +8,14 @@
 
         @if (FirstMessageOrLastMessageWasTooLongAgo()) {
             <div id="imagePerfil">
-                <img [src]="WhiteImageBase64">
+                <img [src]="MessageUserPhoto">
             </div>
         }
 
         <span id="data">
             @if (FirstMessageOrLastMessageWasTooLongAgo()) {
                 <span id="info">
-                    <span id="userName">{{ MessageToRender().userNameThatSended }}</span>
+                    <span id="userName">{{ MessageToRender().userThatSended.exibitedUsername }}</span>
                     <span id="date">{{ MessageToRender().sendAt | date: "dd/MM/YYYY 'às' HH:mm" }}</span>
                 </span>
             }

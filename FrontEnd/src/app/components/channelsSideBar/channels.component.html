@@ -21,7 +21,7 @@
         <button mat-button (click)="SelectChannel(undefined)"><mat-icon fontIcon="home"></mat-icon>Pagina principal</button>
     </div>
 
-     @for(channel of ChannelList; track channel;)
+     @for(channel of ChannelList; track ChannelList[$index].ChannelId!;)
      {
         <app-channel-clickable [channel]="channel" (clickEvent)="SelectChannel($event)"/>
      } @empty {

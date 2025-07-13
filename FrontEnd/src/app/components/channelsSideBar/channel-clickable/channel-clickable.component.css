@@ -21,6 +21,7 @@
 #imageServer > img
 {
     width: 2vw;
+    height: 2vw;
     border-radius: 20px;
     margin-left: 1vw;
 }

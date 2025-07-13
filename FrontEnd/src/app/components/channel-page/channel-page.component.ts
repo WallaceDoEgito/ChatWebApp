@@ -28,6 +28,7 @@ export class ChannelPageComponent implements OnChanges, OnInit{
   ChannelSelected: InputSignal<ChannelDTO> = input.required<ChannelDTO>();
   private SignalRConnection = inject(SignalConnectService);
   WhiteImageBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
+  ChannelImage!:string
   MessageInputModel = "";
   MessageIdEditing = "";
 
@@ -39,6 +40,7 @@ export class ChannelPageComponent implements OnChanges, OnInit{
     this.SignalRConnection.GetMessageEditedObservable().subscribe( req => this.MessageEditedOnChannel(req))
     this.SignalRConnection.GetMessageDeletedObservable().subscribe( req => this.MessageDeletedOnChannel(req))
     await this.userInfo.LoadUser();
+    this.ChannelImage = this.ChannelImage = this.ChannelSelected().ChannelImageUrl == "" ? this.WhiteImageBase64 : this.ChannelSelected().ChannelImageUrl as string
   }
   async ngOnChanges() {
     await this.RefreshMessages();
@@ -55,6 +57,7 @@ export class ChannelPageComponent implements OnChanges, OnInit{
   async RefreshMessages()
   {
     let mes = await this.SignalRConnection.GetMessagesByChannelId(this.ChannelSelected().ChannelId, 1)
+    console.log(mes)
     this.ChannelSelected().Messages = []
     for(let message of mes)
     {

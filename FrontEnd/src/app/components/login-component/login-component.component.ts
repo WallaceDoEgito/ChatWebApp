@@ -38,6 +38,7 @@ export class LoginComponentComponent {
     this.loading = true;
 
     let dtoAuthRequest = new AuthUserRequestDTO(this.UserNameModel, this.PasswordModel)
+    localStorage.clear()
     let response : AuthUserResponseDTO = await this.authService.Login(dtoAuthRequest);
     this.loading = false;
     if(response.ResponseType === ResponsesEnum.BAD_REQUEST) {this.ServerResponse = response.MessageBody; return}
