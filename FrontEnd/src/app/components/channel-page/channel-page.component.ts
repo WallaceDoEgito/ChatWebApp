@@ -49,7 +49,6 @@ export class ChannelPageComponent implements OnChanges, OnInit{
   async SendMessage()
   {
     if(this.MessageInputModel.trim() === "") return;
-    console.log("Tentouo enviar algo ai " + this.MessageInputModel);
     await this.SignalRConnection.SendMessage(this.MessageInputModel, this.ChannelSelected().ChannelId);
     this.MessageInputModel = "";
   }
@@ -57,7 +56,6 @@ export class ChannelPageComponent implements OnChanges, OnInit{
   async RefreshMessages()
   {
     let mes = await this.SignalRConnection.GetMessagesByChannelId(this.ChannelSelected().ChannelId, 1)
-    console.log(mes)
     this.ChannelSelected().Messages = []
     for(let message of mes)
     {
@@ -67,10 +65,7 @@ export class ChannelPageComponent implements OnChanges, OnInit{
 
   NewMessageArrived(req : MessageDTO)
   {
-    console.log("Tentarei verificar a mesngem")
     if(req.channelId != this.ChannelSelected().ChannelId) return;
-    console.log("Botando mensagme nos components")
-    console.log(req)
     this.ChannelSelected().Messages.unshift(req);
   }
 
@@ -115,17 +110,11 @@ export class ChannelPageComponent implements OnChanges, OnInit{
   async EditedMessage(newMessage:MessageDTO)
   {
     this.MessageIdEditing = "";
-    console.log("Nova mensagem editada: ")
-    console.log(newMessage)
-
     await this.SignalRConnection.EditMessageAsync(newMessage.messageId, newMessage.messageContent)
   }
 
   async DeleteMessage(messageId:string)
   {
-    console.log("Mensagem para ser apagada")
-    console.log(messageId)
-
     console.log(await this.SignalRConnection.DeleteMessageAsync(messageId))
   }
 

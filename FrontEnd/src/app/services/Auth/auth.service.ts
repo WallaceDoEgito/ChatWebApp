@@ -40,6 +40,7 @@ export class AuthService {
 
   async Login(request: AuthUserRequestDTO) : Promise<AuthUserResponseDTO>
   {
+    localStorage.clear()
     let response!:AuthUserResponseDTO
     let resp$ : any = await (firstValueFrom(this.httpReq.post("http://localhost:5269/api/auth/login", request, {observe:'response'}))).catch(e =>
       {
@@ -56,7 +57,7 @@ export class AuthService {
 
   StoreJWTToken(token : string)
   {
-    localStorage.removeItem('JWTSession')
+    localStorage.clear()
     localStorage.setItem('JWTSession', token);
   }
 
