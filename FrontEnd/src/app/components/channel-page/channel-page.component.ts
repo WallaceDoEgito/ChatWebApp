@@ -40,10 +40,10 @@ export class ChannelPageComponent implements OnChanges, OnInit{
     this.SignalRConnection.GetMessageEditedObservable().subscribe( req => this.MessageEditedOnChannel(req))
     this.SignalRConnection.GetMessageDeletedObservable().subscribe( req => this.MessageDeletedOnChannel(req))
     await this.userInfo.LoadUser();
-    this.ChannelImage = this.ChannelImage = this.ChannelSelected().ChannelImageUrl == "" ? this.WhiteImageBase64 : this.ChannelSelected().ChannelImageUrl as string
   }
   async ngOnChanges() {
     await this.RefreshMessages();
+    this.ChannelImage = this.ChannelImage = this.ChannelSelected().ChannelImageUrl == "" ? this.WhiteImageBase64 : this.ChannelSelected().ChannelImageUrl as string
   }
 
   async SendMessage()

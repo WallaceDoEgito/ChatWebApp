@@ -49,7 +49,7 @@ export class DefaultChatPageComponent implements OnInit, OnDestroy{
 
   ngOnDestroy(): void {
       if(this.NewFriendSubs$) this.NewFriendSubs$.unsubscribe();
-    if(this.NewFriendRequestSubs$) this.NewFriendRequestSubs$.unsubscribe();
+      if(this.NewFriendRequestSubs$) this.NewFriendRequestSubs$.unsubscribe();
   }
 
   private async NewFriendRequest(username:String)

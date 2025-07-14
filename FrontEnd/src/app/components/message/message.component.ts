@@ -1,4 +1,4 @@
-import {Component, inject, input, OnInit, output} from '@angular/core';
+import {Component, inject, input, OnChanges, OnInit, output} from '@angular/core';
 import {BrazilianDatePipePipe} from "../../pipes/brazilian-date-pipe.pipe";
 import {AsyncPipe, DatePipe} from "@angular/common";
 import {ChannelDTO} from "../../DTOs/ChannelDTO";
@@ -25,7 +25,7 @@ import {UserInfoService} from "../../services/UserInfo/user-info.service";
   templateUrl: './message.component.html',
   styleUrl: './message.component.css'
 })
-export class MessageComponent implements OnInit{
+export class MessageComponent implements OnChanges{
     ChannelSelected = input.required<ChannelDTO>()
     MessageToRender = input.required<MessageDTO>()
     IndexMessage = input.required<Number>()
@@ -44,7 +44,7 @@ export class MessageComponent implements OnInit{
 
     MessageUserPhoto!:string
 
-    ngOnInit()
+    ngOnChanges()
     {
         this.MessageUserPhoto = this.MessageToRender().userThatSended.userProfilePicUrl == "" ? this.WhiteImageBase64 :  this.MessageToRender().userThatSended.userProfilePicUrl as string
     }
