@@ -71,22 +71,17 @@ export class SignalConnectService {
 
   private MessageDeletedInChannel$(req:MessageDeletedEvent)
   {
-    console.log("Mensagem foi apagada!!")
-    console.log(req);
     this.MessageDeletedSubject.next(req);
   }
 
   private MessageEditedInChannel$(req:MessageEditedEvent)
   {
-    console.log("Mensagem foi editada!!")
-    console.log(req);
     this.MessageEditedSubject.next(req);
   }
 
   ComunicateConnection()
   {
     this.ConnectionSubject.next();
-    console.log("Conectado via websockets")
     this.Connection.on("SendedFriendServerResponse", (req:any) => this.ServerResponseFriendReq$(req))
     this.Connection.on("NewFriendRequest", (req) => this.FriendRequest$(req))
     this.Connection.on("NewFriendAccepted", (req) => this.NewFriendAccepted$(req))

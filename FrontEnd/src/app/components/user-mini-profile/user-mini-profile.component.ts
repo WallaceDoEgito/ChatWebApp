@@ -15,7 +15,6 @@ export class UserMiniProfileComponent implements OnInit{
   public userProfilePic!:string
 
   ngOnInit() {
-    console.log(this.userInfo().userProfilePicUrl)
     this.userProfilePic = this.userInfo().userProfilePicUrl == "" ? this.base64WhiteImage : this.userInfo().userProfilePicUrl as string
   }
 }
