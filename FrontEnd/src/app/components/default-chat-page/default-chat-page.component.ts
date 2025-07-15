@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, inject, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {MatIconModule} from "@angular/material/icon";
 import {MatBadgeModule} from "@angular/material/badge";
 import {UserInfoDTO} from "../../DTOs/UserInfoDTO";
@@ -8,6 +8,7 @@ import {MatIconButton} from "@angular/material/button";
 import {Subscription} from "rxjs";
 import {UserInfoService} from "../../services/UserInfo/user-info.service";
 import {NgOptimizedImage} from "@angular/common";
+import {GetProfilePicUrlFromUser} from "../../services/ProfilePic/ProfilePicUrl";
 
 @Component({
   selector: 'app-default-chat-page',
@@ -29,7 +30,6 @@ export class DefaultChatPageComponent implements OnInit, OnDestroy{
   public SolicitationsSelected = false;
   public NewFriendRequestEvent$ : any;
   public NewFriendAcceptedEvent$ : any;
-  public base64WhiteImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
   public ProfilePicImage!:string
   private NewFriendRequestSubs$! : Subscription
   private NewFriendSubs$! : Subscription
@@ -81,4 +81,6 @@ export class DefaultChatPageComponent implements OnInit, OnDestroy{
     let indexArray = this.Solicitations.findIndex( s => s.userId == UserIdToRespond)
     this.Solicitations.splice(indexArray, 1);
   }
+
+  protected readonly GetProfilePicUrlFromUser = GetProfilePicUrlFromUser;
 }

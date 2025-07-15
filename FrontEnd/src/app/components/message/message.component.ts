@@ -9,6 +9,7 @@ import {MatMenuModule, MatMenuTrigger} from "@angular/material/menu";
 import {FormsModule} from "@angular/forms";
 import {AutomaticFocusDirective} from "../../Directives/automatic-focus.directive";
 import {UserInfoService} from "../../services/UserInfo/user-info.service";
+import {GetProfilePicUrlFromUser} from "../../services/ProfilePic/ProfilePicUrl";
 
 @Component({
   selector: 'app-message',
@@ -31,7 +32,6 @@ export class MessageComponent implements OnChanges{
     IndexMessage = input.required<Number>()
     IsEditing = input.required<boolean>();
 
-    WhiteImageBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
     MenuIsOpen = false;
     EditMessageModel:string = "";
 
@@ -46,7 +46,7 @@ export class MessageComponent implements OnChanges{
 
     ngOnChanges()
     {
-        this.MessageUserPhoto = this.MessageToRender().userThatSended.userProfilePicUrl == "" ? this.WhiteImageBase64 :  this.MessageToRender().userThatSended.userProfilePicUrl as string
+        this.MessageUserPhoto = GetProfilePicUrlFromUser(this.MessageToRender().userThatSended)
     }
 
     IsOtherDay(isoStringOne:string, isoStringTwo:string): boolean

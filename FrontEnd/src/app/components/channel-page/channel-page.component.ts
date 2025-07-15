@@ -11,6 +11,7 @@ import {MessageDTO} from "../../DTOs/MessageDTO";
 import {MessageEditedEvent} from "../../DTOs/MessageEditedEvent";
 import {MessageDeletedEvent} from "../../DTOs/MessageDeletedEvent";
 import {UserInfoService} from "../../services/UserInfo/user-info.service";
+import {GetProfilePicUrlFromChannelSignal} from "../../services/ProfilePic/ProfilePicUrl";
 
 @Component({
   selector: 'app-channel-page',
@@ -27,7 +28,6 @@ import {UserInfoService} from "../../services/UserInfo/user-info.service";
 export class ChannelPageComponent implements OnChanges, OnInit{
   ChannelSelected: InputSignal<ChannelDTO> = input.required<ChannelDTO>();
   private SignalRConnection = inject(SignalConnectService);
-  WhiteImageBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
   ChannelImage!:string
   MessageInputModel = "";
   MessageIdEditing = "";
@@ -43,7 +43,7 @@ export class ChannelPageComponent implements OnChanges, OnInit{
   }
   async ngOnChanges() {
     await this.RefreshMessages();
-    this.ChannelImage = this.ChannelImage = this.ChannelSelected().ChannelImageUrl == "" ? this.WhiteImageBase64 : this.ChannelSelected().ChannelImageUrl as string
+    this.ChannelImage = GetProfilePicUrlFromChannelSignal(this.ChannelSelected)
   }
 
   async SendMessage()

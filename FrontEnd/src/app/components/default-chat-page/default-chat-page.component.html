@@ -26,7 +26,7 @@
         @for(sol of Solicitations; track sol.userId)
         {
             <div class="SolicitationsContainer">
-                <img [ngSrc]="sol.userProfilePicUrl == '' ? base64WhiteImage : sol.userProfilePicUrl" priority width="300" height="300">
+                <img [src]="GetProfilePicUrlFromUser(sol)" width="300" height="300">
                 <span id="Username" style="color: white">{{sol.exibitedUsername}}</span>
                 <div class="ActionButtons">
                     <button mat-icon-button (click)="AnswerFriendRequest(sol.userId, true)">
