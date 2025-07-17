@@ -7,7 +7,6 @@ import {UserMiniProfileComponent} from "../user-mini-profile/user-mini-profile.c
 import {MatIconButton} from "@angular/material/button";
 import {Subscription} from "rxjs";
 import {UserInfoService} from "../../services/UserInfo/user-info.service";
-import {NgOptimizedImage} from "@angular/common";
 import {GetProfilePicUrlFromUser} from "../../services/ProfilePic/ProfilePicUrl";
 
 @Component({
@@ -16,8 +15,7 @@ import {GetProfilePicUrlFromUser} from "../../services/ProfilePic/ProfilePicUrl"
     MatIconModule,
     MatBadgeModule,
     UserMiniProfileComponent,
-    MatIconButton,
-    NgOptimizedImage
+    MatIconButton
   ],
   templateUrl: './default-chat-page.component.html',
   styleUrl: './default-chat-page.component.css'

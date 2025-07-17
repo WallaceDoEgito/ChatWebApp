@@ -1,0 +1,27 @@
+.container
+{
+    background-color: #515051;
+    width: 20vw;
+    height: 3vw;
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    border-radius: 10px 3px 3px 10px;
+}
+
+.container > img
+{
+    margin-left: 0.6vw;
+}
+
+#ProfilePic
+{
+    width: 2.5vw;
+    height: 2.5vw;
+    border-radius: 100px;
+}
+
+.menu
+{
+    margin-left: auto;
+}

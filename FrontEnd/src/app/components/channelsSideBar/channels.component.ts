@@ -6,10 +6,11 @@ import {take} from "rxjs";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {UserProfileComponent} from "./user-profile/user-profile.component";
 
 @Component({
   selector: 'app-channels',
-  imports: [ChannelClickableComponent, ReactiveFormsModule, MatIconModule, MatButton, FormsModule, MatIconButton],
+    imports: [ChannelClickableComponent, ReactiveFormsModule, MatIconModule, MatButton, FormsModule, MatIconButton, UserProfileComponent],
   templateUrl: './channels.component.html',
   styleUrl: './channels.component.css'
 })

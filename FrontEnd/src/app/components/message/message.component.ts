@@ -1,6 +1,6 @@
-import {Component, inject, input, OnChanges, OnInit, output} from '@angular/core';
+import {Component, inject, input, OnChanges, output} from '@angular/core';
 import {BrazilianDatePipePipe} from "../../pipes/brazilian-date-pipe.pipe";
-import {AsyncPipe, DatePipe} from "@angular/common";
+import {DatePipe} from "@angular/common";
 import {ChannelDTO} from "../../DTOs/ChannelDTO";
 import {MessageDTO} from "../../DTOs/MessageDTO";
 import {MatIconButton} from "@angular/material/button";
