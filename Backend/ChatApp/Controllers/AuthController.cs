@@ -22,8 +22,16 @@ public class AuthController(IAuthService authService) : ControllerBase
     public async Task<IActionResult> Login(LoginUserRequest req)
     {
         if (req.UserName.Length > 32) return BadRequest(new {statusCode = 400, msg = "Your Username is too long", success = false});
-        String? token = await authService.Login(req);
-        if (token == null) return BadRequest(new {statusCode = 400, msg = "Username or password is incorrect", success = false} );
-        return Ok(new {statusCode = 200, msg = token, success = true});
+        //try
+        //{
+            String? token = await authService.Login(req);
+            if (token == null) return BadRequest(new {statusCode = 400, msg = "Username or password is incorrect", success = false} );
+            return Ok(new {statusCode = 200, msg = token, success = true});
+        /*}
+        catch(Exception e)
+        {
+            logger.LogError(e, e.Message);
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }*/
     }
 }

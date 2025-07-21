@@ -1,3 +1,4 @@
+using System;
 using ChatApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop.Implementation;
@@ -13,7 +14,7 @@ public class AppDbContext(IConfiguration configuration) : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(configuration.GetSection("ConnectionString").Value);
+        optionsBuilder.UseNpgsql(configuration.GetSection("DbConnectionString").Value);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

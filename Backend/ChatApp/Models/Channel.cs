@@ -4,7 +4,7 @@ namespace ChatApp.Models;
 
 public class Channel
 {
-    [MaxLength(64)] public String ChannelName { get; set; }
+    [MaxLength(128)] public String ChannelName { get; set; }
     public Guid ChannelId { get; set; }
     public DateTime CreatedAt { get; set; }
     public ICollection<User> Participants { get; set; } = new List<User>();

@@ -16,7 +16,7 @@ public class MessageDemux(RabbitMQConnection rabbitMqConnection, IServiceScopeFa
     
     public override async Task StartAsync(CancellationToken cancellationToken)
     {
-        var factory = new ConnectionFactory();
+        var factory = new ConnectionFactory{HostName = "rabbitmq"};
         _connection = await factory.CreateConnectionAsync();
         _channel = await _connection.CreateChannelAsync();
         await base.StartAsync(cancellationToken);
