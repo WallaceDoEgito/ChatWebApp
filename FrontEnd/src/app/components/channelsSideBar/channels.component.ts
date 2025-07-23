@@ -23,11 +23,8 @@ export class ChannelsComponent implements OnInit {
   
   ngOnInit(): void {
     this.SignalRS.IsConnected$().pipe(take(1)).subscribe( async () => {
-          let result = await this.SignalRS.GetChannels();
-          for(let canal in result)
-          {
-            this.ChannelList.push(new ChannelDTO(result[canal].channelName, result[canal].channelId!, result[canal].creationDate!, result[canal].users!, [], result[canal].privateChannel!, result[canal].channelProfilePic!))
-          }
+          await this.RefreshChannels();
+          this.SignalRS.GetNewFriendObservable$().subscribe(req => this.RefreshChannels())
     });
   }
 
@@ -45,6 +42,16 @@ export class ChannelsComponent implements OnInit {
   public SelectChannel(channel:ChannelDTO | undefined)
   {
     this.emitChannelSelected.emit(channel);
+  }
+
+  private async RefreshChannels()
+  {
+    let result = await this.SignalRS.GetChannels();
+    this.ChannelList = []
+    for(let canal in result)
+    {
+      this.ChannelList.push(new ChannelDTO(result[canal].channelName, result[canal].channelId!, result[canal].creationDate!, result[canal].users!, [], result[canal].privateChannel!, result[canal].channelProfilePic!))
+    }
   }
 
 }
