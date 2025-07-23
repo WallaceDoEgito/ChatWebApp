@@ -8,15 +8,16 @@ namespace ChatApp.Data;
 
 public class RabbitMQConnection
 {
-    
-    public RabbitMQConnection()
+    private IConfiguration _enviroment;
+    public RabbitMQConnection(IConfiguration enviroment)
     {
+        _enviroment = enviroment;
         _ = Config();
     }
 
     private async Task Config()
     {
-        var factory = new ConnectionFactory {HostName = "rabbitmq"};
+        var factory = new ConnectionFactory {HostName = _enviroment.GetValue<string>("RabbitMqHost") ?? "localhost"};
         await using IConnection connection =  await factory.CreateConnectionAsync();
         
         await using IChannel channelMessageCreator = await connection.CreateChannelAsync();
@@ -52,7 +53,7 @@ public class RabbitMQConnection
 
     public async Task PublishMessage(MessageRequest req)
     {
-        var factory = new ConnectionFactory {HostName = "rabbitmq"};
+        var factory = new ConnectionFactory {HostName = _enviroment.GetValue<string>("RabbitMqHost") ?? "localhost"};
         await using IConnection connection = await factory.CreateConnectionAsync();
         var jsonMessageParse = JsonSerializer.Serialize(req);
         var bodyEncoded = Encoding.UTF8.GetBytes(jsonMessageParse);
@@ -64,7 +65,7 @@ public class RabbitMQConnection
 
     public async Task DemuxMessage(MessageToDemuxDTO message)
     {
-        var factory = new ConnectionFactory {HostName = "rabbitmq"};
+        var factory = new ConnectionFactory {HostName = _enviroment.GetValue<string>("RabbitMqHost") ?? "localhost"};
         await using IConnection connection = await factory.CreateConnectionAsync();
         var jsonMessageParse = JsonSerializer.Serialize(message);
         var bodyEncoded = Encoding.UTF8.GetBytes(jsonMessageParse);
@@ -74,7 +75,7 @@ public class RabbitMQConnection
     }
     public async Task TransmitMessage(MessageDemuxDto message)
     {
-        var factory = new ConnectionFactory {HostName = "rabbitmq"};
+        var factory = new ConnectionFactory {HostName = _enviroment.GetValue<string>("RabbitMqHost") ?? "localhost"};
         await using IConnection connection = await factory.CreateConnectionAsync();
         var jsonMessageParse = JsonSerializer.Serialize(message);
         var bodyEncoded = Encoding.UTF8.GetBytes(jsonMessageParse);

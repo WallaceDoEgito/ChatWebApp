@@ -37,6 +37,7 @@ services:
     environment:
       - DbConnectionString=Server=postgres;Port=5432;Database=postgres;User Id=postgres;Password=ExamplePassword;
       - RedisConnectionString=redis
+      - RabbitMqHost=rabbitmq
       - JWTConfig__Issuer=AppChatBackend
       - JWTConfig__Audience=AppChatFrontend
       - JWTConfig__SecretKey=ExamplePasswordSha256X84V&&@WF8q4^7fsSWrLCMBF7^QN9SpJ

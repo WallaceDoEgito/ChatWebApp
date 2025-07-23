@@ -8,14 +8,14 @@ using RabbitMQ.Client.Events;
 
 namespace ChatApp.Workers;
 
-public class MessageCreator(IServiceScopeFactory dbContextFactory, RabbitMQConnection rabbitMqConnection) : BackgroundService
+public class MessageCreator(IServiceScopeFactory dbContextFactory, RabbitMQConnection rabbitMqConnection, IConfiguration enviroment) : BackgroundService
 {
     private IConnection? _connection;
     private IChannel? _channel;
     
     public override async Task StartAsync(CancellationToken cancellationToken)
     {
-        var factory = new ConnectionFactory{HostName = "rabbitmq"};
+        var factory = new ConnectionFactory{HostName = enviroment.GetValue<string>("RabbitMqHost") ?? "localhost"};
         _connection = await factory.CreateConnectionAsync();
         _channel = await _connection.CreateChannelAsync();
         await base.StartAsync(cancellationToken);
