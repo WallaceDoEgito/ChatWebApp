@@ -7,10 +7,11 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {UserProfileComponent} from "./user-profile/user-profile.component";
+import {MatBadge} from "@angular/material/badge";
 
 @Component({
   selector: 'app-channels',
-    imports: [ChannelClickableComponent, ReactiveFormsModule, MatIconModule, MatButton, FormsModule, MatIconButton, UserProfileComponent],
+  imports: [ChannelClickableComponent, ReactiveFormsModule, MatIconModule, MatButton, FormsModule, MatIconButton, UserProfileComponent, MatBadge],
   templateUrl: './channels.component.html',
   styleUrl: './channels.component.css'
 })
@@ -20,11 +21,13 @@ export class ChannelsComponent implements OnInit {
   public addFriends = false;
   public addFriendModel = '';
   public emitChannelSelected = output<ChannelDTO | undefined>()
+  public howManyNewFriendRequests = 0;
   
   ngOnInit(): void {
     this.SignalRS.IsConnected$().pipe(take(1)).subscribe( async () => {
           await this.RefreshChannels();
           this.SignalRS.GetNewFriendObservable$().subscribe(req => this.RefreshChannels())
+          this.SignalRS.GetNewFriendRequestObservable$().subscribe(req => this.howManyNewFriendRequests++);
     });
   }
 

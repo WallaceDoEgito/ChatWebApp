@@ -57,7 +57,6 @@ export class DefaultChatPageComponent implements OnInit, OnDestroy{
 
   private async NewFriend(username:String)
   {
-    console.log(username)
     this.Friends = await this.SignalConnection.GetFriends();
   }
 

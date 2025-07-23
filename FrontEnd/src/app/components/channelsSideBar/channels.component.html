@@ -18,7 +18,7 @@
         </div>
 
     <div id="ReturnLandingPage">
-        <button mat-button (click)="SelectChannel(undefined)"><mat-icon fontIcon="home"></mat-icon>Pagina principal</button>
+        <button mat-button (click)="SelectChannel(undefined); howManyNewFriendRequests = 0"><mat-icon fontIcon="home" [matBadge]="howManyNewFriendRequests" [matBadgeHidden]="howManyNewFriendRequests== 0"></mat-icon>Pagina principal</button>
     </div>
 
      @for(channel of ChannelList; track ChannelList[$index].ChannelId!;)
