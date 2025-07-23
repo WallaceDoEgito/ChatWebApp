@@ -10,7 +10,8 @@ import {MessageEditedEvent} from "../../DTOs/MessageEditedEvent";
   providedIn: 'root'
 })
 export class SignalConnectService {
-  private Connection = new signalR.HubConnectionBuilder().configureLogging(signalR.LogLevel.Debug).withUrl("/chat", {skipNegotiation:true,transport:signalR.HttpTransportType.WebSockets,withCredentials:true,accessTokenFactory: () => this.GetToken()}).withAutomaticReconnect().build();
+  private url = "";
+  private Connection = new signalR.HubConnectionBuilder().configureLogging(signalR.LogLevel.Debug).withUrl(`${this.url}/chat`, {skipNegotiation:true,transport:signalR.HttpTransportType.WebSockets,withCredentials:true,accessTokenFactory: () => this.GetToken()}).withAutomaticReconnect().build();
   private ConnectionSubject = new ReplaySubject<void>(1);
   private FriendRequestResponseSubject = new Subject<String>();
   private NewFriendSubject = new Subject<String>();
