@@ -49,7 +49,7 @@ export class AuthService {
   {
     localStorage.clear()
     let response!:AuthUserResponseDTO
-    let resp$ : any = await (firstValueFrom(this.httpReq.post(`${this.url}/api/auth/register`, request,
+    let resp$ : any = await (firstValueFrom(this.httpReq.post(`${this.url}/api/auth/login`, request,
       {
         observe:'response',
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
