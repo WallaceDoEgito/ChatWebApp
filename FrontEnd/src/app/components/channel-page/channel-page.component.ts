@@ -54,7 +54,7 @@ export class ChannelPageComponent implements OnChanges, OnInit{
     await this.SignalRConnection.SendMessage(this.MessageInputModel, this.ChannelSelected().ChannelId);
     this.ChannelSelected().Messages.unshift(
         {
-          messageId: "temp",
+          messageId: `temp${this.MessageInputModel.trim()}${new Date().toISOString()}${Math.random()}`,
           channelId: 'temp',
           userThatSended: this.userInfo.GetUserInfo(),
           messageContent: this.MessageInputModel.trim(),
@@ -109,7 +109,6 @@ export class ChannelPageComponent implements OnChanges, OnInit{
   private RemoveTempMessage(messageToSearch:MessageDTO) {
     for (let i = 0; i < this.ChannelSelected().Messages.length; i++)
     {
-      if(!this.ChannelSelected().Messages[i].temp) return;
       if(this.ChannelSelected().Messages[i].messageContent.trim() == messageToSearch.messageContent.trim())
       {
         this.ChannelSelected().Messages.splice(i,1);
