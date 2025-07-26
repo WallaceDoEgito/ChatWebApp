@@ -63,8 +63,6 @@ export class SignalConnectService {
 
   private NewMessage$(req:any)
   {
-    console.log("tchuru tchuru Chegou mensagem pra voce");
-    console.log(req)
     this.NewMessageSubject.next(req)
   }
 

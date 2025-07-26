@@ -30,7 +30,7 @@
             <button mat-icon-button id="uploadFile">
                 <mat-icon fontIcon="add" class="iconBut"></mat-icon>
             </button>
-            <input placeholder="Digite coisas legais!" [(ngModel)]="MessageInputModel" (keyup.enter)="SendMessage()">
+            <input placeholder="Digite coisas legais!" [(ngModel)]="MessageInputModel" (keyup.enter)="SendMessage()" appAutomaticFocus>
             <button mat-icon-button>
                 <mat-icon fontIcon="emoji_emotions" class="iconBut"></mat-icon>
             </button>

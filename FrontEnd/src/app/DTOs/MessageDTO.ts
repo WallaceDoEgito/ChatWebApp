@@ -7,4 +7,5 @@ export interface MessageDTO {
     messageContent:string;
     sendAt:string;
     edited:boolean;
+    temp:boolean
 }

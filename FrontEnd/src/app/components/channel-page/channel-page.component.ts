@@ -12,6 +12,7 @@ import {MessageEditedEvent} from "../../DTOs/MessageEditedEvent";
 import {MessageDeletedEvent} from "../../DTOs/MessageDeletedEvent";
 import {UserInfoService} from "../../services/UserInfo/user-info.service";
 import {GetProfilePicUrlFromChannelSignal} from "../../services/ProfilePic/ProfilePicUrl";
+import {AutomaticFocusDirective} from "../../Directives/automatic-focus.directive";
 
 @Component({
   selector: 'app-channel-page',
@@ -20,7 +21,8 @@ import {GetProfilePicUrlFromChannelSignal} from "../../services/ProfilePic/Profi
     MatIconModule,
     FormsModule,
     CommonModule,
-    MessageComponent
+    MessageComponent,
+    AutomaticFocusDirective
   ],
   templateUrl: './channel-page.component.html',
   styleUrl: './channel-page.component.css'
@@ -50,6 +52,17 @@ export class ChannelPageComponent implements OnChanges, OnInit{
   {
     if(this.MessageInputModel.trim() === "") return;
     await this.SignalRConnection.SendMessage(this.MessageInputModel, this.ChannelSelected().ChannelId);
+    this.ChannelSelected().Messages.unshift(
+        {
+          messageId: "temp",
+          channelId: 'temp',
+          userThatSended: this.userInfo.GetUserInfo(),
+          messageContent: this.MessageInputModel.trim(),
+          sendAt: new Date().toISOString(),
+          edited: false,
+          temp: true
+        }
+    );
     this.MessageInputModel = "";
   }
 
@@ -66,6 +79,7 @@ export class ChannelPageComponent implements OnChanges, OnInit{
   NewMessageArrived(req : MessageDTO)
   {
     if(req.channelId != this.ChannelSelected().ChannelId) return;
+    this.RemoveTempMessage(req)
     this.ChannelSelected().Messages.unshift(req);
   }
 
@@ -92,6 +106,17 @@ export class ChannelPageComponent implements OnChanges, OnInit{
     }
   }
 
+  private RemoveTempMessage(messageToSearch:MessageDTO) {
+    for (let i = 0; i < this.ChannelSelected().Messages.length; i++)
+    {
+      if(!this.ChannelSelected().Messages[i].temp) return;
+      if(this.ChannelSelected().Messages[i].messageContent.trim() == messageToSearch.messageContent.trim())
+      {
+        this.ChannelSelected().Messages.splice(i,1);
+        return;
+      }
+    }
+  }
   IsEditingAtMoment(messageId:string)
   {
     return this.MessageIdEditing === messageId;
@@ -115,7 +140,7 @@ export class ChannelPageComponent implements OnChanges, OnInit{
 
   async DeleteMessage(messageId:string)
   {
-    console.log(await this.SignalRConnection.DeleteMessageAsync(messageId))
+    await this.SignalRConnection.DeleteMessageAsync(messageId)
   }
 
   protected readonly BrazilianDatePipePipe = BrazilianDatePipePipe;

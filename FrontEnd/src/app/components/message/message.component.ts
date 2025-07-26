@@ -90,7 +90,8 @@ export class MessageComponent implements OnChanges{
                 channelId: this.MessageToRender().channelId,
                 messageContent: this.EditMessageModel,
                 sendAt: this.MessageToRender().sendAt,
-                edited: true
+                edited: true,
+                temp:false
             });
     }
 

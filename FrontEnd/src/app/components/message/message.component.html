@@ -3,7 +3,7 @@
     <div class="DataMensagem">{{MessageToRender().sendAt | brazilianDatePipe}}</div>
 }
 
-<div class="MessageStructureHoverBackground" [class.OtherUser]="FirstMessageOrDifferentUser()" [class.MenuOpenned]="MenuIsOpen" [class.Editing]="IsEditing()">
+<div class="MessageStructureHoverBackground" [class.tempMessage]="MessageToRender().temp" [class.OtherUser]="FirstMessageOrDifferentUser()" [class.MenuOpenned]="MenuIsOpen" [class.Editing]="IsEditing()">
     <div class="MessageStructreConteiner">
 
         @if (FirstMessageOrLastMessageWasTooLongAgo()) {
