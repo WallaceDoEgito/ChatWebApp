@@ -4,7 +4,7 @@
 }
 
 <div class="MessageStructureHoverBackground" [class.tempMessage]="MessageToRender().temp" [class.OtherUser]="FirstMessageOrDifferentUser()" [class.MenuOpenned]="MenuIsOpen" [class.Editing]="IsEditing()">
-    <div class="MessageStructreConteiner">
+    <div class="MessageStructreConteiner" [style.width]="MessageContainerWidth()">
 
         @if (FirstMessageOrLastMessageWasTooLongAgo()) {
             <div id="imagePerfil">
@@ -28,8 +28,8 @@
                     @else if (IsEditing())
                     {
                         <div class="Edit" (keyup.escape)="CancelEdit()" (keyup.enter)="EditConfirmed()">
-                            <textarea class="EditMessageInput" [(ngModel)]="EditMessageModel" appAutomaticFocus></textarea>
-                            <span>esc para cancelar • enter para confirmar</span>
+                            <textarea class="EditMessageInput" [(ngModel)]="EditMessageModel" [style.width]="TextAreaWidth()" appAutomaticFocus></textarea>
+                            <br><span>esc para cancelar • enter para confirmar</span>
                         </div>
                     }
                 </span>
@@ -39,7 +39,7 @@
 
     @if(CanThisUserEraseMessages())
     {
-        <div class="ActionButtons" [class.MenuOpenned]="MenuIsOpen">
+        <div class="ActionButtons" [class.MenuOpenned]="MenuIsOpen" [style.left]="ActionButtonPositionLeft()">
             <button mat-icon-button [matMenuTriggerFor]="MenuToModifyMessages" (click)="MenuOpenned()" (menuClosed)="MenuClosed()" [class.MenuOpenned]="MenuIsOpen">
                 <mat-icon fontIcon="more_horiz"></mat-icon>
             </button>

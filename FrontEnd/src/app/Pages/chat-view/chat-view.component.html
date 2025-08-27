@@ -1,6 +1,6 @@
 <div class="ContainerBody">
     <nav>
-        <app-channels class="channels" (emitChannelSelected)="NewChannelSelected($event)"/>
+        <app-channels class="channels" (emitChannelSelected)="NewChannelSelected($event)" (SideBarMinimizedEvent)="SidebarStateHandler($event)"/>
     </nav>
 
     <main>
@@ -10,7 +10,7 @@
         }
         @else
         {
-            <app-channel-page [ChannelSelected]="selectedChannel!"></app-channel-page>
+            <app-channel-page [ChannelSelected]="selectedChannel!" [Width]="WidthForChannelComponent"></app-channel-page>
         }
     </main>
 </div>

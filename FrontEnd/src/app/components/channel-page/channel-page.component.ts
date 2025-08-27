@@ -1,4 +1,4 @@
-import {Component, inject, input, InputSignal, OnChanges, OnInit} from '@angular/core';
+import {Component, computed, inject, input, InputSignal, OnChanges, OnInit} from '@angular/core';
 import {ChannelDTO} from "../../DTOs/ChannelDTO";
 import {MatIconButton} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
@@ -33,6 +33,13 @@ export class ChannelPageComponent implements OnChanges, OnInit{
   ChannelImage!:string
   MessageInputModel = "";
   MessageIdEditing = "";
+
+  Width = input<string>("80vw");
+  InputWidth = computed(() => {
+    let widthAsNum = +this.Width().slice(0,2)
+    return (widthAsNum - 10) + "vw"
+  })
+
 
   userInfo = inject(UserInfoService);
 

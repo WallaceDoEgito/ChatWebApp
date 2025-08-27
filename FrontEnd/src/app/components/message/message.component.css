@@ -2,7 +2,6 @@
 {
     display: flex;
     flex-direction: row;
-    width: 51vw;
     word-break: break-all;
     text-wrap: pretty;
     gap: 1vw;
@@ -93,7 +92,6 @@
 {
     position: absolute;
     top: 0;
-    left: 70vw;
     transform: translateY(-50%);
     display: none;
     z-index: 100;
@@ -140,7 +138,6 @@ button.MenuOpenned
 {
     border: none;
     overflow: auto;
-    width: 65vw;
     resize: none;
     background-color: rgba(25,25,25,0.7);
     height: fit-content;

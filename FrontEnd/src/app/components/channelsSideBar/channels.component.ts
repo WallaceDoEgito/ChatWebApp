@@ -22,6 +22,8 @@ export class ChannelsComponent implements OnInit {
   public addFriendModel = '';
   public emitChannelSelected = output<ChannelDTO | undefined>()
   public howManyNewFriendRequests = 0;
+  public SideBarMinimized = false;
+  public SideBarMinimizedEvent = output<boolean>();
   
   ngOnInit(): void {
     this.SignalRS.IsConnected$().pipe(take(1)).subscribe( async () => {

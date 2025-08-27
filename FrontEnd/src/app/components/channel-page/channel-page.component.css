@@ -1,7 +1,6 @@
     Header
     {
         overflow: hidden;
-        width: 80vw;
         height: 8vh;
         background-color: #515051;
         display: flex;
@@ -57,13 +56,12 @@
         height: 12vh;
         background-color: #414141;
         align-items: center;
-        justify-content: center;
+        margin-left: 2vw;
     }
 
     .SendMessage
     {
         display: flex;
-        width: 78vw;
         height: 8vh;
         align-items: center;
         background-color: #515051;
@@ -75,7 +73,6 @@
     .SendMessage > input
     {
         height: 7vh;
-        width: 71vw;
         background-color: #515051;
         border:none;
         color: white;
@@ -96,6 +93,5 @@
         overflow-y: scroll;
         scrollbar-width: none;
         overflow-x:hidden;
-        width: 80vw;
     }
 

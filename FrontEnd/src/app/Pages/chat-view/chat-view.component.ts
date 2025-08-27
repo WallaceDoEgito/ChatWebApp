@@ -16,6 +16,8 @@ export class ChatViewComponent implements OnInit{
   private route = inject(Router)
   private signalRConnection = inject(SignalConnectService)
   public selectedChannel:ChannelDTO | undefined = undefined;
+  public SideBarIsMinimized = false;
+  public WidthForChannelComponent = "80vw";
 
   async ngOnInit(): Promise<void> {
     const tokenJWT = localStorage.getItem("JWTSession");
@@ -31,6 +33,10 @@ export class ChatViewComponent implements OnInit{
     this.selectedChannel = channelEmitted;
   }
 
-
+  SidebarStateHandler(SideBarMinimized:boolean)
+  {
+    this.SideBarIsMinimized = SideBarMinimized
+    this.SideBarIsMinimized ? this.WidthForChannelComponent = "95vw" : this.WidthForChannelComponent = "80vw";
+  }
 
 }

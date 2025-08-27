@@ -1,14 +1,30 @@
-<div class="ChannelSideBarConteiner">
-    <div class="SearchBar">
-        <input type="text" placeholder="Pesquise algum canal...">
-        <button mat-icon-button>
-            <mat-icon fontIcon="search"></mat-icon>
+@if (SideBarMinimized) {
+    <div class="ChannelSideBarConteinerMinimized">
+        <button mat-icon-button class="ShowSideBarButton" (click)="SideBarMinimized = false; SideBarMinimizedEvent.emit(false)">
+            <mat-icon fontIcon="start"></mat-icon>
         </button>
+        <div id="ReturnLandingPageMinimized">
+            <button mat-icon-button (click)="SelectChannel(undefined); howManyNewFriendRequests = 0"><mat-icon fontIcon="home" [matBadge]="howManyNewFriendRequests" [matBadgeHidden]="howManyNewFriendRequests== 0"></mat-icon></button>
+        </div>
     </div>
-    <button mat-button class="buttonFriend" (click)="AddFriendsToggle()">
-        <mat-icon fontIcon="person_add"></mat-icon>
-        <span>Adicione mais amigos</span>
-    </button>
+} @else {
+    <div class="ChannelSideBarConteiner">
+        <div class="FirstLayer">
+            <div class="SearchBar">
+                <input type="text" placeholder="Pesquise algum canal...">
+                <button mat-icon-button>
+                    <mat-icon fontIcon="search"></mat-icon>
+                </button>
+            </div>
+            <button mat-icon-button class="MinimizeSideBarButton" (click)="SideBarMinimized = true; SideBarMinimizedEvent.emit(true)">
+                <mat-icon fontIcon="start"></mat-icon>
+            </button>
+        </div>
+
+        <button mat-button class="buttonFriend" (click)="AddFriendsToggle()">
+            <mat-icon fontIcon="person_add"></mat-icon>
+            <span>Adicione mais amigos</span>
+        </button>
 
         <div class="AddFriendsConteiner" [class.closedInput] = "!addFriends" [class.OpenedInput] = "addFriends">
             <input type="text" [(ngModel)]="addFriendModel" placeholder="Digite o nick de seu amigo">
@@ -17,18 +33,20 @@
             </button>
         </div>
 
-    <div id="ReturnLandingPage">
-        <button mat-button (click)="SelectChannel(undefined); howManyNewFriendRequests = 0"><mat-icon fontIcon="home" [matBadge]="howManyNewFriendRequests" [matBadgeHidden]="howManyNewFriendRequests== 0"></mat-icon>Pagina principal</button>
-    </div>
+        <div id="ReturnLandingPage">
+            <button mat-button (click)="SelectChannel(undefined); howManyNewFriendRequests = 0"><mat-icon fontIcon="home" [matBadge]="howManyNewFriendRequests" [matBadgeHidden]="howManyNewFriendRequests== 0"></mat-icon>Pagina principal</button>
+        </div>
 
-     @for(channel of ChannelList; track ChannelList[$index].ChannelId!;)
-     {
-        <app-channel-clickable [channel]="channel" (clickEvent)="SelectChannel($event)"/>
-     } @empty {
-         <span class="NenhumAmigo">Vish... <br> parece que voce nao tem amigos!</span>
-     }
+        @for(channel of ChannelList; track ChannelList[$index].ChannelId!;)
+        {
+            <app-channel-clickable [channel]="channel" (clickEvent)="SelectChannel($event)"/>
+        } @empty {
+            <span class="NenhumAmigo">Vish... <br> parece que voce nao tem amigos!</span>
+        }
 
-    <div class="profile">
-        <app-user-profile/>
+        <div class="profile">
+            <app-user-profile/>
+        </div>
     </div>
-</div>
+}
+

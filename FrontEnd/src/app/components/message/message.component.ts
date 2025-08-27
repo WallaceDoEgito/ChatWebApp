@@ -1,4 +1,4 @@
-import {Component, inject, input, OnChanges, output} from '@angular/core';
+import {Component, computed, inject, input, OnChanges, output} from '@angular/core';
 import {BrazilianDatePipePipe} from "../../pipes/brazilian-date-pipe.pipe";
 import {DatePipe} from "@angular/common";
 import {ChannelDTO} from "../../DTOs/ChannelDTO";
@@ -31,6 +31,23 @@ export class MessageComponent implements OnChanges{
     MessageToRender = input.required<MessageDTO>()
     IndexMessage = input.required<Number>()
     IsEditing = input.required<boolean>();
+
+    Width = input<string>("60vw")
+    MessageContainerWidth = computed(() =>
+    {
+        let width = +this.Width().slice(0,2);
+        return width-10 + "vw"
+    })
+    ActionButtonPositionLeft = computed(() =>
+    {
+        let width = +this.Width().slice(0,2);
+        return width - 5 + "vw"
+    })
+    TextAreaWidth = computed(() =>
+    {
+        let width = +this.Width().slice(0,2);
+        return width - 15 + "vw"
+    })
 
     MenuIsOpen = false;
     EditMessageModel:string = "";
