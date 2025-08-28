@@ -32,7 +32,13 @@ builder.Services.AddCors(op =>
 {
     op.AddDefaultPolicy((builderCors =>
     {
-        builderCors.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+//         builderCors.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        builderCors.SetIsOriginAllowed(origin =>
+                    origin == "http://localhost:4200" ||
+                    origin == "https://localhost:4000")
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
     }));
 });
 builder.Services.AddSingleton<RabbitMQConnection>();
