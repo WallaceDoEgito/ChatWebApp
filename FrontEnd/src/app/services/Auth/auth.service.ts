@@ -10,6 +10,7 @@ import { firstValueFrom } from 'rxjs';
 })
 export class AuthService {
   private httpReq = inject(HttpClient);
+  // private url = "http://localhost:5269"
   private url = ""
   
   async Register(request: AuthUserRequestDTO) : Promise<AuthUserResponseDTO>
