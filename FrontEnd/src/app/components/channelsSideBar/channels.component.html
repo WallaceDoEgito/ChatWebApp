@@ -27,7 +27,7 @@
         </button>
 
         <div class="AddFriendsConteiner" [class.closedInput] = "!addFriends" [class.OpenedInput] = "addFriends">
-            <input type="text" [(ngModel)]="addFriendModel" placeholder="Digite o nick de seu amigo">
+            <input type="text" [(ngModel)]="addFriendModel" placeholder="Digite o nick de seu amigo" (keyup.enter)="SendFriendRequest()">
             <button mat-icon-button (click)="SendFriendRequest()">
                 <mat-icon fontIcon = "send"></mat-icon>
             </button>
