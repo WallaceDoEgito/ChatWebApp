@@ -6,6 +6,11 @@
         <div id="ReturnLandingPageMinimized">
             <button mat-icon-button (click)="SelectChannel(undefined); howManyNewFriendRequests = 0"><mat-icon fontIcon="home" [matBadge]="howManyNewFriendRequests" [matBadgeHidden]="howManyNewFriendRequests== 0"></mat-icon></button>
         </div>
+
+        @for(channel of ChannelList; track ChannelList[$index].ChannelId!;)
+        {
+            <app-channel-clickable [channel]="channel" (clickEvent)="SelectChannel($event)" [isMinimized]="SideBarMinimized"/>
+        }
     </div>
 } @else {
     <div class="ChannelSideBarConteiner">
@@ -37,12 +42,13 @@
             <button mat-button (click)="SelectChannel(undefined); howManyNewFriendRequests = 0"><mat-icon fontIcon="home" [matBadge]="howManyNewFriendRequests" [matBadgeHidden]="howManyNewFriendRequests== 0"></mat-icon>Pagina principal</button>
         </div>
 
-        @for(channel of ChannelList; track ChannelList[$index].ChannelId!;)
-        {
-            <app-channel-clickable [channel]="channel" (clickEvent)="SelectChannel($event)"/>
-        } @empty {
-            <span class="NenhumAmigo">Vish... <br> parece que voce nao tem amigos!</span>
-        }
+        <div class="channels">
+            @for (channel of ChannelList; track ChannelList[$index].ChannelId!; ) {
+                <app-channel-clickable [channel]="channel" (clickEvent)="SelectChannel($event)"/>
+            } @empty {
+                <span class="NenhumAmigo">Vish... <br> parece que voce nao tem amigos!</span>
+            }
+        </div>
 
         <div class="profile">
             <app-user-profile/>

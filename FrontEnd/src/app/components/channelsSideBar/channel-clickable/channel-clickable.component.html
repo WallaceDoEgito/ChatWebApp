@@ -1,6 +1,8 @@
-<div class="containerChannel" (click)="clickChannel()">
+<div class="containerChannel" (click)="clickChannel()" [class.Minimized]="isMinimized()">
     <div id="imageServer">
         <img [src]="ChannelImage" alt="Server image">
     </div>
-    <span>{{channel().ChannelName}}</span>
+    @if (!isMinimized()) {
+        <span>{{ channel().ChannelName }}</span>
+    }
 </div>

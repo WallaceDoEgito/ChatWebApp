@@ -14,6 +14,7 @@ import {GetProfilePicUrlFromChannelSignal} from "../../../services/ProfilePic/Pr
 export class ChannelClickableComponent implements OnChanges{
   public channel = input.required<ChannelDTO>();
   public clickEvent = output<ChannelDTO>();
+  public isMinimized = input<boolean>(false);
   public ChannelImage!:string
 
   ngOnChanges() {
