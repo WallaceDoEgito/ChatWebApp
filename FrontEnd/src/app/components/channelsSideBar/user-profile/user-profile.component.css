@@ -6,12 +6,12 @@
     display: flex;
     align-items: center;
     gap: 1vw;
-    border-radius: 10px 3px 3px 10px;
+    border-radius: 5px 5px 3px 3px;
 }
 
 .container > img
 {
-    margin-left: 0.6vw;
+    margin-left: 0.5vw;
 }
 
 #ProfilePic
@@ -24,4 +24,9 @@
 .menu
 {
     margin-left: auto;
+}
+
+#Username
+{
+    color:white
 }

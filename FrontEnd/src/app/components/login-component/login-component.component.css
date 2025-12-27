@@ -4,6 +4,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #1a1a1a;
 }
 
 .conteiner
@@ -16,6 +17,7 @@
     height: 70vh;
     width: 30vw;
     gap:10px;
+    color: white;
 }
 
 
@@ -30,7 +32,7 @@ button
 
 .loginAsk
 {
-    color: rgb(1, 1, 117);
+    color: white;
     text-decoration: underline;
     cursor: pointer;
 }

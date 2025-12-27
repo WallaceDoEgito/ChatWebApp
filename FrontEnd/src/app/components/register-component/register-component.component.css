@@ -4,6 +4,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #1a1a1a;
 }
 
 .conteiner
@@ -14,19 +15,20 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    gap:10px
+    gap:10px;
+    color:white;
 }
 
 .loginAsk
 {
-    color: rgb(1, 1, 117);
+    color: white;
     text-decoration: underline;
     cursor: pointer;
 }
 
 .RequestSucess
 {
-    color: rgb(83, 128, 15);
+    color: rgb(116, 184, 22);
 }
 
 .loading
