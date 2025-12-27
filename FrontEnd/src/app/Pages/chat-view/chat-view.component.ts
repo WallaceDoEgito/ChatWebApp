@@ -1,10 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ChannelsComponent } from "../../components/channelsSideBar/channels.component";
+import { ChannelsComponent } from "../../components/Hub/channelsSideBar/channels.component";
 import { SignalConnectService } from '../../services/SignalConnect/signal-connect.service';
 import {ChannelDTO} from "../../DTOs/ChannelDTO";
-import {DefaultChatPageComponent} from "../../components/default-chat-page/default-chat-page.component";
-import {ChannelPageComponent} from "../../components/channel-page/channel-page.component";
+import {DefaultChatPageComponent} from "../../components/Hub/default-chat-page/default-chat-page.component";
+import {ChannelPageComponent} from "../../components/Hub/channel-page/channel-page.component";
 
 @Component({
   selector: 'app-chat-view',

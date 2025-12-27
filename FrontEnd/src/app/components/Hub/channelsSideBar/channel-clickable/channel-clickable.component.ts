@@ -1,7 +1,7 @@
 import {Component, input, OnChanges, output} from '@angular/core';
 import {MatButtonModule} from "@angular/material/button";
-import {ChannelDTO} from "../../../DTOs/ChannelDTO";
-import {GetProfilePicUrlFromChannelSignal} from "../../../services/ProfilePic/ProfilePicUrl";
+import {ChannelDTO} from "../../../../DTOs/ChannelDTO"
+import {GetProfilePicUrlFromChannelSignal} from "../../../../services/ProfilePic/ProfilePicUrl";
 
 @Component({
   selector: 'app-channel-clickable',

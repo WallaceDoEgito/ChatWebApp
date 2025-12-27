@@ -7,14 +7,14 @@ import {
   ValidatorFn,
   Validators, FormGroup
 } from '@angular/forms';
-import { AuthService } from '../../services/Auth/auth.service';
+import { AuthService } from '../../../services/Auth/auth.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import {AuthUserRequestDTO} from "../../DTOs/AuthUserRequest";
-import {AuthUserResponseDTO} from "../../DTOs/AuthUserResponseDTO";
-import {ResponsesEnum} from "../../Enums/ResponsesEnum";
+import {AuthUserRequestDTO} from "../../../DTOs/AuthUserRequest";
+import {AuthUserResponseDTO} from "../../../DTOs/AuthUserResponseDTO";
+import {ResponsesEnum} from "../../../Enums/ResponsesEnum";
 
 @Component({
   selector: 'app-register-component',

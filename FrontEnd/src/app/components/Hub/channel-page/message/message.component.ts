@@ -1,15 +1,15 @@
 import {Component, computed, inject, input, OnChanges, output} from '@angular/core';
-import {BrazilianDatePipePipe} from "../../pipes/brazilian-date-pipe.pipe";
+import {BrazilianDatePipePipe} from "../../../../pipes/brazilian-date-pipe.pipe";
 import {DatePipe} from "@angular/common";
-import {ChannelDTO} from "../../DTOs/ChannelDTO";
-import {MessageDTO} from "../../DTOs/MessageDTO";
+import {ChannelDTO} from "../../../../DTOs/ChannelDTO";
+import {MessageDTO} from "../../../../DTOs/MessageDTO";
 import {MatIconButton} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatMenuModule, MatMenuTrigger} from "@angular/material/menu";
 import {FormsModule} from "@angular/forms";
-import {AutomaticFocusDirective} from "../../Directives/automatic-focus.directive";
-import {UserInfoService} from "../../services/UserInfo/user-info.service";
-import {GetProfilePicUrlFromUser} from "../../services/ProfilePic/ProfilePicUrl";
+import {AutomaticFocusDirective} from "../../../../Directives/automatic-focus.directive";
+import {UserInfoService} from "../../../../services/UserInfo/user-info.service";
+import {GetProfilePicUrlFromUser} from "../../../../services/ProfilePic/ProfilePicUrl";
 
 @Component({
   selector: 'app-message',

@@ -1,9 +1,9 @@
 import {Component, inject, OnInit, output} from '@angular/core';
 import {MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
-import {UserInfoService} from "../../../services/UserInfo/user-info.service";
-import {UserInfoDTO} from "../../../DTOs/UserInfoDTO";
-import {GetProfilePicUrlFromUser} from "../../../services/ProfilePic/ProfilePicUrl";
+import {UserInfoService} from "../../../../services/UserInfo/user-info.service";
+import {UserInfoDTO} from "../../../../DTOs/UserInfoDTO";
+import {GetProfilePicUrlFromUser} from "../../../../services/ProfilePic/ProfilePicUrl";
 import {Observable} from "rxjs";
 import {AsyncPipe} from "@angular/common";
 

@@ -3,10 +3,10 @@ import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angu
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { AuthUserRequestDTO } from '../../DTOs/AuthUserRequest';
-import { AuthUserResponseDTO } from '../../DTOs/AuthUserResponseDTO';
-import { AuthService } from '../../services/Auth/auth.service';
-import { ResponsesEnum } from '../../Enums/ResponsesEnum';
+import { AuthUserRequestDTO } from '../../../DTOs/AuthUserRequest';
+import { AuthUserResponseDTO } from '../../../DTOs/AuthUserResponseDTO';
+import { AuthService } from '../../../services/Auth/auth.service';
+import { ResponsesEnum } from '../../../Enums/ResponsesEnum';
 import { Router } from '@angular/router';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 

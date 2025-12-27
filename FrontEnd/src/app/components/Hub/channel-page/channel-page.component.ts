@@ -1,18 +1,18 @@
 import {Component, computed, inject, input, InputSignal, OnChanges, OnInit} from '@angular/core';
-import {ChannelDTO} from "../../DTOs/ChannelDTO";
+import {ChannelDTO} from "../../../DTOs/ChannelDTO";
 import {MatIconButton} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {FormsModule} from "@angular/forms";
-import {SignalConnectService} from "../../services/SignalConnect/signal-connect.service";
+import {SignalConnectService} from "../../../services/SignalConnect/signal-connect.service";
 import {CommonModule} from "@angular/common";
-import {BrazilianDatePipePipe} from "../../pipes/brazilian-date-pipe.pipe";
-import {MessageComponent} from "../message/message.component";
-import {MessageDTO} from "../../DTOs/MessageDTO";
-import {MessageEditedEvent} from "../../DTOs/MessageEditedEvent";
-import {MessageDeletedEvent} from "../../DTOs/MessageDeletedEvent";
-import {UserInfoService} from "../../services/UserInfo/user-info.service";
-import {GetProfilePicUrlFromChannelSignal} from "../../services/ProfilePic/ProfilePicUrl";
-import {AutomaticFocusDirective} from "../../Directives/automatic-focus.directive";
+import {BrazilianDatePipePipe} from "../../../pipes/brazilian-date-pipe.pipe";
+import {MessageComponent} from "./message/message.component";
+import {MessageDTO} from "../../../DTOs/MessageDTO";
+import {MessageEditedEvent} from "../../../DTOs/MessageEditedEvent";
+import {MessageDeletedEvent} from "../../../DTOs/MessageDeletedEvent";
+import {UserInfoService} from "../../../services/UserInfo/user-info.service";
+import {GetProfilePicUrlFromChannelSignal} from "../../../services/ProfilePic/ProfilePicUrl";
+import {AutomaticFocusDirective} from "../../../Directives/automatic-focus.directive";
 
 @Component({
   selector: 'app-channel-page',

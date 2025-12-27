@@ -1,7 +1,7 @@
 import {Component, inject, OnInit, output} from '@angular/core';
 import { ChannelClickableComponent } from './channel-clickable/channel-clickable.component';
-import { SignalConnectService } from '../../services/SignalConnect/signal-connect.service';
-import { ChannelDTO } from '../../DTOs/ChannelDTO';
+import { SignalConnectService } from '../../../services/SignalConnect/signal-connect.service';
+import { ChannelDTO } from '../../../DTOs/ChannelDTO';
 import {take} from "rxjs";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButton, MatIconButton} from "@angular/material/button";

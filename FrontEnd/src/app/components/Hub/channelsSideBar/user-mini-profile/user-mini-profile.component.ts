@@ -1,8 +1,8 @@
 import {Component, input, OnInit} from '@angular/core';
-import {UserInfoDTO} from "../../DTOs/UserInfoDTO";
+import {UserInfoDTO} from "../../../../DTOs/UserInfoDTO";
 import {MatIconModule} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
-import {GetProfilePicUrlFromUserSignal} from "../../services/ProfilePic/ProfilePicUrl";
+import {GetProfilePicUrlFromUserSignal} from "../../../../services/ProfilePic/ProfilePicUrl";
 
 @Component({
   selector: 'app-user-mini-profile',
