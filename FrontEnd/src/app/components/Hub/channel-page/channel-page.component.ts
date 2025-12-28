@@ -1,6 +1,6 @@
 import {
     Component,
-    computed,
+    computed, effect,
     inject,
     input,
     InputSignal,
@@ -44,7 +44,7 @@ import {firstValueFrom} from "rxjs";
     templateUrl: './channel-page.component.html',
     styleUrl: './channel-page.component.css'
 })
-export class ChannelPageComponent implements OnChanges, OnInit {
+export class ChannelPageComponent implements OnInit {
     ChannelID = input<string>('')
 
     private SignalRConnection = inject(SignalConnectService);
@@ -75,15 +75,20 @@ export class ChannelPageComponent implements OnChanges, OnInit {
         GetProfilePicUrlFromChannel(this.ChannelSelected()!)
     )
 
+    constructor() {
+        effect(async () => {
+            const channel = this.ChannelSelected();
+            if (channel) {
+                await this.RefreshMessages();
+            }
+        });
+    }
+
     async ngOnInit() {
         await firstValueFrom(this.SignalRConnection.IsConnected$()).then(() => this.isConnected = true)
         this.SignalRConnection.GetNewMessageObservable().subscribe(req => this.NewMessageArrived(req))
         this.SignalRConnection.GetMessageEditedObservable().subscribe(req => this.MessageEditedOnChannel(req))
         this.SignalRConnection.GetMessageDeletedObservable().subscribe(req => this.MessageDeletedOnChannel(req))
-    }
-
-    async ngOnChanges() {
-        console.log("mudei")
     }
 
     async SendMessage() {

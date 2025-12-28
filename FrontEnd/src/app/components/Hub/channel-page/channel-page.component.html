@@ -2,7 +2,7 @@
     <Header>
         <div class="PhotoAndName">
             <img [src]="ChannelImage()">
-            <span id="Name">{{ ChannelSelected()!.ChannelName }}</span>
+            <span id="Name">{{ ChannelSelected()?.ChannelName }}</span>
         </div>
         <div class="CallButtons">
             <button mat-icon-button>
@@ -16,7 +16,7 @@
 
     <main>
         <div class="MessagesConteiner">
-            @for (mes of ChannelSelected()!.Messages; track ChannelSelected()!.Messages[$index].messageId; let
+            @for (mes of ChannelSelected()?.Messages; track ChannelSelected()!.Messages[$index].messageId; let
                 indice = $index) {
                 <app-message [ChannelSelected]="ChannelSelected()!" [MessageToRender]="mes" [IndexMessage]="indice"
                              [IsEditing]="IsEditingAtMoment(mes.messageId)"
