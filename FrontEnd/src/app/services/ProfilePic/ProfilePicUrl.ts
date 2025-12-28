@@ -14,8 +14,9 @@ export function GetProfilePicUrlFromUserSignal(user: Signal<UserInfoDTO>)
     return user().userProfilePicUrl == "" ? base64WhiteImage : user().userProfilePicUrl as string
 }
 
-export function GetProfilePicUrlFromChannel(channel:ChannelDTO)
+export function GetProfilePicUrlFromChannel(channel:ChannelDTO | null)
 {
+    if(channel == null) return base64WhiteImage
     return channel.ChannelImageUrl == "" ? base64WhiteImage : channel.ChannelImageUrl as string
 }
 

@@ -1,97 +1,92 @@
-    Header
-    {
-        overflow: hidden;
-        height: 8vh;
-        background-color: #515051;
-        display: flex;
-        align-items: center;
-        color: white;
-        justify-content: space-between;
-    }
+Header {
+    overflow: hidden;
+    height: 8vh;
+    background-color: #515051;
+    display: flex;
+    align-items: center;
+    color: white;
+    justify-content: space-between;
+}
 
-    #Name
-    {
-        font-size: 1.3rem;
-        margin-left: 1vw;
-    }
+#Name {
+    font-size: 1.3rem;
+    margin-left: 1vw;
+}
 
-    .iconBut
-    {
-        transform: scale(1.4);
-    }
+.iconBut {
+    transform: scale(1.4);
+}
 
-    .PhotoAndName
-    {
-        display: flex;
-        align-items: center;
-        margin-left: 1vw;
-    }
+.PhotoAndName {
+    display: flex;
+    align-items: center;
+    margin-left: 1vw;
+}
 
-    .PhotoAndName > img
-    {
-        border-radius: 100px;
-        height: 3vw;
-        width: 3vw;
-        object-fit: cover;
-    }
+.PhotoAndName > img {
+    border-radius: 100px;
+    height: 3vw;
+    width: 3vw;
+    object-fit: cover;
+}
 
-    .CallButtons
-    {
-        margin-right: 2vw;
-        display: flex;
-        align-items: center;
-        gap: 1vw;
-    }
+.CallButtons {
+    margin-right: 2vw;
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+}
 
-    main
-    {
-        overflow: hidden;
-        height: 100vh;
-        background-color: #414141;
-    }
+main {
+    overflow: hidden;
+    height: 100vh;
+    background-color: #414141;
+}
 
-    .SendMessageContainer
-    {
-        display: flex;
-        height: 12vh;
-        background-color: #414141;
-        align-items: center;
-        margin-left: 2vw;
-    }
+.SendMessageContainer {
+    display: flex;
+    height: 12vh;
+    background-color: #414141;
+    align-items: center;
+    margin-left: 2vw;
+}
 
-    .SendMessage
-    {
-        display: flex;
-        height: 8vh;
-        align-items: center;
-        background-color: #515051;
-        gap: 1vw;
-        box-shadow: 0px 2px 4px 1px rgba(0,0,0,0.31);
-    }
+.SendMessage {
+    display: flex;
+    height: 8vh;
+    align-items: center;
+    background-color: #515051;
+    gap: 1vw;
+    box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.31);
+    width: 95%;
+}
 
 
-    .SendMessage > input
-    {
-        height: 7vh;
-        background-color: #515051;
-        border:none;
-        color: white;
-        font-size: 1.3rem;
-    }
+.SendMessage > input {
+    height: 7vh;
+    background-color: #515051;
+    border: none;
+    color: white;
+    font-size: 1.3rem;
+}
 
-    .SendMessage > input:focus
-    {
-       outline: none;
-    }
+.SendMessage > input:focus {
+    outline: none;
+}
 
-    .MessagesConteiner
-    {
-        color: #e3e2e2;
-        display: flex;
-        flex-direction: column-reverse;
-        height: 79vh;
-        overflow-y: scroll;
-        scrollbar-width: none;
-        overflow-x:hidden;
-    }
+.MessagesConteiner {
+    color: #e3e2e2;
+    display: flex;
+    flex-direction: column-reverse;
+    height: 79vh;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    overflow-x: hidden;
+}
+
+#emotes
+{
+    margin-left: auto;
+    margin-right: 2%;
+}
 

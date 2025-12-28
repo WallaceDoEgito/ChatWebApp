@@ -77,7 +77,7 @@
     display: flex;
     align-content: center;
     padding-top: 0.3vh;
-    width: 100vw;
+    width: 100%;
     border-radius: 2px;
     overflow: visible;
 }
@@ -92,7 +92,7 @@
 {
     position: absolute;
     top: 0;
-    transform: translateY(-50%);
+    transform: translateY(-50%) translateX(500%);
     display: none;
     z-index: 100;
 }

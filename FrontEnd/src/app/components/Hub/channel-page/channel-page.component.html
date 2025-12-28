@@ -1,39 +1,43 @@
-<Header [style.width]="Width()">
-    <div class="PhotoAndName">
-        <img [src]="ChannelImage">
-        <span id="Name">{{ChannelSelected().ChannelName}}</span>
-    </div>
-    <div class="CallButtons">
-        <button mat-icon-button>
-            <mat-icon class="iconBut" fontIcon="call"></mat-icon>
-        </button>
-        <button mat-icon-button>
-            <mat-icon class="iconBut" fontIcon="videocam"></mat-icon>
-        </button>
-    </div>
-</Header>
-
-<main>
-    <div class="MessagesConteiner" [style.width]="Width()">
-        @for (mes of ChannelSelected().Messages; track ChannelSelected().Messages[$index].messageId; let indice = $index)
-        {
-            <app-message [ChannelSelected]="ChannelSelected()" [MessageToRender]="mes" [IndexMessage]="indice"
-                         [IsEditing]="IsEditingAtMoment(mes.messageId)" (EditingMessageEvent)="EditMessageMutex($event)"
-                         (NoMoreEditingEvent)="NoMoreEditing()" (DeleteMessageEvent)="DeleteMessage($event)"
-                         (EditedMessageEvent)="EditedMessage($event)" [Width]="Width()"
-            />
-        }
-    </div>
-
-    <div class="SendMessageContainer" [style.width]="Width()">
-        <div class="SendMessage">
-            <button mat-icon-button id="uploadFile">
-                <mat-icon fontIcon="add" class="iconBut"></mat-icon>
-            </button>
-            <input placeholder="Digite coisas legais!" [(ngModel)]="MessageInputModel" (keyup.enter)="SendMessage()" appAutomaticFocus [style.width]="InputWidth()">
+<div id="container">
+    <Header>
+        <div class="PhotoAndName">
+            <img [src]="ChannelImage()">
+            <span id="Name">{{ ChannelSelected()!.ChannelName }}</span>
+        </div>
+        <div class="CallButtons">
             <button mat-icon-button>
-                <mat-icon fontIcon="emoji_emotions" class="iconBut"></mat-icon>
+                <mat-icon class="iconBut" fontIcon="call"></mat-icon>
+            </button>
+            <button mat-icon-button>
+                <mat-icon class="iconBut" fontIcon="videocam"></mat-icon>
             </button>
         </div>
-    </div>
-</main>
+    </Header>
+
+    <main>
+        <div class="MessagesConteiner">
+            @for (mes of ChannelSelected()!.Messages; track ChannelSelected()!.Messages[$index].messageId; let
+                indice = $index) {
+                <app-message [ChannelSelected]="ChannelSelected()!" [MessageToRender]="mes" [IndexMessage]="indice"
+                             [IsEditing]="IsEditingAtMoment(mes.messageId)"
+                             (EditingMessageEvent)="EditMessageMutex($event)"
+                             (NoMoreEditingEvent)="NoMoreEditing()" (DeleteMessageEvent)="DeleteMessage($event)"
+                             (EditedMessageEvent)="EditedMessage($event)"
+                />
+            }
+        </div>
+
+        <div class="SendMessageContainer">
+            <div class="SendMessage">
+                <button mat-icon-button id="uploadFile">
+                    <mat-icon fontIcon="add" class="iconBut"></mat-icon>
+                </button>
+                <input placeholder="Digite coisas legais!" [(ngModel)]="MessageInputModel" (keyup.enter)="SendMessage()"
+                       appAutomaticFocus>
+                <button mat-icon-button id="emotes">
+                    <mat-icon fontIcon="emoji_emotions" class="iconBut"></mat-icon>
+                </button>
+            </div>
+        </div>
+    </main>
+</div>

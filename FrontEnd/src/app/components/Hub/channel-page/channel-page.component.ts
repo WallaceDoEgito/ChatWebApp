@@ -1,4 +1,15 @@
-import {Component, computed, inject, input, InputSignal, OnChanges, OnInit} from '@angular/core';
+import {
+    Component,
+    computed,
+    inject,
+    input,
+    InputSignal,
+    OnChanges,
+    OnInit, resource, Signal,
+    signal,
+    WritableSignal
+} from '@angular/core';
+import {Router} from '@angular/router'
 import {ChannelDTO} from "../../../DTOs/ChannelDTO";
 import {MatIconButton} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
@@ -11,143 +22,151 @@ import {MessageDTO} from "../../../DTOs/MessageDTO";
 import {MessageEditedEvent} from "../../../DTOs/MessageEditedEvent";
 import {MessageDeletedEvent} from "../../../DTOs/MessageDeletedEvent";
 import {UserInfoService} from "../../../services/UserInfo/user-info.service";
-import {GetProfilePicUrlFromChannelSignal} from "../../../services/ProfilePic/ProfilePicUrl";
+import {
+    GetProfilePicUrlFromChannel,
+    GetProfilePicUrlFromChannelSignal
+} from "../../../services/ProfilePic/ProfilePicUrl";
 import {AutomaticFocusDirective} from "../../../Directives/automatic-focus.directive";
+import {ChannelCacheService} from "../../../services/ChannelCache/channel-cache.service";
+import {toSignal} from "@angular/core/rxjs-interop";
+import {firstValueFrom} from "rxjs";
 
 @Component({
-  selector: 'app-channel-page',
-  imports: [
-    MatIconButton,
-    MatIconModule,
-    FormsModule,
-    CommonModule,
-    MessageComponent,
-    AutomaticFocusDirective
-  ],
-  templateUrl: './channel-page.component.html',
-  styleUrl: './channel-page.component.css'
+    selector: 'app-channel-page',
+    imports: [
+        MatIconButton,
+        MatIconModule,
+        FormsModule,
+        CommonModule,
+        MessageComponent,
+        AutomaticFocusDirective
+    ],
+    templateUrl: './channel-page.component.html',
+    styleUrl: './channel-page.component.css'
 })
-export class ChannelPageComponent implements OnChanges, OnInit{
-  ChannelSelected: InputSignal<ChannelDTO> = input.required<ChannelDTO>();
-  private SignalRConnection = inject(SignalConnectService);
-  ChannelImage!:string
-  MessageInputModel = "";
-  MessageIdEditing = "";
+export class ChannelPageComponent implements OnChanges, OnInit {
+    ChannelID = input<string>('')
 
-  Width = input<string>("80vw");
-  InputWidth = computed(() => {
-    let widthAsNum = +this.Width().slice(0,2)
-    return (widthAsNum - 10) + "vw"
-  })
+    private SignalRConnection = inject(SignalConnectService);
+    private ChannelService = inject(ChannelCacheService);
+    userInfo = inject(UserInfoService);
+    private Router = inject(Router)
 
+    MessageInputModel = "";
+    MessageIdEditing = "";
 
-  userInfo = inject(UserInfoService);
+    private isConnected = false
 
-  async ngOnInit()
-  {
-    this.SignalRConnection.GetNewMessageObservable().subscribe( req => this.NewMessageArrived(req))
-    this.SignalRConnection.GetMessageEditedObservable().subscribe( req => this.MessageEditedOnChannel(req))
-    this.SignalRConnection.GetMessageDeletedObservable().subscribe( req => this.MessageDeletedOnChannel(req))
-    await this.userInfo.LoadUser();
-  }
-  async ngOnChanges() {
-    await this.RefreshMessages();
-    this.ChannelImage = GetProfilePicUrlFromChannelSignal(this.ChannelSelected)
-  }
+    ChannelResource = resource({
+        request: () => this.ChannelID(),
+        loader: async ({request}) => {
+            if (!this.isConnected) await firstValueFrom(this.SignalRConnection.IsConnected$());
 
-  async SendMessage()
-  {
-    if(this.MessageInputModel.trim() === "") return;
-    await this.SignalRConnection.SendMessage(this.MessageInputModel, this.ChannelSelected().ChannelId);
-    this.ChannelSelected().Messages.unshift(
-        {
-          messageId: `temp${this.MessageInputModel.trim()}${new Date().toISOString()}${Math.random()}`,
-          channelId: 'temp',
-          userThatSended: this.userInfo.GetUserInfo(),
-          messageContent: this.MessageInputModel.trim(),
-          sendAt: new Date().toISOString(),
-          edited: false,
-          temp: true
+            const channel = await this.ChannelService.GetChannelById(request);
+            if (!channel) {
+                await this.Router.navigate(['hub']);
+                return null;
+            }
+            return channel;
         }
-    );
-    this.MessageInputModel = "";
-  }
+    })
+    ChannelSelected = this.ChannelResource.value
+    ChannelImage = computed(() =>
+        GetProfilePicUrlFromChannel(this.ChannelSelected()!)
+    )
 
-  async RefreshMessages()
-  {
-    let mes = await this.SignalRConnection.GetMessagesByChannelId(this.ChannelSelected().ChannelId, 1)
-    this.ChannelSelected().Messages = []
-    for(let message of mes)
-    {
-      this.ChannelSelected().Messages.push(message);
+    async ngOnInit() {
+        await firstValueFrom(this.SignalRConnection.IsConnected$()).then(() => this.isConnected = true)
+        this.SignalRConnection.GetNewMessageObservable().subscribe(req => this.NewMessageArrived(req))
+        this.SignalRConnection.GetMessageEditedObservable().subscribe(req => this.MessageEditedOnChannel(req))
+        this.SignalRConnection.GetMessageDeletedObservable().subscribe(req => this.MessageDeletedOnChannel(req))
     }
-  }
 
-  NewMessageArrived(req : MessageDTO)
-  {
-    if(req.channelId != this.ChannelSelected().ChannelId) return;
-    this.RemoveTempMessage(req)
-    this.ChannelSelected().Messages.unshift(req);
-  }
-
-  MessageEditedOnChannel(req:MessageEditedEvent)
-  {
-    if(this.ChannelSelected().ChannelId != req.channelId) return;
-    for(let i = 0; i < this.ChannelSelected().Messages.length; i++) {
-      if (this.ChannelSelected().Messages[i].messageId == req.messageId) {
-        this.ChannelSelected().Messages[i].edited = true;
-        this.ChannelSelected().Messages[i].messageContent = req.newMessage;
-        break;
-      }
+    async ngOnChanges() {
+        console.log("mudei")
     }
-  }
 
-  MessageDeletedOnChannel(req:MessageDeletedEvent)
-  {
-    if(this.ChannelSelected().ChannelId != req.channelId) return;
-    for(let i = 0; i < this.ChannelSelected().Messages.length; i++) {
-      if (this.ChannelSelected().Messages[i].messageId == req.messageId) {
-        this.ChannelSelected().Messages.splice(i,1);
-        break;
-      }
+    async SendMessage() {
+        if (this.MessageInputModel.trim() === "") return;
+        await this.SignalRConnection.SendMessage(this.MessageInputModel, this.ChannelSelected()!.ChannelId);
+        this.ChannelSelected()!.Messages.unshift(
+            {
+                messageId: `temp${this.MessageInputModel.trim()}${new Date().toISOString()}${Math.random()}`,
+                channelId: 'temp',
+                userThatSended: this.userInfo.GetUserInfo(),
+                messageContent: this.MessageInputModel.trim(),
+                sendAt: new Date().toISOString(),
+                edited: false,
+                temp: true
+            }
+        );
+        this.MessageInputModel = "";
     }
-  }
 
-  private RemoveTempMessage(messageToSearch:MessageDTO) {
-    for (let i = 0; i < this.ChannelSelected().Messages.length; i++)
-    {
-      if(this.ChannelSelected().Messages[i].messageContent.trim() == messageToSearch.messageContent.trim())
-      {
-        this.ChannelSelected().Messages.splice(i,1);
-        return;
-      }
+    async RefreshMessages() {
+        let mes = await this.SignalRConnection.GetMessagesByChannelId(this.ChannelSelected()!.ChannelId, 1)
+        this.ChannelSelected()!.Messages = []
+        for (let message of mes) {
+            this.ChannelSelected()!.Messages.push(message);
+        }
     }
-  }
-  IsEditingAtMoment(messageId:string)
-  {
-    return this.MessageIdEditing === messageId;
-  }
 
-  EditMessageMutex(messageId:string)
-  {
-    this.MessageIdEditing = messageId;
-  }
+    NewMessageArrived(req: MessageDTO) {
+        if (req.channelId != this.ChannelSelected()!.ChannelId) return;
+        this.RemoveTempMessage(req)
+        this.ChannelSelected()!.Messages.unshift(req);
+    }
 
-  NoMoreEditing()
-  {
-    this.MessageIdEditing = "";
-  }
+    MessageEditedOnChannel(req: MessageEditedEvent) {
+        if (this.ChannelSelected()!.ChannelId != req.channelId) return;
+        for (let i = 0; i < this.ChannelSelected()!.Messages.length; i++) {
+            if (this.ChannelSelected()!.Messages[i].messageId == req.messageId) {
+                this.ChannelSelected()!.Messages[i].edited = true;
+                this.ChannelSelected()!.Messages[i].messageContent = req.newMessage;
+                break;
+            }
+        }
+    }
 
-  async EditedMessage(newMessage:MessageDTO)
-  {
-    this.MessageIdEditing = "";
-    await this.SignalRConnection.EditMessageAsync(newMessage.messageId, newMessage.messageContent)
-  }
+    MessageDeletedOnChannel(req: MessageDeletedEvent) {
+        if (this.ChannelSelected()!.ChannelId != req.channelId) return;
+        for (let i = 0; i < this.ChannelSelected()!.Messages.length; i++) {
+            if (this.ChannelSelected()!.Messages[i].messageId == req.messageId) {
+                this.ChannelSelected()!.Messages.splice(i, 1);
+                break;
+            }
+        }
+    }
 
-  async DeleteMessage(messageId:string)
-  {
-    await this.SignalRConnection.DeleteMessageAsync(messageId)
-  }
+    private RemoveTempMessage(messageToSearch: MessageDTO) {
+        for (let i = 0; i < this.ChannelSelected()!.Messages.length; i++) {
+            if (this.ChannelSelected()!.Messages[i].messageContent.trim() == messageToSearch.messageContent.trim()) {
+                this.ChannelSelected()!.Messages.splice(i, 1);
+                return;
+            }
+        }
+    }
 
-  protected readonly BrazilianDatePipePipe = BrazilianDatePipePipe;
+    IsEditingAtMoment(messageId: string) {
+        return this.MessageIdEditing === messageId;
+    }
+
+    EditMessageMutex(messageId: string) {
+        this.MessageIdEditing = messageId;
+    }
+
+    NoMoreEditing() {
+        this.MessageIdEditing = "";
+    }
+
+    async EditedMessage(newMessage: MessageDTO) {
+        this.MessageIdEditing = "";
+        await this.SignalRConnection.EditMessageAsync(newMessage.messageId, newMessage.messageContent)
+    }
+
+    async DeleteMessage(messageId: string) {
+        await this.SignalRConnection.DeleteMessageAsync(messageId)
+    }
+
+    protected readonly BrazilianDatePipePipe = BrazilianDatePipePipe;
 }

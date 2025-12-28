@@ -26,9 +26,6 @@ export class DefaultChatPageComponent implements OnInit, OnDestroy{
   public Friends:UserInfoDTO[] = []
   public AddedFriendsSelected = true;
   public SolicitationsSelected = false;
-  public NewFriendRequestEvent$ : any;
-  public NewFriendAcceptedEvent$ : any;
-  public ProfilePicImage!:string
   private NewFriendRequestSubs$! : Subscription
   private NewFriendSubs$! : Subscription
 

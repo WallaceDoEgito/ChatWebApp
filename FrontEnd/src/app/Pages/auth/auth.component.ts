@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component } from '@angular/core';
 import { RegisterComponentComponent } from "../../components/Auth/register-component/register-component.component";
 import { LoginComponentComponent } from '../../components/Auth/login-component/login-component.component';
 

@@ -1,16 +1,11 @@
 <div class="ContainerBody">
     <nav>
-        <app-channels class="channels" (emitChannelSelected)="NewChannelSelected($event)" (SideBarMinimizedEvent)="SidebarStateHandler($event)"/>
+        <app-channels class="channels" (SideBarMinimizedEvent)="SidebarStateHandler($event)"/>
     </nav>
 
-    <main>
-        @if(selectedChannel == undefined)
-        {
-            <app-default-chat-page></app-default-chat-page>
-        }
-        @else
-        {
-            <app-channel-page [ChannelSelected]="selectedChannel!" [Width]="WidthForChannelComponent"></app-channel-page>
-        }
-    </main>
+
+    <div id="ContainerPages">
+        <router-outlet/>
+    </div>
+
 </div>
