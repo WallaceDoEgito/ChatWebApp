@@ -4,14 +4,14 @@ import { AuthUserRequestDTO } from '../../DTOs/AuthUserRequest';
 import { ResponsesEnum } from '../../Enums/ResponsesEnum';
 import { AuthUserResponseDTO } from '../../DTOs/AuthUserResponseDTO';
 import { firstValueFrom } from 'rxjs';
+import {environment} from "../../../enviroments/enviroment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private httpReq = inject(HttpClient);
-  // private url = "http://localhost:5269"
-  private url = ""
+  private url = environment.apiUrl
   
   async Register(request: AuthUserRequestDTO) : Promise<AuthUserResponseDTO>
   {

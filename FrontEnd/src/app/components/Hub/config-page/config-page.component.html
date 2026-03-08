@@ -1,0 +1,30 @@
+<div id="background">
+    <div id="container">
+        <div id="PhotoAndName">
+            <div id="photo" (click)="uploadPhoto.click()">
+                <img [src]="UserEdit?.userProfilePicUrl" alt="User's profile pic">
+                <input id="photoFileUploaderInput" type="file" accept="image/*" #uploadPhoto (change)="OnFileUpload($event)">
+                <div id="overlay">
+                    <mat-icon fontIcon="edit"> </mat-icon>
+                </div>
+            </div>
+            <span id="Name">
+                {{ UserEdit?.exibitedUsername }}
+            </span>
+        </div>
+        <div id="EditInputsBackgroundContainer">
+            <div id="EditInputsContainer">
+                <div id="Username">
+                    <app-base-input [(Model)]="UserEdit.username" Label="Nome de Usuário" [Readonly]="true"></app-base-input>
+                </div>
+                <div id="ExibitedName">
+                    <app-base-input [(Model)]="UserEdit.exibitedUsername" Label="Nome exibido"></app-base-input>
+                </div>
+                <div id="Password">
+                    <app-base-input [(Model)]="UserEdit.exibitedUsername" Label="Senha" Type="password" [Readonly]="true"></app-base-input>
+                </div>
+            </div>
+            <button mat-button id="btnSalvar" [disabled]="!HasChanges()" (click)="OnSaveClick()">Salvar alterações</button>
+        </div>
+    </div>
+</div>

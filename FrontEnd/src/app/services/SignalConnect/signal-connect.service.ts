@@ -5,147 +5,146 @@ import {UserInfoDTO} from "../../DTOs/UserInfoDTO";
 import {MessageDTO} from "../../DTOs/MessageDTO";
 import {MessageDeletedEvent} from "../../DTOs/MessageDeletedEvent";
 import {MessageEditedEvent} from "../../DTOs/MessageEditedEvent";
+import {UserConfigInfoDTO} from "../../DTOs/UserConfigInfoDTO";
+import {environment} from "../../../enviroments/enviroment";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class SignalConnectService {
-  // private url = "http://localhost:5269";
-  private url = "";
-  private Connection = new signalR.HubConnectionBuilder().configureLogging(signalR.LogLevel.Debug).withUrl(`${this.url}/chat`, {skipNegotiation:true,transport:signalR.HttpTransportType.WebSockets,withCredentials:true,accessTokenFactory: () => this.GetToken()}).withAutomaticReconnect().build();
-  private ConnectionSubject = new ReplaySubject<void>(1);
-  private FriendRequestResponseSubject = new Subject<String>();
-  private NewFriendSubject = new Subject<String>();
-  private NewMessageSubject = new Subject<MessageDTO>();
-  private MessageDeletedSubject = new Subject<MessageDeletedEvent>();
-  private MessageEditedSubject = new Subject<MessageEditedEvent>();
+    private url = environment.apiUrl
+    private Connection = new signalR.HubConnectionBuilder().configureLogging(signalR.LogLevel.Debug).withUrl(`${this.url}/chat`, {
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+        withCredentials: true,
+        accessTokenFactory: () => this.GetToken()
+    }).withAutomaticReconnect().build();
 
-  private GetToken():string
-  {
-    return localStorage.getItem("JWTSession") ?? ""
-  }
-  IsConnected$() {
-    return this.ConnectionSubject.asObservable();
-  }
+    private ConnectionSubject = new ReplaySubject<void>(1);
+    private FriendRequestResponseSubject = new Subject<String>();
+    private NewFriendSubject = new Subject<String>();
+    private NewMessageSubject = new Subject<MessageDTO>();
+    private MessageDeletedSubject = new Subject<MessageDeletedEvent>();
+    private MessageEditedSubject = new Subject<MessageEditedEvent>();
+    private FriendProfileChangeSubject = new Subject<UserInfoDTO>()
 
-  GetNewFriendObservable$()
-  {
-    return this.NewFriendSubject.asObservable();
-  }
+    private GetToken(): string {
+        return localStorage.getItem("JWTSession") ?? ""
+    }
 
-  GetNewFriendRequestObservable$()
-  {
-    return this.FriendRequestResponseSubject.asObservable();
-  }
+    IsConnected$() {
+        return this.ConnectionSubject.asObservable();
+    }
 
-  GetNewMessageObservable()
-  {
-    return this.NewMessageSubject.asObservable();
-  }
+    GetNewFriendObservable$() {
+        return this.NewFriendSubject.asObservable();
+    }
 
-  GetMessageDeletedObservable()
-  {
-    return this.MessageDeletedSubject.asObservable();
-  }
+    GetNewFriendRequestObservable$() {
+        return this.FriendRequestResponseSubject.asObservable();
+    }
 
-  GetMessageEditedObservable()
-  {
-    return this.MessageEditedSubject.asObservable();
-  }
+    GetNewMessageObservable() {
+        return this.NewMessageSubject.asObservable();
+    }
 
-  private FriendRequest$(FriendReqUsername:String)
-  {
-    this.FriendRequestResponseSubject.next(FriendReqUsername);
-  }
-  private NewFriendAccepted$(UsernameFriendAccepted:String)
-  {
-    this.NewFriendSubject.next(UsernameFriendAccepted)
-  }
+    GetMessageDeletedObservable() {
+        return this.MessageDeletedSubject.asObservable();
+    }
 
-  private NewMessage$(req:any)
-  {
-    this.NewMessageSubject.next(req)
-  }
+    GetMessageEditedObservable() {
+        return this.MessageEditedSubject.asObservable();
+    }
 
-  private ServerResponseFriendReq$(req:any)
-  {
+    GetFriendProfileChangeObservable()
+    {
+        return this.FriendProfileChangeSubject.asObservable()
+    }
 
-  }
+    private FriendRequest$(FriendReqUsername: String) {
+        this.FriendRequestResponseSubject.next(FriendReqUsername);
+    }
 
-  private MessageDeletedInChannel$(req:MessageDeletedEvent)
-  {
-    this.MessageDeletedSubject.next(req);
-  }
+    private NewFriendAccepted$(UsernameFriendAccepted: String) {
+        this.NewFriendSubject.next(UsernameFriendAccepted)
+    }
 
-  private MessageEditedInChannel$(req:MessageEditedEvent)
-  {
-    this.MessageEditedSubject.next(req);
-  }
+    private NewMessage$(req: any) {
+        this.NewMessageSubject.next(req)
+    }
 
-  ComunicateConnection()
-  {
-    this.ConnectionSubject.next();
-    this.Connection.on("SendedFriendServerResponse", (req:any) => this.ServerResponseFriendReq$(req))
-    this.Connection.on("NewFriendRequest", (req) => this.FriendRequest$(req))
-    this.Connection.on("NewFriendAccepted", (req) => this.NewFriendAccepted$(req))
-    this.Connection.on("NewMessage", (req) => this.NewMessage$(req))
-    this.Connection.on("MessageDeletedInChannel", (req) => this.MessageDeletedInChannel$(req))
-    this.Connection.on("MessageEditedInChannel", (req) => this.MessageEditedInChannel$(req))
-  }
+    private ServerResponseFriendReq$(req: any) {
 
-  TryConnect(): Promise<void> {
-    return this.Connection.start()
-  }
+    }
 
-  public async GetChannels()
-  {
-    return await this.Connection.invoke("GetChannelList");
-  }
+    private MessageDeletedInChannel$(req: MessageDeletedEvent) {
+        this.MessageDeletedSubject.next(req);
+    }
 
-  public async GetFriends(): Promise<UserInfoDTO[]>
-  {
-    let friends: UserInfoDTO[] = await this.Connection.invoke("GetFriends");
-    return friends;
-  }
+    private MessageEditedInChannel$(req: MessageEditedEvent) {
+        this.MessageEditedSubject.next(req);
+    }
 
-  public async GetFriendRequests() : Promise<UserInfoDTO[]>
-  {
-    let reqs : UserInfoDTO[] = await this.Connection.invoke("GetFriendRequests");
-    return reqs;
-  }
+    private FriendProfileChange$(req: UserInfoDTO) {
+        this.FriendProfileChangeSubject.next(req);
+    }
 
-  public async FriendRequest(nicknameToRequest:String): Promise<boolean>
-  {
-    return await this.Connection.invoke("FriendRequest", nicknameToRequest)
-  }
+    ComunicateConnection() {
+        this.ConnectionSubject.next();
+        this.Connection.on("SendedFriendServerResponse", (req: any) => this.ServerResponseFriendReq$(req))
+        this.Connection.on("NewFriendRequest", (req) => this.FriendRequest$(req))
+        this.Connection.on("NewFriendAccepted", (req) => this.NewFriendAccepted$(req))
+        this.Connection.on("NewMessage", (req) => this.NewMessage$(req))
+        this.Connection.on("MessageDeletedInChannel", (req) => this.MessageDeletedInChannel$(req))
+        this.Connection.on("MessageEditedInChannel", (req) => this.MessageEditedInChannel$(req))
+        this.Connection.on("FriendProfileChange", (req) => this.FriendProfileChange$(req))
+    }
 
-  public async FriendRequestResponse(userIdWhoRequested :String, response : boolean)
-  {
-      await this.Connection.send("FriendResponse", userIdWhoRequested, response);
-  }
+    TryConnect(): Promise<void> {
+        return this.Connection.start()
+    }
 
-  public async SendMessage(messageContent:String, channelId:String)
-  {
-    await this.Connection.send("SendMessage", messageContent, channelId);
-  }
+    public async GetChannels() {
+        return await this.Connection.invoke("GetChannelList");
+    }
 
-  public async GetMessagesByChannelId(channelId:String, page:number) : Promise<MessageDTO[]>
-  {
-    return this.Connection.invoke("GetMessageByChannelAndPage", channelId, page)
-  }
+    public async GetFriends(): Promise<UserInfoDTO[]> {
+        return await this.Connection.invoke("GetFriends");
+    }
 
-  public async GetCurrentUserInfoAsync():Promise<UserInfoDTO>
-  {
-    return this.Connection.invoke("GetCurrentUserInfo")
-  }
+    public async GetFriendRequests(): Promise<UserInfoDTO[]> {
+        return await this.Connection.invoke("GetFriendRequests");
+    }
 
-  public async DeleteMessageAsync(messageId:string)
-  {
-    return this.Connection.send("DeleteMessageById", messageId);
-  }
+    public async FriendRequest(nicknameToRequest: String): Promise<boolean> {
+        return await this.Connection.invoke("FriendRequest", nicknameToRequest)
+    }
 
-  public async EditMessageAsync(messageId:string, newMessage:string)
-  {
-    return this.Connection.send("EditMessageById", messageId, newMessage)
-  }
+    public async FriendRequestResponse(userIdWhoRequested: String, response: boolean) {
+        await this.Connection.send("FriendResponse", userIdWhoRequested, response);
+    }
+
+    public async SendMessage(messageContent: String, channelId: String) {
+        await this.Connection.send("SendMessage", messageContent, channelId);
+    }
+
+    public async GetMessagesByChannelId(channelId: String, page: number): Promise<MessageDTO[]> {
+        return this.Connection.invoke("GetMessageByChannelAndPage", channelId, page)
+    }
+
+    public async GetCurrentUserInfoAsync(): Promise<UserInfoDTO> {
+        return this.Connection.invoke("GetCurrentUserInfo")
+    }
+
+    public async GetCurrentUserConfigInfoAsync(): Promise<UserConfigInfoDTO> {
+        return this.Connection.invoke("GetCurrentUserConfigInfoAsync")
+    }
+
+    public async DeleteMessageAsync(messageId: string) {
+        return this.Connection.send("DeleteMessageById", messageId);
+    }
+
+    public async EditMessageAsync(messageId: string, newMessage: string) {
+        return this.Connection.send("EditMessageById", messageId, newMessage)
+    }
 }

@@ -37,7 +37,7 @@
         </span>
     </div>
 
-    @if(CanThisUserEraseMessages())
+    @if(canEraseResource.value())
     {
         <div class="ActionButtons" [class.MenuOpenned]="MenuIsOpen" [style.left]="ActionButtonPositionLeft()">
             <button mat-icon-button [matMenuTriggerFor]="MenuToModifyMessages" (click)="MenuOpenned()" (menuClosed)="MenuClosed()" [class.MenuOpenned]="MenuIsOpen">

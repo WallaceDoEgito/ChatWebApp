@@ -11,4 +11,6 @@ public interface IGetInfo
 
     public Task<UserDTO[]> GetFriends(string userId);
     public Task<UserDTO> GetUserInfo(string userId);
+    public Task<UserConfigDTO> GetUserConfigInfo(string userId);
+    public Task<UserDTO> UpdateUserConfigInfo(string userId, UserConfigDTO newUserInfo);
 }

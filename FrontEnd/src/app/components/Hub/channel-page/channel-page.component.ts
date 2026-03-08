@@ -3,14 +3,10 @@ import {
     computed, effect,
     inject,
     input,
-    InputSignal,
-    OnChanges,
-    OnInit, resource, Signal,
-    signal,
-    WritableSignal
+    OnInit,
+    resource
 } from '@angular/core';
 import {Router} from '@angular/router'
-import {ChannelDTO} from "../../../DTOs/ChannelDTO";
 import {MatIconButton} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {FormsModule} from "@angular/forms";
@@ -24,11 +20,9 @@ import {MessageDeletedEvent} from "../../../DTOs/MessageDeletedEvent";
 import {UserInfoService} from "../../../services/UserInfo/user-info.service";
 import {
     GetProfilePicUrlFromChannel,
-    GetProfilePicUrlFromChannelSignal
 } from "../../../services/ProfilePic/ProfilePicUrl";
 import {AutomaticFocusDirective} from "../../../Directives/automatic-focus.directive";
 import {ChannelCacheService} from "../../../services/ChannelCache/channel-cache.service";
-import {toSignal} from "@angular/core/rxjs-interop";
 import {firstValueFrom} from "rxjs";
 
 @Component({
@@ -98,7 +92,7 @@ export class ChannelPageComponent implements OnInit {
             {
                 messageId: `temp${this.MessageInputModel.trim()}${new Date().toISOString()}${Math.random()}`,
                 channelId: 'temp',
-                userThatSended: this.userInfo.GetUserInfo(),
+                userThatSended: await this.userInfo.GetUserInfo(),
                 messageContent: this.MessageInputModel.trim(),
                 sendAt: new Date().toISOString(),
                 edited: false,

@@ -2,36 +2,35 @@ import {Component, inject, OnInit, output} from '@angular/core';
 import {MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {UserInfoService} from "../../../../services/UserInfo/user-info.service";
-import {UserInfoDTO} from "../../../../DTOs/UserInfoDTO";
-import {GetProfilePicUrlFromUser} from "../../../../services/ProfilePic/ProfilePicUrl";
-import {Observable} from "rxjs";
-import {AsyncPipe} from "@angular/common";
+import {GetProfilePicUrlFromUser, GetProfilePicUrlFromUserConfig} from "../../../../services/ProfilePic/ProfilePicUrl";
+import {Router} from "@angular/router";
+import {UserConfigInfoDTO} from "../../../../DTOs/UserConfigInfoDTO";
 
 @Component({
-  selector: 'app-user-profile',
-  imports: [
-    MatIconButton,
-    MatIcon,
-    AsyncPipe,
-  ],
-  templateUrl: './user-profile.component.html',
-  styleUrl: './user-profile.component.css'
+    selector: 'app-user-profile',
+    imports: [
+        MatIconButton,
+        MatIcon,
+    ],
+    templateUrl: './user-profile.component.html',
+    styleUrl: './user-profile.component.css'
 })
-export class UserProfileComponent{
-  currentUser = inject(UserInfoService)
-  user$!:Observable<UserInfoDTO>
-  profileImageUrl!:string
-  ConfigButtonClicked = output()
+export class UserProfileComponent implements OnInit {
+    currentUser = inject(UserInfoService)
+    user!: UserConfigInfoDTO
+    router = inject(Router)
+    ConfigButtonClicked = output()
 
-constructor()
-  {
-    this.user$ = this.currentUser.GetUserLoaded$()
-  }
+    async ngOnInit() {
+        this.user = await this.currentUser.GetUserConfigInfo()
+        this.currentUser.GetUserConfigChanged$().subscribe((newValue) => this.user = newValue)
+    }
 
-  OnConfigClick()
-  {
-    this.ConfigButtonClicked.emit();
-  }
+    async OnConfigClick() {
+        this.ConfigButtonClicked.emit();
+        await this.router.navigate(["hub", "config"]);
+    }
 
-  protected readonly GetProfilePicUrlFromUser = GetProfilePicUrlFromUser;
+    protected readonly GetProfilePicUrlFromUser = GetProfilePicUrlFromUser;
+    protected readonly GetProfilePicUrlFromUserConfig = GetProfilePicUrlFromUserConfig;
 }

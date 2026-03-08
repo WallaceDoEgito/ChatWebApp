@@ -1,0 +1,6 @@
+<div id="container">
+    @if (this.Label() != undefined) {
+        <div id="Label"> <b>{{ this.Label() }}</b></div>
+    }
+    <input [type]="Type()" [readonly]="Readonly()" [(ngModel)]="Model" [class.readonly]="Readonly()" [disabled]="IsDisabled()">
+</div>

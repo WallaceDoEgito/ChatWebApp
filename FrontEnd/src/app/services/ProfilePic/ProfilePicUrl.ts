@@ -1,10 +1,16 @@
 import {UserInfoDTO} from "../../DTOs/UserInfoDTO";
 import {ChannelDTO} from "../../DTOs/ChannelDTO";
 import {Signal} from "@angular/core";
+import {UserConfigInfoDTO} from "../../DTOs/UserConfigInfoDTO";
 
 const base64WhiteImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
 
 export function GetProfilePicUrlFromUser(user:UserInfoDTO)
+{
+    return user.userProfilePicUrl == "" ? base64WhiteImage : user.userProfilePicUrl as string
+}
+
+export function GetProfilePicUrlFromUserConfig(user:UserConfigInfoDTO)
 {
     return user.userProfilePicUrl == "" ? base64WhiteImage : user.userProfilePicUrl as string
 }

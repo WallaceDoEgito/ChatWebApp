@@ -1,14 +1,13 @@
-@if(user$ | async; as user)
-{
-<div class="container">
-    <img [src]="GetProfilePicUrlFromUser(user)" id="ProfilePic">
-    <span id="Username">{{ user?.exibitedUsername}}</span>
-    <nav class="menu">
-        <button mat-icon-button (click)="OnConfigClick()">
-            <mat-icon fontIcon="settings"/>
-        </button>
+@if (user) {
+    <div class="container">
+        <img [src]="GetProfilePicUrlFromUserConfig(user)" id="ProfilePic">
+        <span id="Username">{{ user.exibitedUsername }}</span>
+        <nav class="menu">
+            <button mat-icon-button (click)="OnConfigClick()">
+                <mat-icon fontIcon="settings"/>
+            </button>
 
-    </nav>
-</div>
+        </nav>
+    </div>
 
 }

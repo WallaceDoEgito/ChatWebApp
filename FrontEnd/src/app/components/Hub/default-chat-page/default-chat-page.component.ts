@@ -38,7 +38,6 @@ export class DefaultChatPageComponent implements OnInit, OnDestroy{
         this.Friends = await this.SignalConnection.GetFriends();
         this.NewFriendRequestSubs$ = this.SignalConnection.GetNewFriendRequestObservable$().subscribe(username => this.NewFriendRequest(username))
         this.NewFriendSubs$ = this.SignalConnection.GetNewFriendObservable$().subscribe(username => this.NewFriend(username))
-        await this.userInfo.LoadUser();
     })
   }
 

@@ -1,4 +1,4 @@
-import {Component, computed, inject, input, OnChanges, output} from '@angular/core';
+import {Component, computed, inject, input, OnChanges, output, resource} from '@angular/core';
 import {BrazilianDatePipePipe} from "../../../../pipes/brazilian-date-pipe.pipe";
 import {DatePipe} from "@angular/common";
 import {ChannelDTO} from "../../../../DTOs/ChannelDTO";
@@ -133,10 +133,11 @@ export class MessageComponent implements OnChanges{
         return this.FirstMessageOrDifferentDate() || this.FirstMessageOrDifferentUser()
     }
 
-    CanThisUserEraseMessages() : boolean
-    {
-        let user = this.userInfo.GetUserInfo()
-        if(user.userId == this.MessageToRender().userThatSended.userId) return true;
-        return false;
-    }
+    canEraseResource = resource({
+        request: () => this.MessageToRender(),
+        loader: async ({ request: message }) => {
+            const user = await this.userInfo.GetUserInfo();
+            return user.userId === message.userThatSended.userId;
+        }
+    });
 }

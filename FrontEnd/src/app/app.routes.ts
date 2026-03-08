@@ -3,6 +3,7 @@ import { AuthComponent } from './Pages/auth/auth.component';
 import { ChatViewComponent } from './Pages/chat-view/chat-view.component';
 import {DefaultChatPageComponent} from "./components/Hub/default-chat-page/default-chat-page.component";
 import {ChannelPageComponent} from "./components/Hub/channel-page/channel-page.component";
+import {ConfigPageComponent} from "./components/Hub/config-page/config-page.component";
 
 export const routes: Routes = 
 [
@@ -24,6 +25,9 @@ export const routes: Routes =
             },
             {
                 path:'channel/:ChannelID', component: ChannelPageComponent
+            },
+            {
+                path:'config', component: ConfigPageComponent
             }
         ]
     }

@@ -22,11 +22,9 @@ builder.Services.AddScoped<ITokenService, TokenGenerator>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IGetInfo, GetInfoService>();
 builder.Services.AddScoped<IMessageService, MessageModifyService>();
-builder.Services.AddSignalR().AddStackExchangeRedis(builder.Configuration.GetValue<String>("RedisConnectionString") ?? "localhost",
-    options =>
-    {
-        options.Configuration.ChannelPrefix = RedisChannel.Literal("SignalHubBackPlane");
-    });
+builder.Services.AddSignalR().AddStackExchangeRedis(
+    builder.Configuration.GetValue<String>("RedisConnectionString") ?? "localhost",
+    options => { options.Configuration.ChannelPrefix = RedisChannel.Literal("SignalHubBackPlane"); });
 builder.Services.ConfigJWTAuth(builder.Configuration);
 builder.Services.AddCors(op =>
 {
@@ -34,11 +32,11 @@ builder.Services.AddCors(op =>
     {
 //         builderCors.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
         builderCors.SetIsOriginAllowed(origin =>
-                    origin == "http://localhost:4200" ||
-                    origin == "https://localhost:4000")
-                           .AllowAnyMethod()
-                           .AllowAnyHeader()
-                           .AllowCredentials();
+                origin == "http://localhost:4200" ||
+                origin == "https://localhost:4000")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
     }));
 });
 builder.Services.AddSingleton<RabbitMQConnection>();

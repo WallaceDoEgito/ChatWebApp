@@ -98,7 +98,11 @@ public class PrincipalHub(RabbitMQConnection connection, IFriendService friendSe
     {
         return await getInfoService.GetUserInfo(Context.UserIdentifier!);
     }
-    
+
+    public async Task<UserConfigDTO> GetCurrentUserConfigInfoAsync()
+    {
+        return await getInfoService.GetUserConfigInfo(Context.UserIdentifier!);
+    }
     
 
     public override async Task OnConnectedAsync()

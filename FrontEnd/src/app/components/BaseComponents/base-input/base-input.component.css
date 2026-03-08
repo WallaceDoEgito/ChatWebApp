@@ -1,0 +1,38 @@
+#Label
+{
+    color: white;
+    font-size: medium;
+}
+
+input
+{
+    all: unset;
+    background-color: #414141;
+    color: white;
+    width: 20vw;
+    height: 3vh;
+    border-radius: 8px;
+    font-size: 0.93rem;
+    margin-top: 6px;
+    border: #b8b8b8 solid 2px;
+    text-indent: 0.5vw;
+}
+
+input:hover.readonly
+{
+    cursor: not-allowed;
+}
+
+input:focus
+{
+
+    border: #f9aadd solid 2px;
+    transition: 100ms;
+}
+
+.readonly
+{
+
+    color: #acacac;
+
+}

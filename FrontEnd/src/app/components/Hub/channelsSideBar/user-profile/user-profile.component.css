@@ -12,6 +12,8 @@
 .container > img
 {
     margin-left: 0.5vw;
+    object-fit: cover;
+    object-position: center;
 }
 
 #ProfilePic

@@ -1,0 +1,111 @@
+#background
+{
+    width: 100%;
+    height: 100%;
+    background-color: #414141;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#container
+{
+    width: 60vw;
+    height: 80vh;
+    background-color: #252525;
+    border-radius: 20px;
+}
+
+#PhotoAndName
+{
+    display: flex;
+    margin: 4vh 0 0 2.2vw
+}
+
+#PhotoAndName > span
+{
+    align-self: center;
+    color: white;
+    margin-left: 0.5vw;
+    font-size: large;
+}
+
+#photo > img
+{
+    width: 5vw;
+    border-radius: 100%;
+    height: 5vw;
+    object-fit: cover;
+    object-position: center;
+}
+
+#EditInputsBackgroundContainer
+{
+    overflow: hidden;
+    background-color: #414141;
+    width: 55vw;
+    height: 50vh;
+    margin: 3vh auto;
+    border-radius: 20px;
+}
+
+#Username
+{
+    overflow: hidden;
+    margin-top: 5vh;
+}
+
+#EditInputsContainer
+{
+    overflow: hidden;
+    margin: 1vh 1vw;
+}
+
+#EditInputsContainer > div
+{
+    margin-top: 2vh
+}
+
+#btnSalvar
+{
+    margin-left: 0.5vw;
+    margin-top: 17vh
+}
+
+#photoFileUploaderInput
+{
+    display: none;
+}
+
+#photo:hover #overlay
+{
+    display: block;
+    position: absolute;
+    top: 35%;
+    left: 40%;
+}
+
+#overlay:hover
+{
+    pointer-events: none;
+}
+
+#overlay
+{
+    position: absolute;
+    display: none;
+}
+#photo
+{
+    position: relative;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+#photo:hover
+{
+    cursor: pointer;
+    opacity: 70%;
+}
+
+
