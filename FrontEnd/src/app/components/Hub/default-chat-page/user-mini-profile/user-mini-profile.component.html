@@ -2,7 +2,7 @@
     <img [src]="userProfilePic">
     <span id="Username">{{userInfo().exibitedUsername}}</span>
     <div class="actionButtons">
-        <button mat-icon-button>
+        <button mat-icon-button (click)="messageClick()">
             <mat-icon fontIcon="message"></mat-icon>
 
         </button>

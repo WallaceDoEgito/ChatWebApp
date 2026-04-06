@@ -3,11 +3,12 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatBadgeModule} from "@angular/material/badge";
 import {UserInfoDTO} from "../../../DTOs/UserInfoDTO";
 import {SignalConnectService} from "../../../services/SignalConnect/signal-connect.service";
-import {UserMiniProfileComponent} from "../channelsSideBar/user-mini-profile/user-mini-profile.component";
+import {UserMiniProfileComponent} from "./user-mini-profile/user-mini-profile.component";
 import {MatIconButton} from "@angular/material/button";
 import {Subscription} from "rxjs";
 import {UserInfoService} from "../../../services/UserInfo/user-info.service";
 import {GetProfilePicUrlFromUser} from "../../../services/ProfilePic/ProfilePicUrl";
+import {FriendInfoDTO} from "../../../DTOs/FriendInfoDTO";
 
 @Component({
   selector: 'app-default-chat-page',
@@ -23,7 +24,7 @@ import {GetProfilePicUrlFromUser} from "../../../services/ProfilePic/ProfilePicU
 export class DefaultChatPageComponent implements OnInit, OnDestroy{
   public SignalConnection = inject(SignalConnectService);
   public Solicitations:UserInfoDTO[] = [];
-  public Friends:UserInfoDTO[] = []
+  public Friends:FriendInfoDTO[] = []
   public AddedFriendsSelected = true;
   public SolicitationsSelected = false;
   private NewFriendRequestSubs$! : Subscription

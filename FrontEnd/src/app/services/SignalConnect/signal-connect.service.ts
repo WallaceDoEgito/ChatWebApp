@@ -7,6 +7,7 @@ import {MessageDeletedEvent} from "../../DTOs/MessageDeletedEvent";
 import {MessageEditedEvent} from "../../DTOs/MessageEditedEvent";
 import {UserConfigInfoDTO} from "../../DTOs/UserConfigInfoDTO";
 import {environment} from "../../../enviroments/enviroment";
+import {FriendInfoDTO} from "../../DTOs/FriendInfoDTO";
 
 @Injectable({
     providedIn: 'root'
@@ -108,7 +109,7 @@ export class SignalConnectService {
         return await this.Connection.invoke("GetChannelList");
     }
 
-    public async GetFriends(): Promise<UserInfoDTO[]> {
+    public async GetFriends(): Promise<FriendInfoDTO[]> {
         return await this.Connection.invoke("GetFriends");
     }
 
