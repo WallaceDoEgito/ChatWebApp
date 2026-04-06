@@ -47,13 +47,19 @@ public class GetInfoService(AppDbContext dbContext, IHubContext<PrincipalHub> hu
             .ToArray();
     }
 
-    public async Task<UserDTO[]> GetFriends(string userId)
+    public async Task<FriendInfoDTO[]> GetFriends(string userId)
     {
-        var user = await dbContext.Users.Include(u => u.Friends).FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+        var userIdGuid = Guid.Parse(userId);
+        var user = await dbContext.Users
+            .AsSplitQuery()
+            .Include(u => u.Friends)
+                .ThenInclude(user => user.Channels.Where(c => c.PrivateChannel && c.Participants.Any(p => p.Id == userIdGuid)))
+                    .ThenInclude(channel => channel.Participants.Where(p => p.Id == userIdGuid))
+            .FirstOrDefaultAsync(u => u.Id == userIdGuid);
         if (user is null) throw new ThisUserDontExistEx();
-        UserDTO[] friends = user.Friends.Select(u => new UserDTO(u.Id.ToString(), u.ExhibitedName, u.ProfilePicUrl))
+        
+        return user.Friends.Select(u => new FriendInfoDTO(u.Id.ToString(), u.ExhibitedName, u.ProfilePicUrl, u.Channels.FirstOrDefault()?.ChannelId.ToString() ?? ""))
             .ToArray();
-        return friends;
     }
 
     public async Task<UserDTO> GetUserInfo(string userId)

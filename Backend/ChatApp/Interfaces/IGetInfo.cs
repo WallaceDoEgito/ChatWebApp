@@ -9,7 +9,7 @@ public interface IGetInfo
     public Task<MessageDTO[]> GetMessageByChannel(String channelId, int page);
     public Task<UserDTO[]> GetFriendRequests(String userId);
 
-    public Task<UserDTO[]> GetFriends(string userId);
+    public Task<FriendInfoDTO[]> GetFriends(string userId);
     public Task<UserDTO> GetUserInfo(string userId);
     public Task<UserConfigDTO> GetUserConfigInfo(string userId);
     public Task<UserDTO> UpdateUserConfigInfo(string userId, UserConfigDTO newUserInfo);
