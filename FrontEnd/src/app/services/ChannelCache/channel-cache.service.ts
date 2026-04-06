@@ -10,9 +10,16 @@ export class ChannelCacheService {
     private ChannelCache: ChannelDTO[] = []
     private signalRConnection = inject(SignalConnectService)
     private IsConnected = false
+    private cacheInitialized!:Promise<void>;
 
     constructor() {
-        this.signalRConnection.IsConnected$().subscribe(async() => { this.IsConnected = true; await this.UpdateChannelCache()})
+        this.cacheInitialized = new Promise(resolve => {
+            this.signalRConnection.IsConnected$().subscribe(async() => {
+                this.IsConnected = true;
+                await this.UpdateChannelCache();
+                resolve()
+            })
+        })
         this.signalRConnection.GetNewFriendObservable$().subscribe(() => this.UpdateChannelCache())
     }
 
@@ -33,10 +40,7 @@ export class ChannelCacheService {
 
     public async GetChannelById(id:string)
     {
-        if(!this.IsConnected)
-        {
-            await firstValueFrom(this.signalRConnection.IsConnected$())
-        }
+        await this.cacheInitialized;
         return this.ChannelCache.find(
             x => x.ChannelId === id
         )
