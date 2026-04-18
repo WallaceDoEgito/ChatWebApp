@@ -4,7 +4,7 @@ import {UserInfoDTO} from "../../DTOs/UserInfoDTO";
 import {BehaviorSubject, firstValueFrom, tap} from "rxjs";
 import {UserConfigInfoDTO} from "../../DTOs/UserConfigInfoDTO";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {environment} from "../../../enviroments/enviroment";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
     providedIn: 'root'

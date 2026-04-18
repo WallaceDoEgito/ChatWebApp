@@ -4,7 +4,7 @@ import { AuthUserRequestDTO } from '../../DTOs/AuthUserRequest';
 import { ResponsesEnum } from '../../Enums/ResponsesEnum';
 import { AuthUserResponseDTO } from '../../DTOs/AuthUserResponseDTO';
 import { firstValueFrom } from 'rxjs';
-import {environment} from "../../../enviroments/enviroment";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'

@@ -59,20 +59,12 @@ public class FriendService(AppDbContext dbContext, RedisService redis, IHubConte
             channelTwoFriends.Participants.Add(userToBeFriend);
             channelTwoFriends.Participants.Add(userRequested);
             await dbContext.Channels.AddAsync(channelTwoFriends);
+            await dbContext.SaveChangesAsync();
             await NotifyAcceptedIfOnline(userRequested.Id.ToString(), userToBeFriend.UserName);
             await NotifyAcceptedIfOnline(userToBeFriend.Id.ToString(), userRequested.UserName);
         }
         dbContext.FriendRequests.Remove(request);
-
-        try
-        {
-            await dbContext.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        await dbContext.SaveChangesAsync();
     }
 
     private async Task NotifyNewFriendRequestIfOnline(String userToNotifyId, String requestFriendName)

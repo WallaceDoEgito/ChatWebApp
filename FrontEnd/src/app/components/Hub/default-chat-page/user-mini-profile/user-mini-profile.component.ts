@@ -22,6 +22,6 @@ export class UserMiniProfileComponent implements OnInit{
 
   async messageClick()
   {
-      return await this.router.navigate(['hub','channel',`${this.userInfo().privateChannelID}`])
+      return await this.router.navigate(['hub','channel',`${this.userInfo().privateChannelId}`])
   }
 }

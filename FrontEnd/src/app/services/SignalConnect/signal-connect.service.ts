@@ -6,7 +6,7 @@ import {MessageDTO} from "../../DTOs/MessageDTO";
 import {MessageDeletedEvent} from "../../DTOs/MessageDeletedEvent";
 import {MessageEditedEvent} from "../../DTOs/MessageEditedEvent";
 import {UserConfigInfoDTO} from "../../DTOs/UserConfigInfoDTO";
-import {environment} from "../../../enviroments/enviroment";
+import {environment} from "../../../environments/environment";
 import {FriendInfoDTO} from "../../DTOs/FriendInfoDTO";
 
 @Injectable({
