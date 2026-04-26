@@ -9,7 +9,7 @@
                 </div>
             </div>
             <span id="Name">
-                {{ UserEdit?.exibitedUsername }}
+                {{ UserEdit.exibitedUsername }}
             </span>
         </div>
         <div id="EditInputsBackgroundContainer">
@@ -25,6 +25,7 @@
                 </div>
             </div>
             <button mat-button id="btnSalvar" [disabled]="!HasChanges()" (click)="OnSaveClick()">Salvar alterações</button>
+            <button mat-button id="btnLogout" (click)="OnLogoutClick()">Sair</button>
         </div>
     </div>
 </div>

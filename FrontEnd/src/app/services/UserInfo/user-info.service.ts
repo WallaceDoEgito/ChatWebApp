@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {SignalConnectService} from "../SignalConnect/signal-connect.service";
 import {UserInfoDTO} from "../../DTOs/UserInfoDTO";
-import {BehaviorSubject, firstValueFrom, tap} from "rxjs";
+import {BehaviorSubject, tap} from "rxjs";
 import {UserConfigInfoDTO} from "../../DTOs/UserConfigInfoDTO";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
@@ -34,7 +34,7 @@ export class UserInfoService {
     }
 
     async GetUserInfo() {
-        await firstValueFrom(this.signalRConnection.IsConnected$());
+        await this.signalRConnection.whenConnected();
         if (this.currentUserInfo == null) {
             this.currentUserInfo = await this.signalRConnection.GetCurrentUserInfoAsync();
             this.NotifyUserChanged(this.currentUserInfo)
@@ -43,13 +43,12 @@ export class UserInfoService {
     }
 
     async GetUserConfigInfo() {
-        await firstValueFrom(this.signalRConnection.IsConnected$());
+        await this.signalRConnection.whenConnected();
         if (this.currentUserConfig == null) {
             this.currentUserConfig = await this.signalRConnection.GetCurrentUserConfigInfoAsync()
             this.NotifyUserConfigChanged(this.currentUserConfig)
         }
         return this.currentUserConfig;
-
     }
 
     UpdateUserConfig(newUser: UserConfigInfoDTO) {

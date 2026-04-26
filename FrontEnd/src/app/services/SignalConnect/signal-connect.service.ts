@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as signalR from "@microsoft/signalr"
-import {ReplaySubject, Subject} from "rxjs";
+import {BehaviorSubject, filter, firstValueFrom, Subject} from "rxjs";
 import {UserInfoDTO} from "../../DTOs/UserInfoDTO";
 import {MessageDTO} from "../../DTOs/MessageDTO";
 import {MessageDeletedEvent} from "../../DTOs/MessageDeletedEvent";
@@ -21,7 +21,7 @@ export class SignalConnectService {
         accessTokenFactory: () => this.GetToken()
     }).withAutomaticReconnect().build();
 
-    private ConnectionSubject = new ReplaySubject<void>(1);
+    private ConnectionSubject = new BehaviorSubject<boolean>(false);
     private FriendRequestResponseSubject = new Subject<String>();
     private NewFriendSubject = new Subject<String>();
     private NewMessageSubject = new Subject<MessageDTO>();
@@ -57,8 +57,7 @@ export class SignalConnectService {
         return this.MessageEditedSubject.asObservable();
     }
 
-    GetFriendProfileChangeObservable()
-    {
+    GetFriendProfileChangeObservable() {
         return this.FriendProfileChangeSubject.asObservable()
     }
 
@@ -90,8 +89,8 @@ export class SignalConnectService {
         this.FriendProfileChangeSubject.next(req);
     }
 
-    ComunicateConnection() {
-        this.ConnectionSubject.next();
+    CommunicateConnection() {
+        this.ConnectionSubject.next(true)
         this.Connection.on("SendedFriendServerResponse", (req: any) => this.ServerResponseFriendReq$(req))
         this.Connection.on("NewFriendRequest", (req) => this.FriendRequest$(req))
         this.Connection.on("NewFriendAccepted", (req) => this.NewFriendAccepted$(req))
@@ -102,7 +101,10 @@ export class SignalConnectService {
     }
 
     TryConnect(): Promise<void> {
-        return this.Connection.start()
+        this.Connection.onreconnecting(() => this.ConnectionSubject.next(false))
+        this.Connection.onreconnected(() => this.ConnectionSubject.next(true))
+        this.Connection.onclose(() => this.ConnectionSubject.next(false))
+        return this.Connection.start();
     }
 
     public async GetChannels() {
@@ -147,5 +149,14 @@ export class SignalConnectService {
 
     public async EditMessageAsync(messageId: string, newMessage: string) {
         return this.Connection.send("EditMessageById", messageId, newMessage)
+    }
+
+    public async Disconnect() {
+        return this.Connection.stop()
+    }
+
+    public whenConnected()
+    {
+        return firstValueFrom(this.ConnectionSubject.pipe(filter(v => v === true)))
     }
 }

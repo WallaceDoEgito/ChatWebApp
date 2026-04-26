@@ -6,7 +6,7 @@ import {UserConfigInfoDTO} from "../../../DTOs/UserConfigInfoDTO";
 import {MatButton} from "@angular/material/button";
 import {BaseInputComponent} from "../../BaseComponents/base-input/base-input.component";
 import {MatIcon} from "@angular/material/icon";
-import {HttpClient, HttpEvent, HttpEventType} from "@angular/common/http";
+import {HttpEvent, HttpEventType} from "@angular/common/http";
 import {FileService} from "../../../services/File/file-service.service";
 import {NgIf, NgOptimizedImage} from "@angular/common";
 
@@ -25,7 +25,6 @@ import {NgIf, NgOptimizedImage} from "@angular/common";
 })
 export class ConfigPageComponent implements OnInit {
     UserService = inject(UserInfoService)
-    private httpClient = inject(HttpClient)
     private fileService = inject(FileService)
     LocalUser!: UserConfigInfoDTO
     UserEdit: UserConfigInfoDTO = {

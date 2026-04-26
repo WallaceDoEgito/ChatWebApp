@@ -11,70 +11,63 @@ import {GetProfilePicUrlFromUser} from "../../../services/ProfilePic/ProfilePicU
 import {FriendInfoDTO} from "../../../DTOs/FriendInfoDTO";
 
 @Component({
-  selector: 'app-default-chat-page',
-  imports: [
-    MatIconModule,
-    MatBadgeModule,
-    UserMiniProfileComponent,
-    MatIconButton
-  ],
-  templateUrl: './default-chat-page.component.html',
-  styleUrl: './default-chat-page.component.css'
+    selector: 'app-default-chat-page',
+    imports: [
+        MatIconModule,
+        MatBadgeModule,
+        UserMiniProfileComponent,
+        MatIconButton
+    ],
+    templateUrl: './default-chat-page.component.html',
+    styleUrl: './default-chat-page.component.css'
 })
-export class DefaultChatPageComponent implements OnInit, OnDestroy{
-  public SignalConnection = inject(SignalConnectService);
-  public Solicitations:UserInfoDTO[] = [];
-  public Friends:FriendInfoDTO[] = []
-  public AddedFriendsSelected = true;
-  public SolicitationsSelected = false;
-  private NewFriendRequestSubs$! : Subscription
-  private NewFriendSubs$! : Subscription
+export class DefaultChatPageComponent implements OnInit, OnDestroy {
+    public SignalConnection = inject(SignalConnectService);
+    public Solicitations: UserInfoDTO[] = [];
+    public Friends: FriendInfoDTO[] = []
+    public AddedFriendsSelected = true;
+    public SolicitationsSelected = false;
+    private NewFriendRequestSubs$!: Subscription
+    private NewFriendSubs$!: Subscription
 
-  userInfo = inject(UserInfoService)
+    userInfo = inject(UserInfoService)
 
-  async ngOnInit(): Promise<void> {
-    this.SignalConnection.IsConnected$().subscribe(async() =>
-    {
-        this.Solicitations =  await this.SignalConnection.GetFriendRequests();
+    async ngOnInit(): Promise<void> {
+        await this.SignalConnection.whenConnected();
+        this.Solicitations = await this.SignalConnection.GetFriendRequests();
         this.Friends = await this.SignalConnection.GetFriends();
         this.NewFriendRequestSubs$ = this.SignalConnection.GetNewFriendRequestObservable$().subscribe(username => this.NewFriendRequest(username))
         this.NewFriendSubs$ = this.SignalConnection.GetNewFriendObservable$().subscribe(username => this.NewFriend(username))
-    })
-  }
+    }
 
-  ngOnDestroy(): void {
-      if(this.NewFriendSubs$) this.NewFriendSubs$.unsubscribe();
-      if(this.NewFriendRequestSubs$) this.NewFriendRequestSubs$.unsubscribe();
-  }
+    ngOnDestroy(): void {
+        if (this.NewFriendSubs$) this.NewFriendSubs$.unsubscribe();
+        if (this.NewFriendRequestSubs$) this.NewFriendRequestSubs$.unsubscribe();
+    }
 
-  private async NewFriendRequest(username:String)
-  {
-    this.Solicitations = await this.SignalConnection.GetFriendRequests();
-  }
+    private async NewFriendRequest(username: String) {
+        this.Solicitations = await this.SignalConnection.GetFriendRequests();
+    }
 
-  private async NewFriend(username:String)
-  {
-    this.Friends = await this.SignalConnection.GetFriends();
-  }
+    private async NewFriend(username: String) {
+        this.Friends = await this.SignalConnection.GetFriends();
+    }
 
-  public SelectSolicitations()
-  {
-    this.SolicitationsSelected = true;
-    this.AddedFriendsSelected = false;
-  }
+    public SelectSolicitations() {
+        this.SolicitationsSelected = true;
+        this.AddedFriendsSelected = false;
+    }
 
-  public SelectAdded()
-  {
-    this.SolicitationsSelected = false;
-    this.AddedFriendsSelected = true;
-  }
+    public SelectAdded() {
+        this.SolicitationsSelected = false;
+        this.AddedFriendsSelected = true;
+    }
 
-  public async AnswerFriendRequest(UserIdToRespond:String, accepted :boolean)
-  {
-    await this.SignalConnection.FriendRequestResponse(UserIdToRespond, accepted);
-    let indexArray = this.Solicitations.findIndex( s => s.userId == UserIdToRespond)
-    this.Solicitations.splice(indexArray, 1);
-  }
+    public async AnswerFriendRequest(UserIdToRespond: String, accepted: boolean) {
+        await this.SignalConnection.FriendRequestResponse(UserIdToRespond, accepted);
+        let indexArray = this.Solicitations.findIndex(s => s.userId == UserIdToRespond)
+        this.Solicitations.splice(indexArray, 1);
+    }
 
-  protected readonly GetProfilePicUrlFromUser = GetProfilePicUrlFromUser;
+    protected readonly GetProfilePicUrlFromUser = GetProfilePicUrlFromUser;
 }

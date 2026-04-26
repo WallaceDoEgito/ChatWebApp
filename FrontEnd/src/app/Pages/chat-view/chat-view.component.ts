@@ -21,7 +21,7 @@ export class ChatViewComponent implements OnInit{
       await this.route.navigate(["/auth"]);
       return;
     }
-    this.signalRConnection.TryConnect().then(e => this.signalRConnection.ComunicateConnection()).catch( async (e)=> {await this.route.navigate(["/auth"])})
+    this.signalRConnection.TryConnect().then(e => this.signalRConnection.CommunicateConnection()).catch( async (e)=> {await this.route.navigate(["/auth"])})
   }
 
   SidebarStateHandler(SideBarMinimized:boolean)

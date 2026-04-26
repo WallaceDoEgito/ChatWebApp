@@ -23,7 +23,6 @@ import {
 } from "../../../services/ProfilePic/ProfilePicUrl";
 import {AutomaticFocusDirective} from "../../../Directives/automatic-focus.directive";
 import {ChannelCacheService} from "../../../services/ChannelCache/channel-cache.service";
-import {firstValueFrom} from "rxjs";
 
 @Component({
     selector: 'app-channel-page',
@@ -54,7 +53,7 @@ export class ChannelPageComponent implements OnInit {
     ChannelResource = resource({
         request: () => this.ChannelID(),
         loader: async ({request}) => {
-            if (!this.isConnected) await firstValueFrom(this.SignalRConnection.IsConnected$());
+            await this.SignalRConnection.whenConnected();
 
             const channel = await this.ChannelService.GetChannelById(request);
             if (!channel) {
@@ -79,7 +78,7 @@ export class ChannelPageComponent implements OnInit {
     }
 
     async ngOnInit() {
-        await firstValueFrom(this.SignalRConnection.IsConnected$()).then(() => this.isConnected = true)
+        await this.SignalRConnection.whenConnected();
         this.SignalRConnection.GetNewMessageObservable().subscribe(req => this.NewMessageArrived(req))
         this.SignalRConnection.GetMessageEditedObservable().subscribe(req => this.MessageEditedOnChannel(req))
         this.SignalRConnection.GetMessageDeletedObservable().subscribe(req => this.MessageDeletedOnChannel(req))

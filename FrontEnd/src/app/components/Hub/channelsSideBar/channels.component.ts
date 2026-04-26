@@ -26,12 +26,12 @@ export class ChannelsComponent implements OnInit {
     public SideBarMinimized = false;
     public SideBarMinimizedEvent = output<boolean>();
 
-    ngOnInit(): void {
-        this.SignalRS.IsConnected$().pipe(take(1)).subscribe(async () => {
-            await this.RefreshChannels();
-            this.SignalRS.GetNewFriendObservable$().subscribe(req => this.RefreshChannels())
-            this.SignalRS.GetNewFriendRequestObservable$().subscribe(req => this.howManyNewFriendRequests++);
-        });
+    async ngOnInit() {
+        await this.SignalRS.whenConnected()
+        await this.RefreshChannels();
+        this.SignalRS.GetNewFriendObservable$().subscribe(req => this.RefreshChannels())
+        this.SignalRS.GetNewFriendRequestObservable$().subscribe(req => this.howManyNewFriendRequests++);
+
     }
 
     AddFriendsToggle() {
@@ -45,11 +45,10 @@ export class ChannelsComponent implements OnInit {
     }
 
     public async SelectChannel(channel: ChannelDTO | undefined) {
-        if (channel == undefined)
-        {
+        if (channel == undefined) {
             return await this.Router.navigate([''])
         }
-        return await this.Router.navigate(['hub','channel',`${channel?.ChannelId}`])
+        return await this.Router.navigate(['hub', 'channel', `${channel?.ChannelId}`])
     }
 
     private async RefreshChannels() {
