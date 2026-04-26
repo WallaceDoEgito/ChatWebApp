@@ -66,11 +66,6 @@
     margin-top: 2vh
 }
 
-#btnSalvar
-{
-    margin-left: 0.5vw;
-    margin-top: 17vh
-}
 
 #photoFileUploaderInput
 {
@@ -108,4 +103,76 @@
     opacity: 70%;
 }
 
+#containerButtons
+{
+    display: flex;
+    margin-top: 17vh;
+    gap: 6.2vw;
+    align-items: center;
+    margin-left: 1vw;
+}
 
+#btnLogout
+{
+    color: #ff5e5e;
+    align-items: center;
+    height: 4vh;
+    width: 5vw;
+    display: flex;
+}
+
+#btnLogout > span
+{
+    margin-left: 0.2vw;
+}
+
+#btnLogout:hover
+{
+    background-color: rgba(255, 94, 94, 0.1);
+    transition: 150ms;
+    border-radius: 100px;
+    cursor: pointer;
+}
+
+.disabled
+{
+    color: #6a6a6a;
+}
+
+.disabled:hover
+{
+
+    cursor: not-allowed;
+}
+
+#btnSalvar
+{
+    display: flex;
+    align-items: center;
+    height: 4vh;
+    width: 9vw;
+}
+
+#btnSalvar > span
+{
+    margin-left: 0.2vw;
+}
+
+.Icons
+{
+    font-size: 22px;
+    margin-left: 0.6vw;
+}
+
+#btnSalvar:not(.disabled)
+{
+    color: #ffabf3;
+}
+
+#btnSalvar:not(.disabled):hover
+{
+    background-color: rgba(255, 171, 243, 0.1);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: 150ms;
+}

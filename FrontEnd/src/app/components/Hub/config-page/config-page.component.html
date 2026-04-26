@@ -24,8 +24,17 @@
                     <app-base-input [(Model)]="UserEdit.exibitedUsername" Label="Senha" Type="password" [Readonly]="true"></app-base-input>
                 </div>
             </div>
-            <button mat-button id="btnSalvar" [disabled]="!HasChanges()" (click)="OnSaveClick()">Salvar alterações</button>
-            <button mat-button id="btnLogout" (click)="OnLogoutClick()">Sair</button>
+
+            <div id="containerButtons">
+                <div id="btnSalvar" (click)="OnSaveClick()" [class.disabled]="!HasChanges()" mat-ripple [matRippleDisabled]="!HasChanges()">
+                    <mat-icon fontIcon="save" class="Icons"></mat-icon>
+                    <span>Salvar alterações</span>
+                </div>
+                <div id="btnLogout" mat-ripple (click)="OnLogoutClick()">
+                    <mat-icon fontIcon="login" class="Icons"></mat-icon>
+                    <span>Sair</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>

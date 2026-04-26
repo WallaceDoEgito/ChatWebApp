@@ -3,29 +3,33 @@ import {UserInfoService} from "../../../services/UserInfo/user-info.service";
 import {GetProfilePicUrlFromUserConfig} from "../../../services/ProfilePic/ProfilePicUrl";
 import {FormsModule} from "@angular/forms";
 import {UserConfigInfoDTO} from "../../../DTOs/UserConfigInfoDTO";
-import {MatButton} from "@angular/material/button";
 import {BaseInputComponent} from "../../BaseComponents/base-input/base-input.component";
 import {MatIcon} from "@angular/material/icon";
 import {HttpEvent, HttpEventType} from "@angular/common/http";
 import {FileService} from "../../../services/File/file-service.service";
 import {NgIf, NgOptimizedImage} from "@angular/common";
+import {SignalConnectService} from "../../../services/SignalConnect/signal-connect.service";
+import {Router} from "@angular/router";
+import {MatRipple} from "@angular/material/core";
 
 @Component({
     selector: 'app-config-page',
     templateUrl: './config-page.component.html',
     imports: [
         FormsModule,
-        MatButton,
         BaseInputComponent,
         MatIcon,
         NgOptimizedImage,
-        NgIf
+        NgIf,
+        MatRipple
     ],
     styleUrl: './config-page.component.css'
 })
 export class ConfigPageComponent implements OnInit {
     UserService = inject(UserInfoService)
     private fileService = inject(FileService)
+    private connectionService = inject(SignalConnectService)
+    private router = inject(Router)
     LocalUser!: UserConfigInfoDTO
     UserEdit: UserConfigInfoDTO = {
         username: '',
@@ -74,11 +78,18 @@ export class ConfigPageComponent implements OnInit {
 
     OnSaveClick()
     {
-        if(!this.IsEditValid()) return;
+        if(!this.HasChanges() || !this.IsEditValid()) return;
         this.UserService.UpdateUserConfig(this.UserEdit).subscribe()
     }
 
     IsEditValid() {
         return true
+    }
+
+    async OnLogoutClick()
+    {
+        await this.connectionService.Disconnect();
+        localStorage.clear();
+        await this.router.navigate(["/auth"])
     }
 }
