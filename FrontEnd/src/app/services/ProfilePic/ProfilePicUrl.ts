@@ -5,6 +5,10 @@ import {UserConfigInfoDTO} from "../../DTOs/UserConfigInfoDTO";
 
 const base64WhiteImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII="
 
+export function isBase64(url: string): boolean {
+    return url ? url.startsWith('data:') : false;
+}
+
 export function GetProfilePicUrlFromUser(user:UserInfoDTO)
 {
     return user.userProfilePicUrl == "" ? base64WhiteImage : user.userProfilePicUrl as string

@@ -2,7 +2,12 @@
     <div id="container">
         <div id="PhotoAndName">
             <div id="photo" (click)="uploadPhoto.click()">
-                <img *ngIf="UserEdit.userProfilePicUrl" [ngSrc]="UserEdit.userProfilePicUrl" alt="User's profile pic" height="100" width="100" priority>
+                @if (UserEdit.userProfilePicUrl && !isBase64(UserEdit.userProfilePicUrl)) {
+                    <img [ngSrc]="UserEdit.userProfilePicUrl" alt="User's profile pic" height="100" width="100" priority>
+                } @else if (UserEdit.userProfilePicUrl)
+                {
+                    <img [src]="UserEdit.userProfilePicUrl" alt="User's profile pic" >
+                }
                 <input id="photoFileUploaderInput" type="file" accept="image/*" #uploadPhoto (change)="OnFileUpload($event)">
                 <div id="overlay">
                     <mat-icon fontIcon="edit"> </mat-icon>
@@ -18,7 +23,7 @@
                     <app-base-input [(Model)]="UserEdit.username" Label="Nome de Usuário" [Readonly]="true"></app-base-input>
                 </div>
                 <div id="ExibitedName">
-                    <app-base-input [(Model)]="UserEdit.exibitedUsername" Label="Nome exibido"></app-base-input>
+                    <app-base-input [(Model)]="UserEdit.exibitedUsername" Label="Nome exibido" MaxLength='24' ></app-base-input>
                 </div>
                 <div id="Password">
                     <app-base-input [(Model)]="UserEdit.exibitedUsername" Label="Senha" Type="password" [Readonly]="true"></app-base-input>

@@ -14,6 +14,7 @@ export class BaseInputComponent {
     public Type = input<string>("text")
     public Readonly = model<boolean>(false)
     public Label = input<string>()
+    public MaxLength = input<string>('100');
 
     IsDisabled() : boolean
     {

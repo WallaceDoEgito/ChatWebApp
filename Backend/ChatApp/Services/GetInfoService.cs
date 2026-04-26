@@ -76,7 +76,7 @@ public class GetInfoService(AppDbContext dbContext, IHubContext<PrincipalHub> hu
         return new UserConfigDTO(user.UserName, user.ExhibitedName, user.ProfilePicUrl);
     }
 
-    public async Task<UserDTO> UpdateUserConfigInfo(string userId, UserConfigDTO newUserInfo)
+    public async Task<UserConfigDTO> UpdateUserConfigInfo(string userId, UserConfigDTO newUserInfo)
     {
         var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userId);
         if (user is null) throw new ThisUserDontExistEx();
@@ -100,7 +100,7 @@ public class GetInfoService(AppDbContext dbContext, IHubContext<PrincipalHub> hu
             await hubContext.Clients.Clients(connectionStrings).SendAsync("FriendProfileChange", userDto);
         }
 
-        return userDto;
+        return new UserConfigDTO(user.UserName, user.ExhibitedName, user.ProfilePicUrl);
     }
 
     private Task<List<string>> GetFriendIdsListByUserId(string userId)

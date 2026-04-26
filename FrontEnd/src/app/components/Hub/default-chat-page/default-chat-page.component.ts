@@ -38,6 +38,7 @@ export class DefaultChatPageComponent implements OnInit, OnDestroy {
         this.Friends = await this.SignalConnection.GetFriends();
         this.NewFriendRequestSubs$ = this.SignalConnection.GetNewFriendRequestObservable$().subscribe(username => this.NewFriendRequest(username))
         this.NewFriendSubs$ = this.SignalConnection.GetNewFriendObservable$().subscribe(username => this.NewFriend(username))
+        this.SignalConnection.GetFriendProfileChangeObservable().subscribe(user => this.OnFriendProfileChange(user))
     }
 
     ngOnDestroy(): void {
@@ -45,6 +46,12 @@ export class DefaultChatPageComponent implements OnInit, OnDestroy {
         if (this.NewFriendRequestSubs$) this.NewFriendRequestSubs$.unsubscribe();
     }
 
+    private OnFriendProfileChange(user:UserInfoDTO)
+    {
+        let index = this.Friends.findIndex((u) => u.userId === user.userId)
+        this.Friends[index].userProfilePicUrl = user.userProfilePicUrl
+        this.Friends[index].exibitedUsername = user.exibitedUsername
+    }
     private async NewFriendRequest(username: String) {
         this.Solicitations = await this.SignalConnection.GetFriendRequests();
     }

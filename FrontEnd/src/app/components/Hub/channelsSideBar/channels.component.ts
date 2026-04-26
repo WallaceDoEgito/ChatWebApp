@@ -29,6 +29,7 @@ export class ChannelsComponent implements OnInit {
     async ngOnInit() {
         await this.SignalRS.whenConnected()
         await this.RefreshChannels();
+        this.SignalRS.GetFriendProfileChangeObservable().subscribe(req => this.RefreshChannels())
         this.SignalRS.GetNewFriendObservable$().subscribe(req => this.RefreshChannels())
         this.SignalRS.GetNewFriendRequestObservable$().subscribe(req => this.howManyNewFriendRequests++);
 

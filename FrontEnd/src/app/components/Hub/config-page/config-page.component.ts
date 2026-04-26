@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {UserInfoService} from "../../../services/UserInfo/user-info.service";
-import {GetProfilePicUrlFromUserConfig} from "../../../services/ProfilePic/ProfilePicUrl";
+import {GetProfilePicUrlFromUserConfig, isBase64} from "../../../services/ProfilePic/ProfilePicUrl";
 import {FormsModule} from "@angular/forms";
 import {UserConfigInfoDTO} from "../../../DTOs/UserConfigInfoDTO";
 import {BaseInputComponent} from "../../BaseComponents/base-input/base-input.component";
@@ -20,7 +20,6 @@ import {MatRipple} from "@angular/material/core";
         BaseInputComponent,
         MatIcon,
         NgOptimizedImage,
-        NgIf,
         MatRipple
     ],
     styleUrl: './config-page.component.css'
@@ -92,4 +91,6 @@ export class ConfigPageComponent implements OnInit {
         localStorage.clear();
         await this.router.navigate(["/auth"])
     }
+
+    protected readonly isBase64 = isBase64;
 }

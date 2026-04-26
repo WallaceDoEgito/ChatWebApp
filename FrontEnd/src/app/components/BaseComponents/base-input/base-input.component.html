@@ -2,5 +2,5 @@
     @if (this.Label() != undefined) {
         <div id="Label"> <b>{{ this.Label() }}</b></div>
     }
-    <input [type]="Type()" [readonly]="Readonly()" [(ngModel)]="Model" [class.readonly]="Readonly()" [disabled]="IsDisabled()">
+    <input [type]="Type()" [readonly]="Readonly()" [(ngModel)]="Model" [class.readonly]="Readonly()" [disabled]="IsDisabled()" [maxlength]="MaxLength()">
 </div>

@@ -79,6 +79,7 @@ export class ChannelPageComponent implements OnInit {
 
     async ngOnInit() {
         await this.SignalRConnection.whenConnected();
+        this.SignalRConnection.GetFriendProfileChangeObservable().subscribe(req => this.ChannelResource.reload())
         this.SignalRConnection.GetNewMessageObservable().subscribe(req => this.NewMessageArrived(req))
         this.SignalRConnection.GetMessageEditedObservable().subscribe(req => this.MessageEditedOnChannel(req))
         this.SignalRConnection.GetMessageDeletedObservable().subscribe(req => this.MessageDeletedOnChannel(req))
