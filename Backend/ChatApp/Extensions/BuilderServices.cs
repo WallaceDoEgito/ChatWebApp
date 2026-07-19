@@ -12,19 +12,28 @@ namespace ChatApp.Extensions;
 
 public static class BuilderServices
 {
-    public static IServiceCollection ConfigureCloudProvider(this IServiceCollection service, IConfiguration configuration)
+    public static IServiceCollection ConfigureCloudProvider(this IServiceCollection service,
+        IConfiguration configuration)
     {
-        AWSOptions awsOptions = configuration.GetAWSOptions();
-        awsOptions.Credentials = new BasicAWSCredentials(configuration.GetValue<string>("AWS:Credentials:AccessKey"),
-            configuration.GetValue<string>("AWS:Credentials:SecretKey"));
+        if (configuration.GetValue<string>("AWS:Credentials:SecretKey") != "SecretKey Here")
+        {
+            AWSOptions awsOptions = configuration.GetAWSOptions();
+            awsOptions.Credentials = new BasicAWSCredentials(
+                configuration.GetValue<string>("AWS:Credentials:AccessKey"),
+                configuration.GetValue<string>("AWS:Credentials:SecretKey"));
 
-        service.AddDefaultAWSOptions(awsOptions);
-        service.AddAWSService<IAmazonS3>();
-        service.AddScoped<ICloudProviderStrategy, AwsS3Bucket>();
+            service.AddDefaultAWSOptions(awsOptions);
+            service.AddAWSService<IAmazonS3>();
+            service.AddScoped<ICloudProviderStrategy, AwsS3Bucket>();
+        }
+        else
+        {
+            service.AddScoped<ICloudProviderStrategy, InMemory>();
+        }
 
         return service;
     }
-    
+
     public static IServiceCollection ConfigureDependencyInjection(this IServiceCollection service)
     {
         service.AddScoped<IHasher, BcryptPasswordHasher>();
@@ -46,11 +55,11 @@ public static class BuilderServices
         service.AddHostedService<MessageDemux>();
         service.AddHostedService<MessageDistribution>();
         service.AddSingleton<RedisService>();
-        
+
         service.AddSignalR().AddStackExchangeRedis(
             configuration.GetValue<string>("RedisConnectionString") ?? "localhost",
             options => { options.Configuration.ChannelPrefix = RedisChannel.Literal("SignalHubBackPlane"); });
-        
+
         service.AddSingleton<IConnectionMultiplexer>(
             ConnectionMultiplexer.Connect(configuration.GetValue<string>("RedisConnectionString") ?? "localhost"));
 

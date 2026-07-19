@@ -27,6 +27,7 @@ services:
   backend-one: &backend
     build:
       context: ./Backend/ChatApp
+      target: dev
     ports:
       - "9000:8080"
     depends_on:
@@ -40,35 +41,41 @@ services:
       - RabbitMqHost=rabbitmq
       - JWTConfig__Issuer=AppChatBackend
       - JWTConfig__Audience=AppChatFrontend
-      - JWTConfig__SecretKey=ExamplePasswordSha256X84V&&@WF8q4^7fsSWrLCMBF7^QN9SpJ
+      - JWTConfig__SecretKey="ExamplePasswordSha256X84V&&@WF8q4^7fsSWrLCMBF7^QN9SpJ"
       - JWTConfig__ExpirationInMinutes=5
       - InMemorySave__BasePath=/var/www/ChatApp
+      - ASPNETCORE_ENVIRONMENT=Development
     volumes:
       - cdn_data:/var/www/ChatApp
-
-  backend-two:
-    <<: *backend
-    ports:
-      - "9001:8080"
 
   frontend:
     build:
       context: ./FrontEnd
-    depends_on:
-      - loadbalancer
-      - cdn
+      target: dev
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./FrontEnd:/app
+      - /app/node_modules 
+  
+  frontend-nginx:
+    image: nginx:alpine
     ports:
       - "4000:80"
+    volumes:
+      - ./FrontEnd/nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - loadbalancer
   
   loadbalancer:
     image: nginx:alpine
     ports:
       - "9999:80"
     volumes:
-      - ./nginx/loadbalancer.conf:/etc/nginx/nginx.conf
+      - ./nginx/loadbalancer.dev.conf:/etc/nginx/nginx.conf
     depends_on:
       - backend-one
-      - backend-two
   
   cdn:
     image: nginx:alpine
