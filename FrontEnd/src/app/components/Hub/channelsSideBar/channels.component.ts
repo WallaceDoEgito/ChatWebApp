@@ -25,6 +25,7 @@ export class ChannelsComponent implements OnInit {
     public howManyNewFriendRequests = 0;
     public SideBarMinimized = false;
     public SideBarMinimizedEvent = output<boolean>();
+    public channelFilterModel = '';
 
     async ngOnInit() {
         await this.SignalRS.whenConnected()

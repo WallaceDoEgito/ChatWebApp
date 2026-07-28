@@ -50,3 +50,8 @@
     height: 2.2vw;
     transition: 50ms;
 }
+
+.badgeNewMessage
+{
+    width: 1vw;
+}

@@ -2,7 +2,10 @@
     <div id="imageServer">
         <img [src]="ChannelImage" alt="Server image">
     </div>
-    @if (!isMinimized()) {
+    @if (!isMinimized() && countHowManyNewMessages() > 0) {
+        <span [matBadge]= countHowManyNewMessages() matBadgeOverlap="false" matBadgeSize="large">{{ channel().ChannelName }}</span>
+    } @else if (!isMinimized())
+    {
         <span>{{ channel().ChannelName }}</span>
     }
 </div>

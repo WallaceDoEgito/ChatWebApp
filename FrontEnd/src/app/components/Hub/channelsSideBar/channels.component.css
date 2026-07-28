@@ -16,6 +16,7 @@
     align-items: center;
     width: 100%;
     justify-content: center;
+    margin-top: 1vh
 }
 
 .SearchBar{
@@ -24,22 +25,25 @@
     align-items: center;
     justify-content: space-between;
     height: 5vh;
-    margin-top: 2vh;
-    width: 15vw;
+    width: 100%;
     background-color: white;
     border-radius: 5px;
+    margin-left: 1vw;
+}
+
+.SearchBar > button
+{
+    transform: scale(0.7);
 }
 
 .MinimizeSideBarButton
 {
-    transform: scale(1.2) translateX(-40%) translateY(-15%);
-    rotate: 180deg;
-
+    transform: scale(1.0);
 }
 
 input{
     height: 4vh;
-    width: 13vw;
+    width: 60%;
     border: none;
 }
 

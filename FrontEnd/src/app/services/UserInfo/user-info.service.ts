@@ -33,7 +33,7 @@ export class UserInfoService {
         this.UserConfigChangedSubject.next(user);
     }
 
-    async GetUserInfo() {
+    async GetUserInfo() : Promise<UserInfoDTO> {
         await this.signalRConnection.whenConnected();
         if (this.currentUserInfo == null) {
             this.currentUserInfo = await this.signalRConnection.GetCurrentUserInfoAsync();
