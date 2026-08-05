@@ -27,7 +27,7 @@
     align-self: center;
     color: white;
     margin-left: 0.5vw;
-    font-size: large;
+    font-size: 1.5rem;
 }
 
 #photo > img
@@ -74,10 +74,9 @@
 
 #photo:hover #overlay
 {
-    display: block;
-    position: absolute;
-    top: 35%;
-    left: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #overlay:hover
@@ -89,6 +88,10 @@
 {
     position: absolute;
     display: none;
+    width: 5vw;
+    height: 5vw;
+    font-size: 3rem;
+    transform: translateY(-105%);
 }
 #photo
 {
@@ -106,7 +109,7 @@
 #containerButtons
 {
     display: flex;
-    margin-top: 17vh;
+    margin-top: 10%;
     gap: 6.2vw;
     align-items: center;
     margin-left: 1vw;
@@ -117,13 +120,14 @@
     color: #ff5e5e;
     align-items: center;
     height: 4vh;
-    width: 5vw;
+    min-width: 5vw;
     display: flex;
 }
 
 #btnLogout > span
 {
     margin-left: 0.2vw;
+    font-size: 1.2rem;
 }
 
 #btnLogout:hover
@@ -150,17 +154,18 @@
     display: flex;
     align-items: center;
     height: 4vh;
-    width: 9vw;
+    min-width: 9vw;
 }
 
 #btnSalvar > span
 {
     margin-left: 0.2vw;
+    font-size: 1.2rem;
 }
 
 .Icons
 {
-    font-size: 22px;
+    font-size: 1.4rem;
     margin-left: 0.6vw;
 }
 

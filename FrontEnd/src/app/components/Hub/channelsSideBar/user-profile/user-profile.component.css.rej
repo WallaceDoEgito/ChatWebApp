@@ -1,0 +1,10 @@
+diff a/FrontEnd/src/app/components/Hub/channelsSideBar/user-profile/user-profile.component.css b/FrontEnd/src/app/components/Hub/channelsSideBar/user-profile/user-profile.component.css	(rejected hunks)
+@@ -2,7 +2,7 @@
+ {
+     background-color: #515051;
+     width: 20vw;
+-    height: 3vw;
++    height: 7vh;
+     display: flex;
+     align-items: center;
+     gap: 1vw;

@@ -10,7 +10,7 @@ input
     background-color: #414141;
     color: white;
     width: 20vw;
-    height: 3vh;
+    min-height: 5vh;
     border-radius: 8px;
     font-size: 0.93rem;
     margin-top: 6px;
